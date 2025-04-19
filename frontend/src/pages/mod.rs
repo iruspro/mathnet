@@ -1,0 +1,9 @@
+pub mod chat;
+pub mod docs;
+pub mod exercise;
+pub mod home;
+pub mod list_of_exercises;
+pub mod login;
+pub mod register;
+pub mod settings;
+pub mod user_profile;
