@@ -1,13 +1,15 @@
-use sauron::prelude::*,
+use sauron::prelude::*;
+use crate::messages::Msg;
+use sauron::html::{meta,link,title};
 
-pub fn view() -> Node<crate::Msg> {
+pub fn view() -> Node<Msg> {
     html(
         [],
         [
             head(
                 [],
                 [
-                    title([], [text("Home Page")]),
+                    title([],[text("Home Page")]),
                     meta([name("description"), content("Example of common HTML tags")], []),
                     link([rel("stylesheet"), href("styles.css")], []),
                 ],
