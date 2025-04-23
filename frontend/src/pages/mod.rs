@@ -7,3 +7,4 @@ pub mod login;
 pub mod register;
 pub mod settings;
 pub mod user_profile;
+pub mod about_project;
