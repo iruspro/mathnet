@@ -3,7 +3,7 @@ use wasm_bindgen::prelude::*;
 use web_sys::window;
 use crate::messages::Msg;
 use crate::list_of_pages::{self, Page};
-use crate::pages::{home, chat, docs,exercise,list_of_exercises,login,register,settings,user_profile};
+use crate::pages::{home, chat, docs,exercise,list_of_exercises,login,register,settings,user_profile,about_project};
 use sauron::dom::Program;
 
 
@@ -40,6 +40,9 @@ impl Application for App {
         match msg {
             Msg::GoToHomePage => self.current_page = Page::Home,
             Msg::GoToDocsPage => self.current_page = Page::Docs,
+            Msg::GoToLogin => self.current_page = Page::Login,
+            Msg::GoToRegister => self.current_page = Page::Register,
+            Msg::GoToAboutProject => self.current_page = Page::AboutProject,
         }
         Cmd::none()
     }
@@ -55,6 +58,7 @@ impl Application for App {
             Page::Register => register::view(),
             Page::Settings => settings::view(),
             Page::UserProfile => user_profile::view(),
+            Page::AboutProject => about_project::view(),
         }
     }
 
