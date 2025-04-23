@@ -8,5 +8,6 @@ Register,
 Chat,
 Docs,
 ListOfExercise,
-Exercise
+Exercise,
+AboutProject
 }

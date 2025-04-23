@@ -20,25 +20,27 @@ pub fn view() -> Node<Msg> {
                     <a class="nav-link" on_click=|_| {Msg::GoToLogin}>"Login"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">"Register"</a>
+                    <a class="nav-link" on_click=|_| {Msg::GoToRegister}>"Register"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::GoToLogin}>"About this project"</a>
+                    <a class="nav-link active" aria-current="page" href="#">"About this project"</a>
                 </li>
             </ul>
         </div>
     </div>
     </nav>
+
     <div class="container-fluid">
   <div class="row">
     <div class="col-2">
-      1 of 3
+      
     </div>
-    <div class="col-2">
-      2 of 3 (wider)
+    <div class="col-8" class="col text-start">
+      <h1 class="text-center">"About this project"</h1>
     </div>
+    <p class="basicparagraph" class="text-start">"This project is currently under heavy development More specific, at begining of it. Therefore it is not useful yet.
+    We will let you know when it will be ready to use."</p>
     <div class="col-2">
-      3 of 3
     </div>
   </div>
 </div>
