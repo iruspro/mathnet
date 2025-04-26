@@ -9,5 +9,6 @@ Chat,
 Docs,
 ListOfExercise,
 Exercise,
-AboutProject
+AboutProject,
+PrivacyAndSecurity
 }
