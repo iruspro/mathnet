@@ -36,8 +36,21 @@ pub fn view(app : &App) -> Node<Msg> {
         </div>
     </div>
     </nav>
-    <p>"Login"</p>
-    <label for="inputPassword5" class="form-label">"Username"</label>
+    <div class="container-fluid">
+    <div class="row">
+      <div class="col-2">
+        
+      </div>
+      <div class="col-8" class="col text-start">
+        <h1 class="text-center">"Login"</h1>
+        <div class="col-2">
+      </div>
+      </div>
+      <div class="row">
+      <div class="col-5">
+      </div>
+      <div class="col-2">
+        <label for="inputPassword5" class="form-label">"Username"</label>
     <input
         type="text"
         id="inputPassword5"
@@ -62,10 +75,14 @@ pub fn view(app : &App) -> Node<Msg> {
     <div id="passwordHelpBlock" class="form-text">
         "Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji."
     </div>
-
     <button class="btn btn-primary w-100" on_click=move |_| Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy)>
         "Log in"
     </button>
-
+      </div>
+      <div class="col-5">
+      </div>
+    </div>
+  </div>
+  </div>
     </main>
   }}

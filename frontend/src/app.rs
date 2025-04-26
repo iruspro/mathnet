@@ -1,16 +1,19 @@
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
-use crate::messages::{GoToPage, Msg, UserLoginAttempt};
+use crate::logics::registration_logics::check_registration_validity;
+use crate::messages::{GoToPage, Msg, UserLoginAttempt,UserRegister};
 use crate::list_of_pages::{self, Page};
 use crate::pages::{logged_out_pages::{about_project,docs,home,privacy_and_security,login,register},logged_in_pages::{chat,exercise,list_of_exercises,settings,user_profile}};
 use sauron::dom::Program;
-use crate::user::UserLoginData;
-use crate::logics::login_logics;
+use crate::user::{UserLoginData, UserRegisterData,get_user_register_data};
+use crate::logics::{login_logics,registration_logics};
+use crate::user;
 
 pub struct App {
     pub current_page: Page,
     pub user_login_data : UserLoginData,
+    pub user_register_data : UserRegisterData,
 }
 
 impl App {
@@ -18,6 +21,7 @@ impl App {
         App {
             current_page : Page::Home,
             user_login_data : UserLoginData{user_name : String::new(), user_password : String::new()},
+            user_register_data : user::get_user_register_data()
         }
     }
     //fn parse_location() -> Page {
@@ -51,7 +55,12 @@ impl Application for App {
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
             Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => login_logics::check_login_attempt_validity(self),
-        
+            
+            Msg::Registration(UserRegister::UpdateUserRegisterName(name)) => self.user_register_data.user_name = name, 
+            Msg::Registration(UserRegister::UpdateUserRegisterPassword(passw)) => self.user_register_data.user_password = passw,
+            Msg::Registration(UserRegister::UpdateUserRegisterPasswordAgain(passw_again)) =>self.user_register_data.user_password_again = passw_again,
+            Msg::Registration(UserRegister::UpdateUserRegisterEmail(email)) => self.user_register_data.user_email = email,
+            Msg::Registration(UserRegister::RegistrationAttempt) => registration_logics::check_registration_validity(self),
         }
         Cmd::none()
     }
