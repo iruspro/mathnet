@@ -1,20 +1,23 @@
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
-use crate::messages::Msg;
+use crate::messages::{GoToPage, Msg, UserLoginAttempt};
 use crate::list_of_pages::{self, Page};
-use crate::pages::{home, chat, docs,exercise,list_of_exercises,login,register,settings,user_profile,about_project};
+use crate::pages::{logged_out_pages::{about_project,docs,home,privacy_and_security,login,register},logged_in_pages::{chat,exercise,list_of_exercises,settings,user_profile}};
 use sauron::dom::Program;
-
+use crate::user::UserLoginData;
+use crate::logics::login_logics;
 
 pub struct App {
     pub current_page: Page,
+    pub user_login_data : UserLoginData,
 }
 
 impl App {
     pub fn new() -> Self {
         App {
             current_page : Page::Home,
+            user_login_data : UserLoginData{user_name : String::new(), user_password : String::new()},
         }
     }
     //fn parse_location() -> Page {
@@ -38,11 +41,17 @@ impl Application for App {
     type MSG = Msg;
     fn update(&mut self, msg: Self::MSG) -> Cmd<Msg> {
         match msg {
-            Msg::GoToHomePage => self.current_page = Page::Home,
-            Msg::GoToDocsPage => self.current_page = Page::Docs,
-            Msg::GoToLogin => self.current_page = Page::Login,
-            Msg::GoToRegister => self.current_page = Page::Register,
-            Msg::GoToAboutProject => self.current_page = Page::AboutProject,
+            Msg::SetPage(GoToPage::GoToHomePage) => self.current_page = Page::Home,
+            Msg::SetPage(GoToPage::GoToDocsPage) => self.current_page = Page::Docs,
+            Msg::SetPage(GoToPage::GoToLogin )=> self.current_page = Page::Login,
+            Msg::SetPage(GoToPage::GoToRegister) => self.current_page = Page::Register,
+            Msg::SetPage(GoToPage::GoToAboutProject) => self.current_page = Page::AboutProject,
+            Msg::SetPage(GoToPage::GoToPrivacyAndSecurity) => self.current_page = Page::PrivacyAndSecurity,
+        
+            Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
+            Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
+            Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => login_logics::check_login_attempt_validity(self),
+        
         }
         Cmd::none()
     }
@@ -54,11 +63,12 @@ impl Application for App {
             Page::Docs => docs::view(),
             Page::Exercise => exercise::view(),
             Page::ListOfExercise => list_of_exercises::view(),
-            Page::Login => login::view(),
+            Page::Login => login::view(&self),
             Page::Register => register::view(),
             Page::Settings => settings::view(),
             Page::UserProfile => user_profile::view(),
             Page::AboutProject => about_project::view(),
+            Page::PrivacyAndSecurity => privacy_and_security::view(),
         }
     }
 
