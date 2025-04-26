@@ -1,5 +1,5 @@
 use sauron::prelude::*;
-use crate::messages::Msg;
+use crate::messages::{Msg,GoToPage};
 
 pub fn view() -> Node<Msg> {
     node! {
@@ -13,16 +13,19 @@ pub fn view() -> Node<Msg> {
             <a class="nav-link active" aria-current="page" href="#">"Home page"</a>
         </li>
         <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::GoToDocsPage}>"Docs"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToDocsPage)}>"Docs"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::GoToLogin}>"Login"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToLogin)}>"Login"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::GoToRegister}>"Register"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToRegister)}>"Register"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::GoToAboutProject}>"About this project"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToAboutProject)}>"About this project"</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPrivacyAndSecurity)}>"Privacy and security"</a>
                 </li>
             </ul>
         </div>

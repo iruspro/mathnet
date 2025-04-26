@@ -1,10 +1,2 @@
-pub mod chat;
-pub mod docs;
-pub mod exercise;
-pub mod home;
-pub mod list_of_exercises;
-pub mod login;
-pub mod register;
-pub mod settings;
-pub mod user_profile;
-pub mod about_project;
+pub mod logged_in_pages;
+pub mod logged_out_pages;
