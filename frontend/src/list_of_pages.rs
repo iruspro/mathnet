@@ -1,14 +1,26 @@
 #[derive(Debug,Clone,PartialEq)]
 pub enum Page {
+    ItemUnsignedPage(UnsignedPage),
+    ItemSignedPage(SignedPage),
+}
+
+#[derive(Debug,Clone,PartialEq)]
+pub enum UnsignedPage {
 Home,
 Login,
-UserProfile,
-Settings,
 Register,
 Chat,
 Docs,
-ListOfExercise,
-Exercise,
 AboutProject,
-PrivacyAndSecurity
+PrivacyAndSecurity,
+}
+
+#[derive(Debug,Clone,PartialEq)]
+pub enum SignedPage {
+GroupsList,
+Docs,
+AboutProject,
+PrivacyAndSecurity,
+UserProfile,
+Settings
 }

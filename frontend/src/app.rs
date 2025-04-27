@@ -2,13 +2,14 @@ use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
 use crate::logics::registration_logics::check_registration_validity;
-use crate::messages::{GoToPage, Msg, UserLoginAttempt,UserRegister};
-use crate::list_of_pages::{self, Page};
-use crate::pages::{logged_out_pages::{about_project,docs,home,privacy_and_security,login,register},logged_in_pages::{chat,exercise,list_of_exercises,settings,user_profile}};
+pub use crate::messages::{Msg, UserLoginAttempt,UserRegister,SwitchToPageSigned,SwitchToPageUnsigned,GoToPage::{GoToPageSigned, GoToPageUnsigned}};
+use crate::list_of_pages::{self, Page,UnsignedPage,SignedPage};
+use crate::pages::{logged_out_pages,logged_in_pages};
 use sauron::dom::Program;
 use crate::user::{UserLoginData, UserRegisterData,get_user_register_data};
 use crate::logics::{login_logics,registration_logics};
 use crate::user;
+use crate::messages::GoToPage;
 
 pub struct App {
     pub current_page: Page,
@@ -19,7 +20,7 @@ pub struct App {
 impl App {
     pub fn new() -> Self {
         App {
-            current_page : Page::Home,
+            current_page : Page::ItemUnsignedPage(UnsignedPage::Home),
             user_login_data : UserLoginData{user_name : String::new(), user_password : String::new()},
             user_register_data : user::get_user_register_data()
         }
@@ -45,13 +46,16 @@ impl Application for App {
     type MSG = Msg;
     fn update(&mut self, msg: Self::MSG) -> Cmd<Msg> {
         match msg {
-            Msg::SetPage(GoToPage::GoToHomePage) => self.current_page = Page::Home,
-            Msg::SetPage(GoToPage::GoToDocsPage) => self.current_page = Page::Docs,
-            Msg::SetPage(GoToPage::GoToLogin )=> self.current_page = Page::Login,
-            Msg::SetPage(GoToPage::GoToRegister) => self.current_page = Page::Register,
-            Msg::SetPage(GoToPage::GoToAboutProject) => self.current_page = Page::AboutProject,
-            Msg::SetPage(GoToPage::GoToPrivacyAndSecurity) => self.current_page = Page::PrivacyAndSecurity,
-        
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::Home),
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::Docs),
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage) )=> self.current_page = Page::ItemUnsignedPage(UnsignedPage::Login),
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::Register),
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::AboutProject),
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList)) => self.current_page = Page::ItemSignedPage(SignedPage::GroupsList),
+
+
+
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
             Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => login_logics::check_login_attempt_validity(self),
@@ -67,17 +71,19 @@ impl Application for App {
 
     fn view(&self) -> Node<Self::MSG> {
         match self.current_page {
-            Page::Home => home::view(),
-            Page::Chat => chat::view(),
-            Page::Docs => docs::view(),
-            Page::Exercise => exercise::view(),
-            Page::ListOfExercise => list_of_exercises::view(),
-            Page::Login => login::view(&self),
-            Page::Register => register::view(),
-            Page::Settings => settings::view(),
-            Page::UserProfile => user_profile::view(),
-            Page::AboutProject => about_project::view(),
-            Page::PrivacyAndSecurity => privacy_and_security::view(),
+            Page::ItemUnsignedPage(UnsignedPage::Home) => logged_out_pages::home::view(),
+            Page::ItemUnsignedPage(UnsignedPage::Docs) => logged_out_pages::docs::view(),
+            Page::ItemUnsignedPage(UnsignedPage::AboutProject) => logged_out_pages::about_project::view(),
+            Page::ItemUnsignedPage(UnsignedPage::Login) => logged_out_pages::login::view(&self),
+            Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity) => logged_out_pages::privacy_and_security::view(),
+            Page::ItemUnsignedPage(UnsignedPage::Register) => logged_out_pages::register::view(),
+
+            Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::groups::view(),
+            Page::ItemSignedPage(SignedPage::Settings) => logged_in_pages::settings::view(),
+            Page::ItemSignedPage(SignedPage::UserProfile) => logged_in_pages::user_profile::view(),
+            Page::ItemSignedPage(SignedPage::PrivacyAndSecurity) => logged_in_pages::privacy_and_security::view(),
+            Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::docs::view(),
+            Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::about_project::view(),    
         }
     }
 

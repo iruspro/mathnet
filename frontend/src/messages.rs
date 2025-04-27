@@ -9,13 +9,29 @@ pub enum Msg {
 }
 
 #[derive(Debug,Clone)]
-pub enum GoToPage {
+pub enum GoToPage{
+GoToPageSigned(SwitchToPageSigned),
+GoToPageUnsigned(SwitchToPageUnsigned)
+}
+
+#[derive(Debug,Clone)]
+pub enum SwitchToPageUnsigned {
     GoToHomePage,
-    GoToLogin,
+    GoToLoginPage,
     GoToDocsPage,
     GoToRegister,
     GoToAboutProject,
-    GoToPrivacyAndSecurity
+    GoToPrivacyAndSecurity,
+}
+
+#[derive(Debug,Clone)]
+pub enum SwitchToPageSigned {
+    GoToDocsPage,
+    GoToAboutProject,
+    GoToPrivacyAndSecurity,
+    GoToGroupsList,
+    GoToUserProfile,
+    GoToSettings,
 }
 
 #[derive(Debug,Clone)]
