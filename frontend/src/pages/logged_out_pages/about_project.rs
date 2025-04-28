@@ -1,5 +1,5 @@
 use sauron::prelude::*;
-use crate::messages::{Msg,GoToPage};
+use crate::messages::{Msg,GoToPage,SwitchToPageSigned,SwitchToPageUnsigned};
 use sauron::html::{meta,title,link};
 
 pub fn view() -> Node<Msg> {
@@ -11,22 +11,22 @@ pub fn view() -> Node<Msg> {
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-            <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToHomePage)}>"Home page"</a>
+            <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage))}>"Home page"</a>
         </li>
         <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToDocsPage)}>"Docs"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToLogin)}>"Login"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage))}>"Log in"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToRegister)}>"Register"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"Register"</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">"About this project"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPrivacyAndSecurity)}>"Privacy and security"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
                 </li>
             </ul>
         </div>
