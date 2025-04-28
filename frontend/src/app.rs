@@ -1,20 +1,20 @@
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
-use crate::logics::registration_logics::check_registration_validity;
+use crate::{logics::registration_logics::check_registration_validity, messages::UserChangingProfileData};
 pub use crate::messages::{Msg, UserLoginAttempt,UserRegister,SwitchToPageSigned,SwitchToPageUnsigned,GoToPage::{GoToPageSigned, GoToPageUnsigned}};
 use crate::list_of_pages::{self, Page,UnsignedPage,SignedPage};
 use crate::pages::{logged_out_pages,logged_in_pages};
 use sauron::dom::Program;
-use crate::user::{UserLoginData, UserRegisterData,get_user_register_data};
+use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User},group_struct::*};
 use crate::logics::{login_logics,registration_logics};
-use crate::user;
 use crate::messages::GoToPage;
 
 pub struct App {
     pub current_page: Page,
     pub user_login_data : UserLoginData,
     pub user_register_data : UserRegisterData,
+    pub user_data : User,
 }
 
 impl App {
@@ -22,7 +22,8 @@ impl App {
         App {
             current_page : Page::ItemUnsignedPage(UnsignedPage::Home),
             user_login_data : UserLoginData{user_name : String::new(), user_password : String::new()},
-            user_register_data : user::get_user_register_data()
+            user_register_data : crate::structs::user::get_user_register_data(),
+            user_data : crate::structs::user::new(),
         }
     }
     //fn parse_location() -> Page {
@@ -74,6 +75,8 @@ impl Application for App {
             Msg::Registration(UserRegister::UpdateUserRegisterPasswordAgain(passw_again)) =>self.user_register_data.user_password_again = passw_again,
             Msg::Registration(UserRegister::UpdateUserRegisterEmail(email)) => self.user_register_data.user_email = email,
             Msg::Registration(UserRegister::RegistrationAttempt) => registration_logics::check_registration_validity(self),
+        
+            Msg::UserWantsToChangeProfileData(UserChangingProfileData::UserEmailChanged(new_email)) => self.user_data.user_email = new_email,
         }
         Cmd::none()
     }

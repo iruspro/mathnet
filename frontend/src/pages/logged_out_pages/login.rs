@@ -2,7 +2,7 @@ use sauron::prelude::*;
 use crate::messages::{Msg,GoToPage,UserLoginAttempt,SwitchToPageSigned,SwitchToPageUnsigned};
 use sauron::html::{meta,title,link};
 use crate::app::App;
-use crate::user::UserLoginData;
+use crate::structs::user::UserLoginData;
 
 pub fn view(app : &App) -> Node<Msg> {
     let username = app.user_login_data.user_name.clone();
