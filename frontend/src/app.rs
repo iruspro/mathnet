@@ -59,7 +59,9 @@ impl Application for App {
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile)) => self.current_page = Page::ItemSignedPage(SignedPage::UserProfile),
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings)) => self.current_page = Page::ItemSignedPage(SignedPage::Settings),
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage)) => self.current_page = Page::ItemSignedPage(SignedPage::Docs),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut)) => self.current_page = Page::ItemSignedPage(SignedPage::LogOut),        
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut)) => self.current_page = Page::ItemSignedPage(SignedPage::LogOut),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications)) => self.current_page = Page::ItemSignedPage(SignedPage::Notifications),  
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends)) => self.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends),          
 
 
 
@@ -92,7 +94,9 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::groups::view(),
             Page::ItemSignedPage(SignedPage::AboutProject) => logged_in_pages::groups::view(),
             Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(), 
-            Page::ItemSignedPage(SignedPage::Docs) => logged_in_pages::groups::view(),    
+            Page::ItemSignedPage(SignedPage::Docs) => logged_in_pages::groups::view(),
+            Page::ItemSignedPage(SignedPage::ChatWithFriends) => logged_in_pages::chat_with_friends::view(),
+            Page::ItemSignedPage(SignedPage::Notifications) => logged_in_pages::notifications::view(),        
         }
     }
 
