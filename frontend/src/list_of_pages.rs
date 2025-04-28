@@ -9,7 +9,6 @@ pub enum UnsignedPage {
 Home,
 Login,
 Register,
-Chat,
 Docs,
 AboutProject,
 PrivacyAndSecurity,
@@ -22,5 +21,6 @@ Docs,
 AboutProject,
 PrivacyAndSecurity,
 UserProfile,
-Settings
+Settings,
+LogOut,
 }

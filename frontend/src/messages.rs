@@ -32,6 +32,7 @@ pub enum SwitchToPageSigned {
     GoToGroupsList,
     GoToUserProfile,
     GoToSettings,
+    GoToLogOut,
 }
 
 #[derive(Debug,Clone)]

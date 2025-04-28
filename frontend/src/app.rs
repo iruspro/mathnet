@@ -52,7 +52,14 @@ impl Application for App {
             Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::Register),
             Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::AboutProject),
             Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity),
+            
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList)) => self.current_page = Page::ItemSignedPage(SignedPage::GroupsList),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject)) => self.current_page = Page::ItemSignedPage(SignedPage::AboutProject),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity)) => self.current_page = Page::ItemSignedPage(SignedPage::PrivacyAndSecurity),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile)) => self.current_page = Page::ItemSignedPage(SignedPage::UserProfile),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings)) => self.current_page = Page::ItemSignedPage(SignedPage::Settings),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage)) => self.current_page = Page::ItemSignedPage(SignedPage::Docs),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut)) => self.current_page = Page::ItemSignedPage(SignedPage::LogOut),        
 
 
 
@@ -81,9 +88,11 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::groups::view(),
             Page::ItemSignedPage(SignedPage::Settings) => logged_in_pages::settings::view(),
             Page::ItemSignedPage(SignedPage::UserProfile) => logged_in_pages::user_profile::view(),
-            Page::ItemSignedPage(SignedPage::PrivacyAndSecurity) => logged_in_pages::privacy_and_security::view(),
-            Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::docs::view(),
-            Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::about_project::view(),    
+            Page::ItemSignedPage(SignedPage::PrivacyAndSecurity) => logged_in_pages::groups::view(),
+            Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::groups::view(),
+            Page::ItemSignedPage(SignedPage::AboutProject) => logged_in_pages::groups::view(),
+            Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(), 
+            Page::ItemSignedPage(SignedPage::Docs) => logged_in_pages::groups::view(),    
         }
     }
 
