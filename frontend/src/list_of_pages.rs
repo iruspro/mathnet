@@ -23,4 +23,6 @@ PrivacyAndSecurity,
 UserProfile,
 Settings,
 LogOut,
+Notifications,
+ChatWithFriends,
 }
