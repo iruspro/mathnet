@@ -1,5 +1,5 @@
 use sauron::prelude::*;
-use crate::messages::{Msg,GoToPage,UserLoginAttempt};
+use crate::messages::{Msg,GoToPage,UserLoginAttempt,SwitchToPageSigned,SwitchToPageUnsigned};
 use sauron::html::{meta,title,link};
 use crate::app::App;
 use crate::user::UserLoginData;
@@ -15,22 +15,22 @@ pub fn view(app : &App) -> Node<Msg> {
         <div class="collapse navbar-collapse">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-            <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToHomePage)}>"Home page"</a>
+            <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage))}>"Home page"</a>
         </li>
         <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToDocsPage)}>"Docs"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">"Login"</a>
+                <a class="nav-link active" aria-current="page" href="#">"Log in"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToRegister)}>"Register"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"Register"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToAboutProject)}>"About this project"</a>
+                <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"About this project"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPrivacyAndSecurity)}>"Privacy and security"</a>
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
                 </li>
             </ul>
         </div>
@@ -77,7 +77,8 @@ pub fn view(app : &App) -> Node<Msg> {
     </div>
     <button class="btn btn-primary w-100" on_click=move |_| Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy)>
         "Log in"
-    </button>
+    </button> <br></br>
+<div>"Don't you have an account yet? Click" <a on_click=|_|{Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}> " here " </a> "and make one."</div>
       </div>
       <div class="col-5">
       </div>
