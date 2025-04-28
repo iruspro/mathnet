@@ -1,11 +1,12 @@
-use crate::user::{UserLoginData, UserRegisterData, get_user_register_data};
+use crate::structs::user::{UserLoginData, UserRegisterData, get_user_register_data};
 
 
 #[derive(Debug,Clone)]
 pub enum Msg {
     SetPage(GoToPage),
     LoginAttempt(UserLoginAttempt),
-    Registration(UserRegister)
+    Registration(UserRegister),
+    UserWantsToChangeProfileData(UserChangingProfileData),
 }
 
 #[derive(Debug,Clone)]
@@ -51,4 +52,10 @@ pub enum UserRegister {
         UpdateUserRegisterPasswordAgain(String),
         UpdateUserRegisterEmail(String),
         RegistrationAttempt
+}
+
+#[derive(Debug,Clone)]
+pub enum UserChangingProfileData{
+    UserEmailChanged(String),
+
 }

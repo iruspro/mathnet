@@ -63,3 +63,7 @@ body {
 .offcanvas .nav-link:hover {
   color: #adb5bd;
 }
+.my_card_design{
+  width:"60%";
+  color:red;
+}
