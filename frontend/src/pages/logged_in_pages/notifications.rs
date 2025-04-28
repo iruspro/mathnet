@@ -70,7 +70,7 @@ pub fn view() -> Node<Msg> {
                             <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends))}>"Chat with friends"</a>
+                            <a class="nav-link text-white" href="#">"Groups"</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
