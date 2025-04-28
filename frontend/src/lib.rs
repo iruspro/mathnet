@@ -6,11 +6,10 @@ the project is relatively small.)
 pub mod app;
 pub mod messages;
 pub mod router;
-pub mod user;
+pub mod structs;
 pub mod pages;
 pub mod list_of_pages;
 use sauron::prelude::*;
 pub mod logics;
-pub mod group_struct;
 
 

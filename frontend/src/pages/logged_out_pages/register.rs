@@ -74,7 +74,7 @@ pub fn view() -> Node<Msg> {
         on_input=|input| Msg::Registration(UserRegister::UpdateUserRegisterEmail((input.value())))
     />
     <div id="passwordHelpBlock" class="form-text">
-        "Enter your valid email address."
+        "Enter your valid email address. A confirmation letter will be sent to that address."
     </div>
 
     <label for="inputPassword6" class="form-label">"Password"</label>
