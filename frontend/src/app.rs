@@ -1,12 +1,12 @@
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
-use crate::{logics::registration_logics::check_registration_validity, messages::UserChangingProfileData};
+use crate::{logics::registration_logics::check_registration_validity, messages::*};
 pub use crate::messages::{Msg, UserLoginAttempt,UserRegister,SwitchToPageSigned,SwitchToPageUnsigned,GoToPage::{GoToPageSigned, GoToPageUnsigned}};
 use crate::list_of_pages::{self, Page,UnsignedPage,SignedPage};
 use crate::pages::{logged_out_pages,logged_in_pages};
 use sauron::dom::Program;
-use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User},group_struct::*};
+use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData},group_struct::*};
 use crate::logics::{login_logics,registration_logics};
 use crate::messages::GoToPage;
 
@@ -76,7 +76,11 @@ impl Application for App {
             Msg::Registration(UserRegister::UpdateUserRegisterEmail(email)) => self.user_register_data.user_email = email,
             Msg::Registration(UserRegister::RegistrationAttempt) => registration_logics::check_registration_validity(self),
         
-            Msg::UserWantsToChangeProfileData(UserChangingProfileData::UserEmailChanged(new_email)) => self.user_data.user_email = new_email,
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserName(new_name,mut new_profile)) => new_profile.change_user_name(new_name),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(new_email, mut new_profile)) => new_profile.change_user_email(new_email),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(new_password, mut new_profile)) => new_profile.change_user_password(new_password),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges(staged_changes)) => staged_changes.sent_user_profile_data(),
+
         }
         Cmd::none()
     }
