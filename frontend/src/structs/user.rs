@@ -40,47 +40,47 @@ pub fn new() -> User {
 
 #[derive(Debug,Clone)]
 pub enum UserDemandsUserProfileDataChanges{
-    ChangeUserName(String,&mut UserChangingProfileData),
-    ChangeUserEmail(String, &mut UserChangingProfileData),
-    ChangeUserPassword(String, &mut UserChangingProfileData),
+    ChangeUserName(String,UserChangingProfileData),
+    ChangeUserEmail(String, UserChangingProfileData),
+    ChangeUserPassword(String, UserChangingProfileData),
+    ChangeUserPasswordConfirmation(String, UserChangingProfileData),
     ConfirmChanges(UserChangingProfileData),
 }
 
 #[derive(Debug,Clone)]
-pub struct UserChangingProfileData{
-    pub new_user_name : Option<String>,
-    pub new_user_password : Option<String>,
-    pub new_user_email: Option<String>
+pub struct UserChangingProfileData<'a>{
+    pub user_id : u32,
+    pub new_user_name : String,
+    pub new_user_password : String,
+    pub new_user_password_confirmation : String,
+    pub new_user_email: String
 
 }
 
-impl UserChangingProfileData{
-    pub fn new() -> UserChangingProfileData{
+impl<'a> UserChangingProfileData<'a>{
+    pub fn new() -> UserChangingProfileData<'a>{
         UserChangingProfileData{
-        new_user_name : None,
-        new_user_email : None,
-        new_user_password : None,
+        user_id : 42,
+        new_user_name : String::new(),
+        new_user_email : String::new(),
+        new_user_password : String::new(),
+        new_user_password_confirmation : String::new(),
         }
     }
     pub fn change_user_name(&mut self, selected_user_name : String){
-        match selected_user_name {
-            None => self.new_user_name = None,
-            Some(new_name) => self.new_user_name = Some(new_name),
+    self.new_user_name = selected_user_name;
         }
+    
+    pub fn change_user_email(&mut self, selected_user_email : String){
+        self.new_user_email = selected_user_email;
     }
-    pub fn change_user_email(&mut self, selected_user_email : Option<String>){
-        match selected_user_email {
-            None => self.new_user_email = None,
-            Some(new_email) => self.new_user_email = Some(new_email),
-        }
+    pub fn change_user_password(&mut self, selected_user_password : String){
+        self.new_user_password = selected_user_password;
     }
-    pub fn change_user_password(&mut self, selected_user_password : Option<String>){
-        match selected_user_password {
-            None => self.new_user_password = None,
-            Some(new_password) => self.new_user_password = Some(new_password),
-        }
+
+    pub fn change_user_password_confirmation(&mut self, selected_user_password : String){
+        self.new_user_password = selected_user_password;
     }
-    pub fn sent_user_profile_data(self) {
+    pub fn confirm_changes(self) {
         
-    }
-}
+    }}

@@ -122,7 +122,7 @@ pub fn view() -> Node<Msg> {
     on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserName(input.value(), &mut user_profile_changes))}></input>
   </div>
   <div id="passwordHelpBlock" class="form-text">
-        "Enter new user name. A confirmation letter will be sent to your email address."
+        "Enter new user name."
     </div>
 
     <div class="mb-3">
@@ -132,10 +132,10 @@ pub fn view() -> Node<Msg> {
     aria-describedby="passwordHelpBlock" 
     id="exampleFormControlInput1" 
     placeholder= user.user_email.clone() 
-    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(input.value(), &mut user_profile_changes))}></input>
+    on_input=|input| {Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(input.value(), user_profile_changes))}></input>
   </div>
   <div id="passwordHelpBlock" class="form-text">
-        "Enter new email address. A confirmation letter will be sent to that address."
+        "Enter new email address."
     </div>
 
     <div class="mb-3">
@@ -145,15 +145,31 @@ pub fn view() -> Node<Msg> {
     aria-describedby="passwordHelpBlock" 
     id="exampleFormControlInput1" 
     placeholder=user.user_password.clone()
-    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(input.value(), &mut user_profile_changes))}></input>
+    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(input.value(), user_profile_changes))}></input>
   </div>
   <div id="passwordHelpBlock" class="form-text">
-        "Enter new password. A confirmation letter will be sent to that address."
+        "Enter new password."
+    </div>
+
+    <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">"New password"</label>
+    <input type="password" 
+    class="form-control" 
+    aria-describedby="passwordHelpBlock" 
+    id="exampleFormControlInput1" 
+    placeholder=user.user_password.clone()
+    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(input.value(), user_profile_changes))}></input>
+  </div>
+  <div id="passwordHelpBlock" class="form-text">
+        "Enter new  password again. This step is necessary in order to prevent typos."
     </div>
 
     <div class="d-grid gap-2 col-6 mx-auto">
     <button class="btn btn-primary" type="button" on_click=|_|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges(user_profile_changes))}>"Confirm changes"</button>
   </div>
+  <div id="passwordHelpBlock" class="form-text">
+         "A confirmation letter will be sent to that address."
+    </div>
     </form>
   
   
