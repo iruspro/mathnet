@@ -1,9 +1,12 @@
 use sauron::prelude::*;
-use crate::messages::{GoToPage, Msg, SwitchToPageSigned, SwitchToPageUnsigned, UserChangingProfileData};
-use crate::structs::user;
+pub use crate::messages::{GoToPage, Msg, SwitchToPageSigned, SwitchToPageUnsigned};
+pub use crate::structs::user::*;
+pub use crate::structs::user;
+
 
 pub fn view() -> Node<Msg> {
-    let user = user::new();
+    let mut user = user::new();
+    let mut user_profile_changes = UserChangingProfileData::new();
     node! {
         <main>
             // Top Navbar
@@ -110,17 +113,47 @@ pub fn view() -> Node<Msg> {
     <p class="card-text">"There you can view and edit your profile data."</p>
     <form>
     <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">"User name"</label>
+    <input type="text" 
+    class="form-control" 
+    aria-describedby="passwordHelpBlock" 
+    id="exampleFormControlInput1" 
+    placeholder= user.user_name.clone()
+    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserName(input.value(), &mut user_profile_changes))}></input>
+  </div>
+  <div id="passwordHelpBlock" class="form-text">
+        "Enter new user name. A confirmation letter will be sent to your email address."
+    </div>
+
+    <div class="mb-3">
     <label for="exampleFormControlInput1" class="form-label">"Email address"</label>
     <input type="email" 
     class="form-control" 
     aria-describedby="passwordHelpBlock" 
     id="exampleFormControlInput1" 
-    placeholder=user.user_email 
-    on_input=|input|{Msg::UserWantsToChangeProfileData(UserChangingProfileData::UserEmailChanged(input.value()))}></input>
+    placeholder= user.user_email.clone() 
+    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(input.value(), &mut user_profile_changes))}></input>
   </div>
   <div id="passwordHelpBlock" class="form-text">
-        "Enter new email address. A confiramtion letter will be sent to that address."
+        "Enter new email address. A confirmation letter will be sent to that address."
     </div>
+
+    <div class="mb-3">
+    <label for="exampleFormControlInput1" class="form-label">"New password"</label>
+    <input type="password" 
+    class="form-control" 
+    aria-describedby="passwordHelpBlock" 
+    id="exampleFormControlInput1" 
+    placeholder=user.user_password.clone()
+    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(input.value(), &mut user_profile_changes))}></input>
+  </div>
+  <div id="passwordHelpBlock" class="form-text">
+        "Enter new password. A confirmation letter will be sent to that address."
+    </div>
+
+    <div class="d-grid gap-2 col-6 mx-auto">
+    <button class="btn btn-primary" type="button" on_click=|_|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges(user_profile_changes))}>"Confirm changes"</button>
+  </div>
     </form>
   
   
