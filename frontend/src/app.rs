@@ -76,10 +76,11 @@ impl Application for App {
             Msg::Registration(UserRegister::UpdateUserRegisterEmail(email)) => self.user_register_data.user_email = email,
             Msg::Registration(UserRegister::RegistrationAttempt) => registration_logics::check_registration_validity(self),
         
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserName(new_name,mut new_profile)) => new_profile.change_user_name(new_name),
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(new_email, mut new_profile)) => new_profile.change_user_email(new_email),
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(new_password, mut new_profile)) => new_profile.change_user_password(new_password),
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges(staged_changes)) => staged_changes.sent_user_profile_data(),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserName(new_name,new_profile)) => new_profile.change_user_name(new_name),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(new_email, new_profile)) => new_profile.change_user_email(new_email),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(new_password, new_profile)) => new_profile.change_user_password(new_password),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(new_password,new_profile)) => new_profile.change_user_password_confirmation(new_password),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges(staged_changes)) => staged_changes.confirm_changes(),
 
         }
         Cmd::none()
