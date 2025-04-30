@@ -1,6 +1,8 @@
 
+use crate::app::SwitchToPageSigned;
 pub use crate::structs::group_struct::GroupId;
 pub use crate::structs::languages;
+pub use crate::messages::*;
 
 use self::languages::Languages;
 #[derive(Debug,Clone)]
@@ -40,15 +42,17 @@ pub fn new() -> User {
 
 #[derive(Debug,Clone)]
 pub enum UserDemandsUserProfileDataChanges{
-    ChangeUserName(String,UserChangingProfileData),
-    ChangeUserEmail(String, UserChangingProfileData),
-    ChangeUserPassword(String, UserChangingProfileData),
-    ChangeUserPasswordConfirmation(String, UserChangingProfileData),
-    ConfirmChanges(UserChangingProfileData),
+    ChangeUserName(String),
+    ChangeUserEmail(String),
+    ChangeUserPassword(String),
+    ChangeUserPasswordConfirmation(String),
+    ConfirmChanges,
+    DeleteAccount,
+    Retry,
 }
 
 #[derive(Debug,Clone)]
-pub struct UserChangingProfileData<'a>{
+pub struct UserChangingProfileData{
     pub user_id : u32,
     pub new_user_name : String,
     pub new_user_password : String,
@@ -57,8 +61,8 @@ pub struct UserChangingProfileData<'a>{
 
 }
 
-impl<'a> UserChangingProfileData<'a>{
-    pub fn new() -> UserChangingProfileData<'a>{
+impl UserChangingProfileData{
+    pub fn new() -> UserChangingProfileData{
         UserChangingProfileData{
         user_id : 42,
         new_user_name : String::new(),
@@ -67,20 +71,11 @@ impl<'a> UserChangingProfileData<'a>{
         new_user_password_confirmation : String::new(),
         }
     }
-    pub fn change_user_name(&mut self, selected_user_name : String){
-    self.new_user_name = selected_user_name;
+    pub fn confirm_changes(self)-> Msg {
+        if self.new_user_password != self.new_user_password_confirmation {
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry)
         }
-    
-    pub fn change_user_email(&mut self, selected_user_email : String){
-        self.new_user_email = selected_user_email;
-    }
-    pub fn change_user_password(&mut self, selected_user_password : String){
-        self.new_user_password = selected_user_password;
-    }
-
-    pub fn change_user_password_confirmation(&mut self, selected_user_password : String){
-        self.new_user_password = selected_user_password;
-    }
-    pub fn confirm_changes(self) {
-        
+        else {
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSuccessfullyChangedUserProfileData))
+        }
     }}
