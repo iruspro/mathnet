@@ -6,3 +6,6 @@ pub mod user_profile;
 pub mod groups;
 pub mod log_out;
 pub mod notifications;
+pub mod successfully_changed_user_profile_data;
+pub mod retry_changing_user_profile_data;
+pub mod delete_account;
