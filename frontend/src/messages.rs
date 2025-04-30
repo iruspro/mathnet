@@ -7,6 +7,7 @@ pub enum Msg {
     LoginAttempt(UserLoginAttempt),
     Registration(UserRegister),
     UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges),
+    SendComment(String),
 }
 
 #[derive(Debug,Clone)]
@@ -38,7 +39,8 @@ pub enum SwitchToPageSigned {
     GoToNotifications,
     GoToSuccessfullyChangedUserProfileData,
     GoToRetryChangingUserProfileData,
-    GoToDeleteAccount
+    GoToDeleteAccount,
+    GoToUserSuggestsDevelopers,
 }
 
 #[derive(Debug,Clone)]
