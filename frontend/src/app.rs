@@ -1,7 +1,7 @@
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
-use crate::{logics::registration_logics::check_registration_validity, messages::*};
+use crate::{logics::registration_logics::check_registration_validity, messages::*, pages::logged_in_pages::user_suggests_developers};
 pub use crate::messages::{Msg, UserLoginAttempt,UserRegister,SwitchToPageSigned,SwitchToPageUnsigned,GoToPage::{GoToPageSigned, GoToPageUnsigned}};
 use crate::list_of_pages::{self, Page,UnsignedPage,SignedPage};
 use crate::pages::{logged_out_pages,logged_in_pages};
@@ -68,6 +68,7 @@ impl Application for App {
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSuccessfullyChangedUserProfileData)) => self.current_page = Page::ItemSignedPage(SignedPage::SuccessfullyChangedUserProfileData),
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToRetryChangingUserProfileData)) => self.current_page = Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData),
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDeleteAccount)) => self.current_page = Page::ItemSignedPage(SignedPage::DeleteAccount),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserSuggestsDevelopers)) => self.current_page = Page::ItemSignedPage(SignedPage::UserSuggestsDevelopers),
 
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
@@ -86,6 +87,8 @@ impl Application for App {
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {self.current_page = Page::ItemSignedPage(SignedPage::DeleteAccount)},
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => self.current_page = Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData),
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges) => {},
+
+            Msg::SendComment(String) => {},
 
         }
         Cmd::none()
@@ -113,6 +116,7 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::SuccessfullyChangedUserProfileData) => logged_in_pages::successfully_changed_user_profile_data::view(),
             Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
             Page::ItemSignedPage(SignedPage::DeleteAccount) => logged_in_pages::delete_account::view(),       
+            Page::ItemSignedPage(SignedPage::UserSuggestsDevelopers) => logged_in_pages::user_suggests_developers::view(),
         }
     }
 
