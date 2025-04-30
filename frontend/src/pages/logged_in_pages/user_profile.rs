@@ -109,7 +109,7 @@ pub fn view() -> Node<Msg> {
 <div class="card border-dark mb-3" >
 <div class="card text-center">
   <div class="card-body">
-    <h5 class="card-title">"User profile"</h5>
+    <h5 class="card-title">"Edit user profile"</h5>
     <p class="card-text">"There you can view and edit your profile data."</p>
     <form>
     <div class="mb-3">
@@ -119,7 +119,7 @@ pub fn view() -> Node<Msg> {
     aria-describedby="passwordHelpBlock" 
     id="exampleFormControlInput1" 
     placeholder= user.user_name.clone()
-    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserName(input.value(), &mut user_profile_changes))}></input>
+    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserName(input.value()))}></input>
   </div>
   <div id="passwordHelpBlock" class="form-text">
         "Enter new user name."
@@ -132,7 +132,7 @@ pub fn view() -> Node<Msg> {
     aria-describedby="passwordHelpBlock" 
     id="exampleFormControlInput1" 
     placeholder= user.user_email.clone() 
-    on_input=|input| {Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(input.value(), user_profile_changes))}></input>
+    on_input=|input| {Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(input.value()))}></input>
   </div>
   <div id="passwordHelpBlock" class="form-text">
         "Enter new email address."
@@ -145,7 +145,7 @@ pub fn view() -> Node<Msg> {
     aria-describedby="passwordHelpBlock" 
     id="exampleFormControlInput1" 
     placeholder=user.user_password.clone()
-    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(input.value(), user_profile_changes))}></input>
+    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(input.value()))}></input>
   </div>
   <div id="passwordHelpBlock" class="form-text">
         "Enter new password."
@@ -158,14 +158,14 @@ pub fn view() -> Node<Msg> {
     aria-describedby="passwordHelpBlock" 
     id="exampleFormControlInput1" 
     placeholder=user.user_password.clone()
-    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(input.value(), user_profile_changes))}></input>
+    on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(input.value()))}></input>
   </div>
   <div id="passwordHelpBlock" class="form-text">
         "Enter new  password again. This step is necessary in order to prevent typos."
     </div>
 
     <div class="d-grid gap-2 col-6 mx-auto">
-    <button class="btn btn-primary" type="button" on_click=|_|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges(user_profile_changes))}>"Confirm changes"</button>
+    <button class="btn btn-primary" type="button" on_click=|_|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges)}>"Confirm changes"</button>
   </div>
   <div id="passwordHelpBlock" class="form-text">
          "A confirmation letter will be sent to that address."
@@ -174,6 +174,27 @@ pub fn view() -> Node<Msg> {
   
   
   </div>
+
+
+  <div class="my_card_design">
+  <div class="card border-dark mb-3" >
+  <div class="card text-center">
+    <div class="card-body">
+      <h5 class="card-title">"Delete account"</h5>
+      <form>
+      <div class="d-grid gap-2 col-6 mx-auto">
+      <button class="btn btn-danger" type="button" on_click=|_|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount)}>"Delete account"</button>
+    </div>
+    <div id="passwordHelpBlock" class="form-text">
+           "After deletion your data will be unrecovable."
+      </div>
+      </form>
+    
+    
+    </div>
+</div>
+</div>
+</div>
 </div>
 </div>
 </div>

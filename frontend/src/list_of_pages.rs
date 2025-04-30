@@ -25,4 +25,7 @@ Settings,
 LogOut,
 Notifications,
 ChatWithFriends,
+SuccessfullyChangedUserProfileData,
+RetryChangingUserProfileData,
+DeleteAccount
 }
