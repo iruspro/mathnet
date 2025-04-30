@@ -36,6 +36,9 @@ pub enum SwitchToPageSigned {
     GoToLogOut,
     GoToChatWithFriends,
     GoToNotifications,
+    GoToSuccessfullyChangedUserProfileData,
+    GoToRetryChangingUserProfileData,
+    GoToDeleteAccount
 }
 
 #[derive(Debug,Clone)]
