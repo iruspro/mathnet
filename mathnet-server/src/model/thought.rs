@@ -93,7 +93,7 @@ impl ThoughtBmc {
         if count == 0 {
             return Err(Error::EntityNotFound {
                 entity: "thought",
-                id: id,
+                id,
             });
         }
 
@@ -109,6 +109,7 @@ mod tests {
 
     use super::*;
     use anyhow::{Ok, Result};
+    use axum::routing::get;
     use serial_test::serial;
 
     #[serial]
@@ -126,25 +127,98 @@ mod tests {
         let id = ThoughtBmc::create(&ctx, &mm, thought_c).await?;
 
         // -- Check
-        let (content,): (String,) = sqlx::query_as("SELECT content from thought where id = $1")
-            .bind(id)
-            .fetch_one(mm.db())
-            .await?;
-        assert_eq!(content, fx_content);
+        let thought = ThoughtBmc::get(&ctx, &mm, id).await?;
+        assert_eq!(thought.content, fx_content);
 
         // -- Clean
-        let count = sqlx::query("DELETE FROM thought WHERE id = $1")
-            .bind(id)
-            .execute(mm.db())
-            .await?
-            .rows_affected();
-        assert_eq!(count, 1, "Did not delete 1 row?");
+        ThoughtBmc::delete(&ctx, &mm, id).await?;
 
         Ok(())
     }
 
+    #[serial]
     #[tokio::test]
     async fn test_create_err() -> Result<()> {
+        Ok(())
+    }
+
+    #[serial]
+    #[tokio::test]
+    async fn test_get_err_not_found() -> Result<()> {
+        // -- Setup & Fixtures
+        let mm = _dev_utils::init_test().await;
+        let ctx = Ctx::root_ctx();
+        let fx_id = 100;
+
+        // -- Exec
+        let res = ThoughtBmc::get(&ctx, &mm, fx_id).await;
+
+        // -- Check
+        assert!(
+            matches!(
+                res,
+                Err(Error::EntityNotFound {
+                    entity: "thought",
+                    id: 100
+                })
+            ),
+            "EntityNotFound not matching"
+        );
+
+        Ok(())
+    }
+
+    #[serial]
+    #[tokio::test]
+    async fn test_list_ok() -> Result<()> {
+        // -- Setup & Fixtures
+        let mm = _dev_utils::init_test().await;
+        let ctx = Ctx::root_ctx();
+        let fx_contents = &["test_list_ok-thought 01", "test_list_ok-thought 02"];
+        _dev_utils::seed_thoughts(&ctx, &mm, fx_contents).await?;
+
+        // -- Exec
+        let thoughts = ThoughtBmc::list(&ctx, &mm).await?;
+
+        // -- Check
+        // TODO: Add filters, limits, and other constraints
+        let thoughts: Vec<Thought> = thoughts
+            .into_iter()
+            .filter(|t| t.content.starts_with("test_list_ok-thought"))
+            .collect();
+        assert_eq!(thoughts.len(), 2, "number of seeded tasks");
+
+        // -- Clean
+        for thought in thoughts.iter() {
+            ThoughtBmc::delete(&ctx, &mm, thought.id).await?;
+        }
+
+        Ok(())
+    }
+
+    #[serial]
+    #[tokio::test]
+    async fn test_delete_err_not_found() -> Result<()> {
+        // -- Setup & Fixtures
+        let mm = _dev_utils::init_test().await;
+        let ctx = Ctx::root_ctx();
+        let fx_id = 100;
+
+        // -- Exec
+        let res = ThoughtBmc::delete(&ctx, &mm, fx_id).await;
+
+        // -- Check
+        assert!(
+            matches!(
+                res,
+                Err(Error::EntityNotFound {
+                    entity: "thought",
+                    id: 100
+                })
+            ),
+            "EntityNotFound not matching"
+        );
+
         Ok(())
     }
 }

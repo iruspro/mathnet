@@ -4,7 +4,13 @@ mod dev_db;
 use tokio::sync::OnceCell;
 use tracing::info;
 
-use crate::model::ModelManager;
+use crate::{
+    ctx::Ctx,
+    model::{
+        self, ModelManager,
+        thought::{Thought, ThoughtBmc, ThoughtForCreate},
+    },
+};
 // endregion: --- Modules
 
 /// Initialize environment for local development.
@@ -32,4 +38,28 @@ pub async fn init_test() -> ModelManager {
         .await;
 
     mm.clone()
+}
+
+pub async fn seed_thoughts(
+    ctx: &Ctx,
+    mm: &ModelManager,
+    contents: &[&str],
+) -> model::Result<Vec<Thought>> {
+    let mut thoughts = Vec::new();
+
+    for content in contents {
+        let id = ThoughtBmc::create(
+            ctx,
+            mm,
+            ThoughtForCreate {
+                content: content.to_string(),
+            },
+        )
+        .await?;
+        let thought = ThoughtBmc::get(ctx, mm, id).await?;
+
+        thoughts.push(thought);
+    }
+
+    Ok(thoughts)
 }
