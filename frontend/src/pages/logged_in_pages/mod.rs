@@ -9,3 +9,4 @@ pub mod notifications;
 pub mod successfully_changed_user_profile_data;
 pub mod retry_changing_user_profile_data;
 pub mod delete_account;
+pub mod both_sidebars;

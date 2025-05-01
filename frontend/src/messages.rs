@@ -38,7 +38,8 @@ pub enum SwitchToPageSigned {
     GoToNotifications,
     GoToSuccessfullyChangedUserProfileData,
     GoToRetryChangingUserProfileData,
-    GoToDeleteAccount
+    GoToDeleteAccount,
+    GoToBothSidebars,
 }
 
 #[derive(Debug,Clone)]
