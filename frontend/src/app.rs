@@ -68,7 +68,7 @@ impl Application for App {
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSuccessfullyChangedUserProfileData)) => self.current_page = Page::ItemSignedPage(SignedPage::SuccessfullyChangedUserProfileData),
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToRetryChangingUserProfileData)) => self.current_page = Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData),
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDeleteAccount)) => self.current_page = Page::ItemSignedPage(SignedPage::DeleteAccount),
-
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToBothSidebars)) => self.current_page = Page::ItemSignedPage(SignedPage::BothSidebars),
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
             Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => login_logics::check_login_attempt_validity(self),
@@ -113,6 +113,7 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::SuccessfullyChangedUserProfileData) => logged_in_pages::successfully_changed_user_profile_data::view(),
             Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
             Page::ItemSignedPage(SignedPage::DeleteAccount) => logged_in_pages::delete_account::view(),       
+            Page::ItemSignedPage(SignedPage::BothSidebars) => logged_in_pages::both_sidebars::view(), 
         }
     }
 

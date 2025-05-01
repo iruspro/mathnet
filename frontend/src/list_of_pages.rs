@@ -27,5 +27,6 @@ Notifications,
 ChatWithFriends,
 SuccessfullyChangedUserProfileData,
 RetryChangingUserProfileData,
-DeleteAccount
+DeleteAccount,
+BothSidebars
 }
