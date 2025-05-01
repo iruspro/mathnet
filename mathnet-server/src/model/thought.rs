@@ -1,6 +1,6 @@
 use crate::ctx::Ctx;
 use crate::model::ModelManager;
-use crate::model::Result;
+use crate::model::{Error, Result};
 use serde::{Deserialize, Serialize};
 use sqlx::FromRow;
 
@@ -48,15 +48,56 @@ impl ThoughtBmc {
     }
 
     pub async fn get(_ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<Thought> {
-        todo!()
+        let db = mm.db();
+
+        let thought: Thought = sqlx::query_as("SELECT * FROM thought WHERE id = $1")
+            .bind(id)
+            .fetch_optional(db)
+            // Will fail if there is a problem with the SELECT statement
+            // or database
+            .await?
+            // By convention, `get` must always return a value
+            // otherwise, it should return an EntityNotFound error
+            .ok_or(Error::EntityNotFound {
+                entity: "thought",
+                id,
+            })?;
+
+        Ok(thought)
     }
 
     pub async fn list(_ctx: &Ctx, mm: &ModelManager) -> Result<Vec<Thought>> {
-        todo!()
+        // TODO: Add filters, limits, and other constraints
+        let db = mm.db();
+
+        let thoughts: Vec<Thought> = sqlx::query_as("SELECT * FROM thought ORDER BY id")
+            .fetch_all(db)
+            .await?;
+
+        Ok(thoughts)
     }
 
+    //TODO: update
+
     pub async fn delete(_ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<()> {
-        todo!()
+        let db = mm.db();
+
+        let count = sqlx::query("DELETE FROM thought where id = $1")
+            .bind(id)
+            .execute(db)
+            .await?
+            .rows_affected();
+
+        // By convention, `delete` must always remove something
+        // otherwise, it should return an EntityNotFound error
+        if count == 0 {
+            return Err(Error::EntityNotFound {
+                entity: "thought",
+                id: id,
+            });
+        }
+
+        Ok(())
     }
 }
 // endregion: --- ThoughtBmc
