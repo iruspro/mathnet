@@ -8,17 +8,46 @@ on:
 
 env:
   CARGO_TERM_COLOR: always
+  SERVICE_DB_URL: postgres://app_user:dev_only_pwd@localhost/app_db
+  PG_DEV_POSTGRES_URL: postgres://postgres:welcome@localhost/postgres
+  PG_DEV_APP_URL: postgres://app_user:dev_only_pwd@localhost/app_db
 
 jobs:
   build-mathnet-server:
     runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: welcome
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U app_user -d app_db"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
     - uses: actions/checkout@v4
+
+    - name: Wait for Postgres
+      run: |
+        until pg_isready -h localhost -U postgres -d postgres; do
+          echo "Waiting for postgres..."
+          sleep 2
+        done
+
     - name: Build backend
       run: |
         cd mathnet-server
         cargo build --verbose
+
     - name: Run mathnet-server tests
+      env:
+        SERVICE_DB_URL: postgres://app_user:dev_only_pwd@localhost/app_db
       run: |
         cd mathnet-server
         cargo test --verbose
