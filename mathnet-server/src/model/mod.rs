@@ -1,4 +1,4 @@
-//! Model Later
+//! Model Layer
 //!
 //! Design:
 //!
@@ -17,6 +17,7 @@
 //!    to all Model Controllers functions.
 
 // region:    --- Modules
+mod base;
 mod error;
 mod store;
 pub mod thought;
