@@ -158,6 +158,36 @@ mod tests {
 
     #[serial]
     #[tokio::test]
+    async fn test_update_ok() -> Result<()> {
+        // -- Setup & Fixtures
+        let mm = _dev_utils::init_test().await;
+        let ctx = Ctx::root_ctx();
+        let fx_content = "test_update ok - thought 01";
+        let fx_content_new = "test_update_ok - thought 01 - new";
+        let fx_thought = _dev_utils::seed_thoughts(&ctx, &mm, &[fx_content])
+            .await?
+            .remove(0);
+
+        // -- Exec
+        ThoughtBmc::update(
+            &ctx,
+            &mm,
+            fx_thought.id,
+            ThoughtForUpdate {
+                content: Some(fx_content_new.to_string()),
+            },
+        )
+        .await?;
+
+        // -- Check
+        let thought = ThoughtBmc::get(&ctx, &mm, fx_thought.id).await?;
+        assert_eq!(thought.content, fx_content_new);
+
+        Ok(())
+    }
+
+    #[serial]
+    #[tokio::test]
     async fn test_delete_err_not_found() -> Result<()> {
         // -- Setup & Fixtures
         let mm = _dev_utils::init_test().await;
