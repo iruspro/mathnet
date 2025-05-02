@@ -90,6 +90,8 @@ impl Application for App {
 
             Msg::SendComment(String) => {},
 
+            Msg::Search(searched_person) => {},
+            Msg::NoAction => {},
         }
         Cmd::none()
     }
@@ -111,7 +113,7 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::AboutProject) => logged_in_pages::groups::view(),
             Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(), 
             Page::ItemSignedPage(SignedPage::Docs) => logged_in_pages::groups::view(),
-            Page::ItemSignedPage(SignedPage::ChatWithFriends) => logged_in_pages::chat_with_friends::view(),
+            Page::ItemSignedPage(SignedPage::ChatWithFriends) => logged_in_pages::chat_with_friends::view(&self),
             Page::ItemSignedPage(SignedPage::Notifications) => logged_in_pages::notifications::view(), 
             Page::ItemSignedPage(SignedPage::SuccessfullyChangedUserProfileData) => logged_in_pages::successfully_changed_user_profile_data::view(),
             Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
