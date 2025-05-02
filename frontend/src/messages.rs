@@ -7,6 +7,8 @@ pub enum Msg {
     LoginAttempt(UserLoginAttempt),
     Registration(UserRegister),
     UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges),
+    Search(String),
+    NoAction,
 }
 
 #[derive(Debug,Clone)]
@@ -57,3 +59,4 @@ pub enum UserRegister {
         UpdateUserRegisterEmail(String),
         RegistrationAttempt
 }
+
