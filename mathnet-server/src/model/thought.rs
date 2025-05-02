@@ -2,24 +2,27 @@ use crate::ctx::Ctx;
 use crate::model::ModelManager;
 use crate::model::{Error, Result};
 use serde::{Deserialize, Serialize};
+use sqlb::Fields;
 use sqlx::FromRow;
+
+use super::base::{self, DbBmc};
 
 // region:    --- Thought Types
 // ---->
-#[derive(Debug, Clone, FromRow, Serialize)]
+#[derive(Debug, Clone, Fields, FromRow, Serialize)]
 pub struct Thought {
     pub id: i64,
     pub content: String,
 }
 
 // <----
-#[derive(Deserialize)]
+#[derive(Fields, Deserialize)]
 pub struct ThoughtForCreate {
     pub content: String,
 }
 
 // <----
-#[derive(Deserialize)]
+#[derive(Fields, Deserialize)]
 pub struct ThoughtForUpdate {
     pub content: Option<String>,
 }
@@ -28,76 +31,40 @@ pub struct ThoughtForUpdate {
 // region:    --- ThoughtBmc
 pub struct ThoughtBmc;
 
+impl DbBmc for ThoughtBmc {
+    const TABLE: &'static str = "thought";
+}
+
 impl ThoughtBmc {
     pub async fn create(
         // _ctx and mm must be in all of the BMC functions
-        _ctx: &Ctx,
+        ctx: &Ctx,
         mm: &ModelManager,
         // Function specific arguments
         thought_c: ThoughtForCreate,
     ) -> Result<i64> {
-        let db = mm.db();
-
-        let (id,) =
-            sqlx::query_as::<_, (i64,)>("INSERT INTO thought (content) values ($1) returning id")
-                .bind(thought_c.content)
-                .fetch_one(db)
-                .await?;
-
-        Ok(id)
+        base::create::<Self, _>(ctx, mm, thought_c).await
     }
 
-    pub async fn get(_ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<Thought> {
-        let db = mm.db();
-
-        let thought: Thought = sqlx::query_as("SELECT * FROM thought WHERE id = $1")
-            .bind(id)
-            .fetch_optional(db)
-            // Will fail if there is a problem with the SELECT statement
-            // or database
-            .await?
-            // By convention, `get` must always return a value
-            // otherwise, it should return an EntityNotFound error
-            .ok_or(Error::EntityNotFound {
-                entity: "thought",
-                id,
-            })?;
-
-        Ok(thought)
+    pub async fn get(ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<Thought> {
+        base::get::<Self, _>(ctx, mm, id).await
     }
 
-    pub async fn list(_ctx: &Ctx, mm: &ModelManager) -> Result<Vec<Thought>> {
-        // TODO: Add filters, limits, and other constraints
-        let db = mm.db();
-
-        let thoughts: Vec<Thought> = sqlx::query_as("SELECT * FROM thought ORDER BY id")
-            .fetch_all(db)
-            .await?;
-
-        Ok(thoughts)
+    pub async fn list(ctx: &Ctx, mm: &ModelManager) -> Result<Vec<Thought>> {
+        base::list::<Self, _>(ctx, mm).await
     }
 
-    //TODO: update
+    pub async fn update(
+        ctx: &Ctx,
+        mm: &ModelManager,
+        id: i64,
+        thought_u: ThoughtForUpdate,
+    ) -> Result<()> {
+        base::update::<Self, _>(ctx, mm, id, thought_u).await
+    }
 
-    pub async fn delete(_ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<()> {
-        let db = mm.db();
-
-        let count = sqlx::query("DELETE FROM thought where id = $1")
-            .bind(id)
-            .execute(db)
-            .await?
-            .rows_affected();
-
-        // By convention, `delete` must always remove something
-        // otherwise, it should return an EntityNotFound error
-        if count == 0 {
-            return Err(Error::EntityNotFound {
-                entity: "thought",
-                id,
-            });
-        }
-
-        Ok(())
+    pub async fn delete(ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<()> {
+        base::delete::<Self>(ctx, mm, id).await
     }
 }
 // endregion: --- ThoughtBmc
