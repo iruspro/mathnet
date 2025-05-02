@@ -76,7 +76,6 @@ mod tests {
 
     use super::*;
     use anyhow::{Ok, Result};
-    use axum::routing::get;
     use serial_test::serial;
 
     #[serial]
@@ -100,12 +99,6 @@ mod tests {
         // -- Clean
         ThoughtBmc::delete(&ctx, &mm, id).await?;
 
-        Ok(())
-    }
-
-    #[serial]
-    #[tokio::test]
-    async fn test_create_err() -> Result<()> {
         Ok(())
     }
 
