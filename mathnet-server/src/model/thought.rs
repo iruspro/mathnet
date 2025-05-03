@@ -37,7 +37,7 @@ impl DbBmc for ThoughtBmc {
 
 impl ThoughtBmc {
     pub async fn create(
-        // _ctx and mm must be in all of the BMC functions
+        // ctx and mm must be in all of the BMC functions
         ctx: &Ctx,
         mm: &ModelManager,
         // Function specific arguments
