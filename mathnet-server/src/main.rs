@@ -12,6 +12,8 @@ pub mod _dev_utils;
 
 pub use self::error::{Error, Result};
 pub use config::config;
+use web::mw_auth::mw_ctx_require;
+use web::rpc;
 
 use crate::model::ModelManager;
 use crate::web::mw_auth::mw_ctx_resolve;
@@ -39,12 +41,11 @@ async fn main() -> Result<()> {
     let mm = ModelManager::new().await?;
 
     // -- Define Routes
-    // let routes_rpc = rpc::routes(mm.clone())
-    //   .route_layer(middleware::from_fn(mw_ctx_require));
+    let routes_rpc = rpc::routes(mm.clone()).route_layer(middleware::from_fn(mw_ctx_require));
 
     let routes_all = Router::new()
         .merge(routes_login::routes())
-        // .nest("/api", routes_rpc)
+        .nest("/api", routes_rpc)
         .layer(middleware::map_response(mw_response_map))
         .layer(middleware::from_fn_with_state(mm.clone(), mw_ctx_resolve))
         .layer(CookieManagerLayer::new())
