@@ -7,7 +7,8 @@ pub enum Msg {
     LoginAttempt(UserLoginAttempt),
     Registration(UserRegister),
     UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges),
-    SendComment(String),
+    Search(String),
+    NoAction,
 }
 
 #[derive(Debug,Clone)]
@@ -40,7 +41,7 @@ pub enum SwitchToPageSigned {
     GoToSuccessfullyChangedUserProfileData,
     GoToRetryChangingUserProfileData,
     GoToDeleteAccount,
-    GoToUserSuggestsDevelopers,
+    GoToBothSidebars,
 }
 
 #[derive(Debug,Clone)]
@@ -58,3 +59,4 @@ pub enum UserRegister {
         UpdateUserRegisterEmail(String),
         RegistrationAttempt
 }
+

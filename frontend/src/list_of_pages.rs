@@ -28,5 +28,5 @@ ChatWithFriends,
 SuccessfullyChangedUserProfileData,
 RetryChangingUserProfileData,
 DeleteAccount,
-UserSuggestsDevelopers,
+BothSidebars
 }
