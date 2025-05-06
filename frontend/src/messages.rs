@@ -1,4 +1,4 @@
-use crate::structs::user::{UserLoginData, UserRegisterData, get_user_register_data,UserChangingProfileData,UserDemandsUserProfileDataChanges};
+use crate::structs::user::{UserLoginData, UserRegisterData, get_user_register_data,UserChangingProfileData,UserDemandsUserProfileDataChanges,UserId};
 
 
 #[derive(Debug,Clone)]
@@ -7,8 +7,9 @@ pub enum Msg {
     LoginAttempt(UserLoginAttempt),
     Registration(UserRegister),
     UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges),
-    Search(String),
+    SearchFriend(String),
     NoAction,
+    UserWantsToChatWithSomePerson(UserId),
 }
 
 #[derive(Debug,Clone)]
