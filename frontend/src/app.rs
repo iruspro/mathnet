@@ -86,8 +86,9 @@ impl Application for App {
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {self.current_page = Page::ItemSignedPage(SignedPage::DeleteAccount)},
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => self.current_page = Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData),
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges) => {},
-            Msg::Search(searched_person) => {},
-            Msg::NoAction => {},
+            Msg::SearchFriend(searched_person) => {unimplemented!()},
+            Msg::NoAction => {unimplemented!()},
+            Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
         }
         Cmd::none()
     }

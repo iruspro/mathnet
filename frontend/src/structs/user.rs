@@ -5,6 +5,8 @@ pub use crate::structs::languages;
 pub use crate::messages::*;
 
 use self::languages::Languages;
+
+use super::friends_at_sidebar::FriendAtSidebar;
 #[derive(Debug,Clone)]
 pub struct UserLoginData{
     pub user_name : String,
@@ -31,7 +33,7 @@ pub struct User{
     pub user_name : String,
     pub user_password : String,
     pub user_email: String,
-    pub user_friends : Vec<UserId>,
+    pub user_friends : Vec<FriendAtSidebar>,
     pub user_groups: Vec<GroupId>,
     pub language : Languages,
 }
