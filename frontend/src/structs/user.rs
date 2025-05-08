@@ -28,6 +28,8 @@ pub fn get_user_register_data() -> UserRegisterData {
 pub enum UserId{
 UserIdNumber(u32),
 }
+
+#[derive(Debug,Clone)]
 pub struct User{
     pub user_id : UserId,
     pub user_name : String,
