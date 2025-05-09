@@ -1,6 +1,7 @@
 pub use crate::structs::user;
 pub use crate::structs::emojis_and_reactions;
 
+#[derive(Clone,Debug)]
 pub enum ChatId{
     ChatIdNumber(u32),
 }
