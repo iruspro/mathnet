@@ -89,6 +89,7 @@ impl Application for App {
             Msg::SearchFriend(searched_person) => {unimplemented!()},
             Msg::NoAction => {unimplemented!()},
             Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
+            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {unimplemented!()},
         }
         Cmd::none()
     }
