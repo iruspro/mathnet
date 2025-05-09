@@ -2,15 +2,26 @@ pub use sauron::Node;
 pub use crate::messages::Msg;
 
 pub use crate::structs::user::{User,UserId,new};
+pub use crate::structs::chat_message::{ChatId,ChatMessage};
 pub use sauron::node;
 pub use crate::app::App;
 
 #[derive(Debug,Clone)]
 pub struct FriendAtSidebar{
-    friend : UserId,
-    ordering_number : u32,
+    pub friend : UserId,
+    pub ordering_number : u32,
 }
 
+
+pub struct ShowChats{
+    pub chat_id : ChatId, 
+    pub friend : User,
+    pub last_message : ChatMessage,
+    pub currently_active: bool,
+}
+
+
+/*TODO: migrate this functions to logics map to some new rs file. */
 pub fn get_user_friends_data_from_server(vec_of_friends_id : Vec<FriendAtSidebar>) -> Vec<User>{
 vec![new()]
 
@@ -31,5 +42,21 @@ node!{
         </div>
     }
 }
+}}}
+
+pub fn show_chats_in_content(v : Vec<ShowChats>) -> Node<Msg>{
+    node!{
+    {for chat in v{
+        node!{
+            <div class="card">
+            <div class="card-body">
+            <a on_click =move |_| {Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat.chat_id.clone())}>text!(chat.friend.user_name.clone())</a>
+            <p>text!(chat.last_message)</p>
+            <p></p>
+            </div>
+            </div>
+        }
+    }
+
 }}}
 
