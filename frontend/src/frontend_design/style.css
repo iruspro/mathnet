@@ -107,3 +107,8 @@ body {
   }
 }
 
+.scrollable-container{
+  margin-left: 250px;
+  margin-right: 250px;
+  overflow-y: scroll;
+}
