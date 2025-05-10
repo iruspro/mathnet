@@ -5,6 +5,11 @@ pub use crate::structs::user::{User,UserId,new};
 pub use crate::structs::chat_message::{ChatId,ChatMessage};
 pub use sauron::node;
 pub use crate::app::App;
+pub use crate::logics::date_and_time;
+
+use self::date_and_time::display_current_date_and_time;
+
+use super::chat_message::DateAndTime;
 
 #[derive(Debug,Clone)]
 pub struct FriendAtSidebar{
@@ -13,50 +18,24 @@ pub struct FriendAtSidebar{
 }
 
 
+/*Struct ShowChats represents a chat channel in chat_with_friends.rs default view */
 pub struct ShowChats{
     pub chat_id : ChatId, 
     pub friend : User,
     pub last_message : ChatMessage,
+    pub date_and_time : DateAndTime,
     pub currently_active: bool,
 }
 
 
-/*TODO: migrate this functions to logics map to some new rs file. */
-pub fn get_user_friends_data_from_server(vec_of_friends_id : Vec<FriendAtSidebar>) -> Vec<User>{
-vec![new()]
-
- /*   unimplemented!("This piece of code will be implemented when I figure out how to manage 
-communication with the server.") */
-}
-
-// Current function show_friends_at_sidebar clones data, but I don't think that is necessary ... or is it? Think about it again.
-pub fn show_friends_at_sidebar(current_state_of_app: &App) -> Node<Msg>{
-    let friends_data = get_user_friends_data_from_server(current_state_of_app.user_data.user_friends.clone());
-node!{
-{for friend in friends_data{
-    node!{
-        <div class="card">
-        <div class="card-body">
-        <a on_click =move |_| {Msg::UserWantsToChatWithSomePerson(friend.user_id.clone())}>text!(friend.user_name.clone())</a>
-        </div>
-        </div>
+impl ShowChats{
+    pub fn new() -> ShowChats{
+        ShowChats{
+        chat_id : ChatId::ChatIdNumber(111),
+        friend : new(),
+        last_message : ChatMessage::new(),
+        date_and_time : display_current_date_and_time(),
+        currently_active : false,
+        } 
     }
 }
-}}}
-
-pub fn show_chats_in_content(v : Vec<ShowChats>) -> Node<Msg>{
-    node!{
-    {for chat in v{
-        node!{
-            <div class="card">
-            <div class="card-body">
-            <a on_click =move |_| {Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat.chat_id.clone())}>text!(chat.friend.user_name.clone())</a>
-            <p>text!(chat.last_message)</p>
-            <p></p>
-            </div>
-            </div>
-        }
-    }
-
-}}}
-
