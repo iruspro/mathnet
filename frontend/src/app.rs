@@ -1,7 +1,8 @@
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
-use crate::{logics::registration_logics::check_registration_validity, messages::*, pages::logged_in_pages::user_suggests_developers};
+// use crate::{logics::registration_logics::check_registration_validity, messages::*, pages::logged_in_pages::user_suggests_developers};
+use crate::{logics::registration_logics::check_registration_validity, messages::*, structs::chat_message::ChatId};
 pub use crate::messages::{Msg, UserLoginAttempt,UserRegister,SwitchToPageSigned,SwitchToPageUnsigned,GoToPage::{GoToPageSigned, GoToPageUnsigned}};
 use crate::list_of_pages::{self, Page,UnsignedPage,SignedPage};
 use crate::pages::{logged_out_pages,logged_in_pages};
@@ -15,7 +16,8 @@ pub struct App {
     pub user_login_data : UserLoginData,
     pub user_register_data : UserRegisterData,
     pub user_data : User,
-    pub user_changing_data_structure : UserChangingProfileData
+    pub user_changing_data_structure : UserChangingProfileData,
+    pub current_conversation : Option<ChatId>,
 }
 
 impl App {
@@ -25,7 +27,8 @@ impl App {
             user_login_data : UserLoginData{user_name : String::new(), user_password : String::new()},
             user_register_data : crate::structs::user::get_user_register_data(),
             user_data : crate::structs::user::new(),
-            user_changing_data_structure : crate::structs::user::UserChangingProfileData::new()
+            user_changing_data_structure : crate::structs::user::UserChangingProfileData::new(),
+            current_conversation : None,
         }
     }
     //fn parse_location() -> Page {
@@ -95,7 +98,9 @@ impl Application for App {
             Msg::SearchFriend(searched_person) => {unimplemented!()},
             Msg::NoAction => {unimplemented!()},
             Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
-            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {unimplemented!()},
+            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {self.current_conversation = Some(chat_id); self.current_page = Page::ItemSignedPage(SignedPage::Conversation((chat_id)))},
+            Msg::SetConversationToNone => self.current_conversation = None,
+        
         }
         Cmd::none()
     }
@@ -123,6 +128,7 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
             Page::ItemSignedPage(SignedPage::DeleteAccount) => logged_in_pages::delete_account::view(),       
             Page::ItemSignedPage(SignedPage::UserSuggestsDevelopers) => logged_in_pages::user_suggests_developers::view(),
+            Page::ItemSignedPage(SignedPage::Conversation(chat_id)) => logged_in_pages::conversation::view(&self),
         }
     }
 

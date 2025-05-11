@@ -13,6 +13,7 @@ pub enum Msg {
     NoAction,
     UserWantsToChatWithSomePerson(UserId),
     UserWantsToChatWithSomePersonViaPersonalConversation(ChatId),
+    SetConversationToNone,
 }
 
 #[derive(Debug,Clone)]
