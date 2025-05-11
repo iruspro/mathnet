@@ -30,7 +30,7 @@ pub async fn mw_ctx_resolve(
 ) -> Result<Response> {
     debug!("{:<12} - mw_ctx_resolve", "MIDDLEWARE");
 
-    let auth_token = cookies.get(AUTH_TOKEN).map(|c| c.value().to_string());
+    // let auth_token = cookies.get(AUTH_TOKEN).map(|c| c.value().to_string());
 
     // FIXME - Compute real CtxAuthResult<Ctx>.
     let result_ctx = Ctx::new(100).map_err(|ex| CtxExtError::CtxCreateFail(ex.to_string()));

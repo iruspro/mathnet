@@ -3,7 +3,6 @@ use std::sync::Arc;
 use crate::{model, web};
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
-use lazy_regex::regex;
 use serde::Serialize;
 use tracing::debug;
 
