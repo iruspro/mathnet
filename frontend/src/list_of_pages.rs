@@ -31,5 +31,5 @@ SuccessfullyChangedUserProfileData,
 RetryChangingUserProfileData,
 DeleteAccount,
 BothSidebars,
-Conversation(ChatId),
+Conversation,
 }
