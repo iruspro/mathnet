@@ -67,9 +67,7 @@ pub fn show_conversation(chat_id : ChatId) -> Node<Msg>{
                 <div class="container-fluid"> //scrollable-container doesn't do anything because sidebars are already fixed (independent from scrolling the content.)
                     <h1 class="text-center">{text!("{}",friend_name)}</h1>
 <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-<form>
   <button class="btn btn-primary" type="button" on_click=|_| {Msg::SetConversationToNone}>"Go back to all messages"</button>
-</form>
   </div>
                         {for chat_message in vec_of_chat_messages{
                             node!{
