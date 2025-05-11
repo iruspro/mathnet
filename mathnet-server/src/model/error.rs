@@ -1,3 +1,4 @@
+use derive_more::From;
 use serde::Serialize;
 use serde_with::{DisplayFromStr, serde_as};
 
@@ -6,30 +7,21 @@ use super::store;
 pub type Result<T> = core::result::Result<T, Error>;
 
 #[serde_as]
-#[derive(Debug, Serialize)]
+#[derive(Debug, Serialize, From)]
 pub enum Error {
-    EntityNotFound { entity: &'static str, id: i64 },
+    EntityNotFound {
+        entity: &'static str,
+        id: i64,
+    },
 
     // -- Modules
+    #[from]
     Store(store::Error),
 
     // -- Externals
+    #[from]
     Sqlx(#[serde_as(as = "DisplayFromStr")] sqlx::Error),
 }
-
-// region:    --- Froms
-impl From<sqlx::Error> for Error {
-    fn from(val: sqlx::Error) -> Self {
-        Self::Sqlx(val)
-    }
-}
-
-impl From<store::Error> for Error {
-    fn from(val: store::Error) -> Self {
-        Self::Store(val)
-    }
-}
-// endregion: --- Froms
 
 // region:    --- Error Boilerplate
 impl core::fmt::Display for Error {

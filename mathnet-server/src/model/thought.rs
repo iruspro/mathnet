@@ -1,6 +1,6 @@
 use crate::ctx::Ctx;
 use crate::model::ModelManager;
-use crate::model::{Error, Result};
+use crate::model::Result;
 use serde::{Deserialize, Serialize};
 use sqlb::Fields;
 use sqlx::FromRow;
@@ -72,9 +72,9 @@ impl ThoughtBmc {
 // region:    --- Tests
 #[cfg(test)]
 mod tests {
-    use crate::_dev_utils;
-
     use super::*;
+    use crate::_dev_utils;
+    use crate::model::Error;
     use anyhow::{Ok, Result};
     use serial_test::serial;
 
