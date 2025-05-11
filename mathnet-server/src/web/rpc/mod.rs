@@ -1,6 +1,8 @@
 // region:    --- Modules
 mod thought_rpc;
 
+use std::sync::Arc;
+
 use axum::{
     Json, Router,
     extract::State,
@@ -64,7 +66,7 @@ async fn rpc_handler(
 
     // -- Exec & Store RpcInfo in response.
     let mut res = _rpc_handler(ctx, mm, rpc_req).await.into_response();
-    res.extensions_mut().insert(rpc_info);
+    res.extensions_mut().insert(Arc::new(rpc_info));
 
     res
 }
