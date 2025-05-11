@@ -1,3 +1,5 @@
+pub use crate::structs::chat_message::ChatId;
+
 #[derive(Debug,Clone,PartialEq)]
 pub enum Page {
     ItemUnsignedPage(UnsignedPage),
@@ -28,5 +30,6 @@ ChatWithFriends,
 SuccessfullyChangedUserProfileData,
 RetryChangingUserProfileData,
 DeleteAccount,
-BothSidebars
+BothSidebars,
+Conversation(ChatId),
 }
