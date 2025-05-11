@@ -1,6 +1,6 @@
 use crate::ctx::Ctx;
 use crate::model::ModelManager;
-use crate::model::thought::{self, Thought, ThoughtBmc, ThoughtForCreate, ThoughtForUpdate};
+use crate::model::thought::{Thought, ThoughtBmc, ThoughtForCreate, ThoughtForUpdate};
 use crate::web::Result;
 
 use super::{ParamsForCreate, ParamsForUpdate, ParamsIded};
