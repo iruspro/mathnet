@@ -37,7 +37,9 @@ pub fn show_chats_in_content(v : Vec<ShowChats>) -> Node<Msg>{
         node!{
             <div class="card">
             <div class="card-body">
-            <a on_click =move |_| {Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat.chat_id.clone())}>{text!("{}",chat.friend.user_name.clone())}</a>
+            <form>
+            <button type="button" class="btn btn-dark" on_click=move |_| {Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat.chat_id.clone())}>{text!("{}",chat.friend.user_name.clone())}</button>
+            </form>
             <p>{text!("{}", chat.last_message.content.clone())}</p>
             <p>{text!("{}",chat.date_and_time.date_and_time_to_string())}</p>
             <p></p>

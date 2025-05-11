@@ -2,7 +2,7 @@ pub use crate::structs::user;
 pub use crate::structs::emojis_and_reactions;
 pub use crate::logics::date_and_time::{DateAndTime, display_current_date_and_time};
 
-#[derive(Clone,Debug)]
+#[derive(Clone,Debug,Copy,PartialEq)]
 pub enum ChatId{
     ChatIdNumber(u32),
 }
@@ -24,7 +24,7 @@ pub struct ChatMessage{
     pub date_and_time : DateAndTime,
     pub content: String,
     pub latex_on : bool,
-    pub sender: user::UserId,
+    pub sender: String,
     pub reactions : Vec<emojis_and_reactions::Emoji>,
 
 }
@@ -32,6 +32,6 @@ pub struct ChatMessage{
 // Implement that!
 impl ChatMessage{
     pub fn new() -> ChatMessage{
-        ChatMessage { chat_id: ChatId::ChatIdNumber(111), chat_message_id: ChatMessagesId::ChatMessagesIdValue(112), date_and_time: display_current_date_and_time(), content: "Lorem ipsum".to_string(), latex_on: false, sender: user::UserId::UserIdNumber(42), reactions: Vec::new()}
+        ChatMessage { chat_id: ChatId::ChatIdNumber(111), chat_message_id: ChatMessagesId::ChatMessagesIdValue(112), date_and_time: display_current_date_and_time(), content: "Lorem ipsum".to_string(), latex_on: false, sender: "JohnDoe".to_string(), reactions: Vec::new()}
     }
 }
