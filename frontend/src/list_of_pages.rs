@@ -31,4 +31,5 @@ SuccessfullyChangedUserProfileData,
 RetryChangingUserProfileData,
 DeleteAccount,
 UserSuggestsDevelopers,
+Conversation,
 }

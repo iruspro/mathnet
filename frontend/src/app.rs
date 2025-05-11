@@ -98,8 +98,9 @@ impl Application for App {
             Msg::SearchFriend(searched_person) => {unimplemented!()},
             Msg::NoAction => {unimplemented!()},
             Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
-            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {self.current_conversation = Some(chat_id); self.current_page = Page::ItemSignedPage(SignedPage::Conversation((chat_id)))},
+            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {self.current_conversation = Some(chat_id); self.current_page = Page::ItemSignedPage(SignedPage::Conversation)},
             Msg::SetConversationToNone => self.current_conversation = None,
+            Msg::NoOp =>{}
         
         }
         Cmd::none()
@@ -128,7 +129,7 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
             Page::ItemSignedPage(SignedPage::DeleteAccount) => logged_in_pages::delete_account::view(),       
             Page::ItemSignedPage(SignedPage::UserSuggestsDevelopers) => logged_in_pages::user_suggests_developers::view(),
-            Page::ItemSignedPage(SignedPage::Conversation(chat_id)) => logged_in_pages::conversation::view(&self),
+            Page::ItemSignedPage(SignedPage::Conversation) => logged_in_pages::conversation::view(&self),
         }
     }
 
