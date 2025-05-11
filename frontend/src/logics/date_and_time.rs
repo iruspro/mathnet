@@ -20,3 +20,5 @@ pub fn date_and_time_to_string(&self) -> String{
 Current implementation means that if you send a message and then travel abroad and
 change time zone in the process and then send a new message, you will have messages 
 from different time zones, which is weird and confusing. */
+/* Also get time stamps from database because it is weird that it refreshes every time
+the page is refreshed. */

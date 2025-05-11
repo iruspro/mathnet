@@ -6,5 +6,5 @@ use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_c
 use crate::experimental_examples::imaginary_friends;
 
 pub fn view(data_provided : &App) -> Node<Msg> {
-show_conversation(data_provided.current_conversation.unwrap().clone())
+show_conversation(data_provided.current_conversation.clone().unwrap())
 }
