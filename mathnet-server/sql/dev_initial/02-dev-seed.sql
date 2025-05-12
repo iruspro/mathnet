@@ -1,2 +1,2 @@
--- User demo1
-INSERT INTO "user" (username) VALUES('demo1');
+-- User admin
+INSERT INTO "user" (username, email, password) VALUES('admin', 'admin@fmf.com', 'password');
