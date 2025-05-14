@@ -1,10 +1,9 @@
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
-// use crate::{logics::registration_logics::check_registration_validity, messages::*, pages::logged_in_pages::user_suggests_developers};
-use crate::{logics::registration_logics::check_registration_validity, messages::*, structs::chat_message::ChatId};
+use crate::{list_of_pages::OtherPage, logics::registration_logics::check_registration_validity, messages::*, pages::logged_in_pages::conversation, structs::chat_message::ChatId};
 pub use crate::messages::{Msg, UserLoginAttempt,UserRegister,SwitchToPageSigned,SwitchToPageUnsigned,GoToPage::{GoToPageSigned, GoToPageUnsigned}};
-use crate::list_of_pages::{self, Page,UnsignedPage,SignedPage};
+use crate::list_of_pages::{Page,UnsignedPage,SignedPage};
 use crate::pages::{logged_out_pages,logged_in_pages};
 use sauron::dom::Program;
 use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData},group_struct::*};
@@ -18,6 +17,7 @@ pub struct App {
     pub user_data : User,
     pub user_changing_data_structure : UserChangingProfileData,
     pub current_conversation : Option<ChatId>,
+    pub reload_current_page : bool,
 }
 
 impl App {
@@ -29,6 +29,7 @@ impl App {
             user_data : crate::structs::user::new(),
             user_changing_data_structure : crate::structs::user::UserChangingProfileData::new(),
             current_conversation : None,
+            reload_current_page : false,
         }
     }
     //fn parse_location() -> Page {
@@ -68,11 +69,13 @@ impl Application for App {
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut)) => self.current_page = Page::ItemSignedPage(SignedPage::LogOut),
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications)) => self.current_page = Page::ItemSignedPage(SignedPage::Notifications),  
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends)) => self.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends),          
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSuccessfullyChangedUserProfileData)) => self.current_page = Page::ItemSignedPage(SignedPage::SuccessfullyChangedUserProfileData),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToRetryChangingUserProfileData)) => self.current_page = Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDeleteAccount)) => self.current_page = Page::ItemSignedPage(SignedPage::DeleteAccount),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserSuggestsDevelopers)) => self.current_page = Page::ItemSignedPage(SignedPage::UserSuggestsDevelopers),
-
+            // Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToUserSuggestsDevelopers)) => 
+            
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToDeleteAccount)) => self.current_page = Page::ItemOtherPage(OtherPage::DeleteAccount),
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToRetryChangingUserProfileData)) => self.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData),
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::SuccessfullyChangedUserProfileData)) => self.current_page = Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData),
+            
+            
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
             Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => login_logics::check_login_attempt_validity(self),
@@ -87,8 +90,8 @@ impl Application for App {
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(new_email)) => self.user_changing_data_structure.new_user_email = new_email,
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(new_password)) => self.user_changing_data_structure.new_user_password = new_password,
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(new_password)) => self.user_changing_data_structure.new_user_password_confirmation = new_password,
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {self.current_page = Page::ItemSignedPage(SignedPage::DeleteAccount)},
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => self.current_page = Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {self.current_page = Page::ItemOtherPage(OtherPage::DeleteAccount)},
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => self.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData),
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges) => {},
 
             Msg::SendComment(String) => {},
@@ -100,7 +103,10 @@ impl Application for App {
             Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
             Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {self.current_conversation = Some(chat_id); self.current_page = Page::ItemSignedPage(SignedPage::Conversation)},
             Msg::SetConversationToNone => self.current_conversation = None,
-            Msg::NoOp =>{}
+            Msg::NoOp =>{},
+            Msg::SendConversationMessage(conversation_message) => {},
+
+            _ => todo!()
         
         }
         Cmd::none()
@@ -125,11 +131,15 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::Docs) => logged_in_pages::groups::view(),
             Page::ItemSignedPage(SignedPage::ChatWithFriends) => logged_in_pages::chat_with_friends::view(&self),
             Page::ItemSignedPage(SignedPage::Notifications) => logged_in_pages::notifications::view(), 
-            Page::ItemSignedPage(SignedPage::SuccessfullyChangedUserProfileData) => logged_in_pages::successfully_changed_user_profile_data::view(),
-            Page::ItemSignedPage(SignedPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
-            Page::ItemSignedPage(SignedPage::DeleteAccount) => logged_in_pages::delete_account::view(),       
-            Page::ItemSignedPage(SignedPage::UserSuggestsDevelopers) => logged_in_pages::user_suggests_developers::view(),
+            Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => logged_in_pages::successfully_changed_user_profile_data::view(),
+            Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
+            Page::ItemOtherPage(OtherPage::DeleteAccount) => logged_in_pages::delete_account::view(),       
+            Page::ItemOtherPage(OtherPage::UserSuggestsDevelopers) => logged_in_pages::user_suggests_developers::view(),
             Page::ItemSignedPage(SignedPage::Conversation) => logged_in_pages::conversation::view(&self),
+
+            Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => logged_in_pages::successfully_changed_user_profile_data::view(),
+            Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
+            Page::ItemOtherPage(OtherPage::DeleteAccount) => logged_in_pages::delete_account::view(),
         }
     }
 
