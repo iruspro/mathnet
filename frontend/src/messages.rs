@@ -12,13 +12,15 @@ pub enum Msg {
     UserWantsToChatWithSomePerson(UserId),
     UserWantsToChatWithSomePersonViaPersonalConversation(ChatId),
     SetConversationToNone,
-    NoOp
+    NoOp,
+    SendConversationMessage(String),
 }
 
 #[derive(Debug,Clone)]
 pub enum GoToPage{
 GoToPageSigned(SwitchToPageSigned),
-GoToPageUnsigned(SwitchToPageUnsigned)
+GoToPageUnsigned(SwitchToPageUnsigned),
+GoToPageOther(SwitchToPageOther),
 }
 
 #[derive(Debug,Clone)]
@@ -42,10 +44,13 @@ pub enum SwitchToPageSigned {
     GoToLogOut,
     GoToChatWithFriends,
     GoToNotifications,
-    GoToSuccessfullyChangedUserProfileData,
-    GoToRetryChangingUserProfileData,
+}
+
+#[derive(Debug,Clone)]
+pub enum SwitchToPageOther{
+    SuccessfullyChangedUserProfileData,
     GoToDeleteAccount,
-    GoToBothSidebars,
+    GoToRetryChangingUserProfileData,
 }
 
 #[derive(Debug,Clone)]
