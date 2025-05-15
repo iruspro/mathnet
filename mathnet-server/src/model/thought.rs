@@ -1,9 +1,12 @@
-use crate::ctx::Ctx;
-use crate::model::ModelManager;
-use crate::model::Result;
+use chrono::DateTime;
+use chrono::Utc;
 use serde::{Deserialize, Serialize};
 use sqlb::Fields;
 use sqlx::FromRow;
+
+use crate::ctx::Ctx;
+use crate::model::ModelManager;
+use crate::model::Result;
 
 use super::base::{self, DbBmc};
 
@@ -13,12 +16,17 @@ use super::base::{self, DbBmc};
 pub struct Thought {
     pub id: i64,
     pub content: String,
+    pub mather_id: i64,
+    pub created_at: DateTime<Utc>,
+    pub on_latex: bool,
 }
 
 // <----
 #[derive(Fields, Deserialize)]
 pub struct ThoughtForCreate {
     pub content: String,
+    pub mather_id: i64,
+    pub on_latex: bool,
 }
 
 // <----
@@ -67,6 +75,16 @@ impl ThoughtBmc {
         base::delete::<Self>(ctx, mm, id).await
     }
 }
+
+impl ThoughtBmc {
+    // pub async fn list_thought_reactions(
+    //     ctx: &Ctx,
+    //     mm: &ModelManager,
+    //     mather_id: i64,
+    // ) -> Result<Vec<Reaction>> {
+    //     todo!()
+    // }
+}
 // endregion: --- ThoughtBmc
 
 // region:    --- Tests
@@ -89,6 +107,8 @@ mod tests {
         // -- Exec
         let thought_c = ThoughtForCreate {
             content: fx_content.to_string(),
+            mather_id: 1000,
+            on_latex: true,
         };
         let id = ThoughtBmc::create(&ctx, &mm, thought_c).await?;
 
