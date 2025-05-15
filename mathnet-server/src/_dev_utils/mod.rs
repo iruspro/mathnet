@@ -53,6 +53,8 @@ pub async fn seed_thoughts(
             mm,
             ThoughtForCreate {
                 content: content.to_string(),
+                mather_id: 1000,
+                on_latex: true,
             },
         )
         .await?;

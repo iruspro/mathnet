@@ -1,3 +1,4 @@
+#![allow(unused)]
 // region:    --- Modules
 mod config;
 mod ctx;
