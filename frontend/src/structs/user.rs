@@ -13,6 +13,7 @@ pub struct UserLoginData{
     pub user_password : String,
 }
 
+#[derive(Debug,Clone)]
 pub struct UserRegisterData{
     pub user_name : String,
     pub user_password : String,
@@ -80,6 +81,6 @@ impl UserChangingProfileData{
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry)
         }
         else {
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSuccessfullyChangedUserProfileData))
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToSuccessfullyChangedUserProfileData))
         }
     }}

@@ -1,5 +1,6 @@
 pub use sauron::Node;
-pub use crate::messages::Msg;
+use crate::list_of_pages::SignedPage;
+pub use crate::messages::*;
 
 pub use crate::structs::user::{User,UserId,new};
 pub use crate::structs::chat_message::{ChatId,ChatMessage};
@@ -37,13 +38,14 @@ pub fn show_chats_in_content(v : Vec<ShowChats>) -> Node<Msg>{
         node!{
             <div class="card">
             <div class="card-body">
-            <a on_click =move |_| {Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat.chat_id.clone())}>{text!("{}",chat.friend.user_name.clone())}</a>
+
+            // <button type="button" class="btn btn-dark" on_click= move |_| Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))>{text!("{}",chat.friend.user_name.clone())}</button> 
+            /* The problem is not on the button itself, but somewhere else. Probably message isn't handled properly. */
+            <button type="button" class="btn btn-dark" on_click= move |_| Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat.chat_id.clone())>{text!("{}",chat.friend.user_name.clone())}</button>
             <p>{text!("{}", chat.last_message.content.clone())}</p>
             <p>{text!("{}",chat.date_and_time.date_and_time_to_string())}</p>
             <p></p>
             </div>
             </div>
         }}
-    }
-    }
-}
+    }}}

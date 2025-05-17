@@ -2,9 +2,11 @@ use sauron::prelude::*;
 pub use crate::messages::{GoToPage, Msg, SwitchToPageSigned, SwitchToPageUnsigned};
 pub use crate::structs::user::*;
 pub use crate::structs::user;
+pub use crate::logics::sidebars;
+pub use crate::app::App;
 
 
-pub fn view() -> Node<Msg> {
+pub fn view(current_state_of_app : &App) -> Node<Msg> {
     let mut user = user::new();
     let mut user_profile_changes = UserChangingProfileData::new();
     node! {
@@ -30,6 +32,7 @@ pub fn view() -> Node<Msg> {
             //</nav>
 
             // Fixed Sidebar (desktop)
+            /*
             <div class="sidebar d-none d-md-block text-white">
                 <h4>"Sidebar"</h4>
                 <ul class="nav flex-column">
@@ -59,9 +62,6 @@ pub fn view() -> Node<Msg> {
             </li>
             <li class="nav-item">
                 <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToBothSidebars))}>"Both sidebars"</a>
             </li>
                 </ul>
             </div>
@@ -101,7 +101,8 @@ pub fn view() -> Node<Msg> {
                     </ul>
                 </div>
             </div>
-
+*/
+{sidebars::left_sidebar(current_state_of_app.current_page.clone())}
             // Main Content
             <div class="content">
                 <div class="container-fluid">
