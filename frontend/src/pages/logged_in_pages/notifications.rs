@@ -1,7 +1,8 @@
 use sauron::prelude::*;
-use crate::messages::{Msg, GoToPage,SwitchToPageSigned,SwitchToPageUnsigned};
+use crate::{logics::sidebars, messages::{GoToPage, Msg, SwitchToPageSigned, SwitchToPageUnsigned}};
+use crate::app::App;
 
-pub fn view() -> Node<Msg> {
+pub fn view(current_state_of_app : &App) -> Node<Msg> {
     node! {
         <main>
             // Top Navbar
@@ -25,6 +26,7 @@ pub fn view() -> Node<Msg> {
             //</nav>
 
             // Fixed Sidebar (desktop)
+            /*
             <div class="sidebar d-none d-md-block text-white">
                 <h4>"Sidebar"</h4>
                 <ul class="nav flex-column">
@@ -90,7 +92,9 @@ pub fn view() -> Node<Msg> {
                     </ul>
                 </div>
             </div>
+*/
 
+{sidebars::left_sidebar(current_state_of_app.current_page.clone())}
             // Main Content
             <div class="content">
                 <div class="container-fluid">
