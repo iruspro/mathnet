@@ -66,15 +66,14 @@ impl Application for App {
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile)) => self.current_page = Page::ItemSignedPage(SignedPage::UserProfile),
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings)) => self.current_page = Page::ItemSignedPage(SignedPage::Settings),
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage)) => self.current_page = Page::ItemSignedPage(SignedPage::Docs),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut)) => self.current_page = Page::ItemSignedPage(SignedPage::LogOut),
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications)) => self.current_page = Page::ItemSignedPage(SignedPage::Notifications),  
             Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends)) => self.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends),          
             // Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToUserSuggestsDevelopers)) => 
             
             Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToDeleteAccount)) => self.current_page = Page::ItemOtherPage(OtherPage::DeleteAccount),
             Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToRetryChangingUserProfileData)) => self.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData),
-            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::SuccessfullyChangedUserProfileData)) => self.current_page = Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData),
-            
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToSuccessfullyChangedUserProfileData)) => self.current_page = Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData),
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut)) => self.current_page = Page::ItemOtherPage(OtherPage::LogOut),
             
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
@@ -127,7 +126,6 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::PrivacyAndSecurity) => logged_in_pages::groups::view(),
             Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::groups::view(),
             Page::ItemSignedPage(SignedPage::AboutProject) => logged_in_pages::groups::view(),
-            Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(), 
             Page::ItemSignedPage(SignedPage::Docs) => logged_in_pages::groups::view(),
             Page::ItemSignedPage(SignedPage::ChatWithFriends) => logged_in_pages::chat_with_friends::view(&self),
             Page::ItemSignedPage(SignedPage::Notifications) => logged_in_pages::notifications::view(), 
@@ -136,10 +134,12 @@ impl Application for App {
             Page::ItemOtherPage(OtherPage::DeleteAccount) => logged_in_pages::delete_account::view(),       
             Page::ItemOtherPage(OtherPage::UserSuggestsDevelopers) => logged_in_pages::user_suggests_developers::view(),
             Page::ItemSignedPage(SignedPage::Conversation) => logged_in_pages::conversation::view(&self),
+            Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(),
 
             Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => logged_in_pages::successfully_changed_user_profile_data::view(),
             Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
             Page::ItemOtherPage(OtherPage::DeleteAccount) => logged_in_pages::delete_account::view(),
+            Page::ItemOtherPage(OtherPage::LogOut) => logged_in_pages::log_out::view(), 
         }
     }
 
