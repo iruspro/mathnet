@@ -1,9 +1,15 @@
+use std::thread::current;
+
 use sauron::prelude::*;
 use crate::messages::{Msg, GoToPage,SwitchToPageSigned,SwitchToPageUnsigned};
+use crate::logics::sidebars;
+use crate::app::App;
 
-pub fn view() -> Node<Msg> {
+pub fn view(current_state_of_app : &App) -> Node<Msg> {
     node! {
         <main>
+            {sidebars::left_sidebar(current_state_of_app.current_page.clone())}
+
             // Top Navbar
             //<nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
             //    <div class="container-fluid">
@@ -25,65 +31,65 @@ pub fn view() -> Node<Msg> {
             //</nav>
 
             // Fixed Sidebar (desktop)
-            <div class="sidebar d-none d-md-block text-white">
-                <h4>"Sidebar"</h4>
-                <ul class="nav flex-column">
-                <li class="nav-item">
-                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" href="#">"Groups"</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
-            </li>
-                </ul>
-            </div>
-
-            // Offcanvas Sidebar (mobile)
-            <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="offcanvasSidebar">
-                <div class="offcanvas-header">
-                    <h5 class="offcanvas-title">"Sidebar"</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-                </div>
-                <div class="offcanvas-body">
-                    <ul class="nav flex-column">
-                        <li class="nav-item">
-                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" href="#">"Groups"</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
-                        </li>
-                    </ul>
-                </div>
-            </div>
+//            <div class="sidebar d-none d-md-block text-white">
+//                <h4>"Sidebar"</h4>
+//                <ul class="nav flex-column">
+//                <li class="nav-item">
+//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
+//            </li>
+//            <li class="nav-item">
+//                <a class="nav-link text-white" href="#">"Groups"</a>
+//            </li>
+//            <li class="nav-item">
+//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
+//            </li>
+//            <li class="nav-item">
+//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
+//            </li>
+//            <li class="nav-item">
+//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+//            </li>
+//            <li class="nav-item">
+//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
+//            </li>
+//            <li class="nav-item">
+//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
+//            </li>
+//                </ul>
+//            </div>
+//
+//            // Offcanvas Sidebar (mobile)
+//            <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="offcanvasSidebar">
+//                <div class="offcanvas-header">
+//                    <h5 class="offcanvas-title">"Sidebar"</h5>
+//                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+//                </div>
+//                <div class="offcanvas-body">
+//                    <ul class="nav flex-column">
+//                        <li class="nav-item">
+//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
+//                        </li>
+//                        <li class="nav-item">
+//                            <a class="nav-link text-white" href="#">"Groups"</a>
+//                        </li>
+//                        <li class="nav-item">
+//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
+//                        </li>
+//                        <li class="nav-item">
+//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
+//                        </li>
+//                        <li class="nav-item">
+//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+//                        </li>
+//                        <li class="nav-item">
+//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
+//                        </li>
+//                        <li class="nav-item">
+//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
+//                        </li>
+//                    </ul>
+//                </div>
+//            </div>
 
             // Main Content
             <div class="content">
