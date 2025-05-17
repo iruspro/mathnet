@@ -1,8 +1,12 @@
+// region:    --- Modules
+
+use super::store;
+
 use derive_more::From;
 use serde::Serialize;
 use serde_with::{DisplayFromStr, serde_as};
 
-use super::store;
+// endregion: --- Modules
 
 pub type Result<T> = core::result::Result<T, Error>;
 
@@ -13,6 +17,10 @@ pub enum Error {
         entity: &'static str,
         id: i64,
     },
+    ListLimitOverMax {
+        max: i64,
+        actual: i64,
+    },
 
     // -- Modules
     #[from]
@@ -21,6 +29,10 @@ pub enum Error {
     // -- Externals
     #[from]
     Sqlx(#[serde_as(as = "DisplayFromStr")] sqlx::Error),
+    #[from]
+    SeaQuery(#[serde_as(as = "DisplayFromStr")] sea_query::error::Error),
+    #[from]
+    ModqlIntoSea(#[serde_as(as = "DisplayFromStr")] modql::filter::IntoSeaError),
 }
 
 // region:    --- Error Boilerplate

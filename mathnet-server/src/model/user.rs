@@ -1,14 +1,20 @@
-use serde::{Deserialize, Serialize};
-use sqlb::Fields;
-use sqlx::FromRow;
-
-use crate::ctx::Ctx;
+// region:    --- Modules
 
 use super::{
     ModelManager, Result,
     base::{self, DbBmc},
     user_group::UserGroup,
 };
+use crate::ctx::Ctx;
+
+use modql::{
+    field::Fields,
+    filter::{FilterNodes, ListOptions, OpValsBool, OpValsInt64, OpValsString},
+};
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
+
+// endregion: --- Modules
 
 // region:    --- User Types
 #[derive(Debug, Clone, Fields, FromRow, Serialize)]
@@ -31,6 +37,15 @@ pub struct UserForUpdate {
     pub email: Option<String>,
     // hash
     pub password: Option<String>,
+}
+
+#[derive(FilterNodes, Deserialize, Default, Debug)]
+pub struct UserFilter {
+    id: Option<OpValsInt64>,
+
+    email: Option<OpValsString>,
+    is_active: Option<OpValsBool>,
+    is_staff: Option<OpValsBool>,
 }
 // endregion: --- User Types
 
@@ -55,8 +70,13 @@ impl UserBmc {
         base::get::<Self, _>(ctx, mm, id).await
     }
 
-    pub async fn list(ctx: &Ctx, mm: &ModelManager) -> Result<Vec<User>> {
-        base::list::<Self, _>(ctx, mm).await
+    pub async fn list(
+        ctx: &Ctx,
+        mm: &ModelManager,
+        filters: Option<Vec<UserFilter>>,
+        list_options: Option<ListOptions>,
+    ) -> Result<Vec<User>> {
+        base::list::<Self, _, _>(ctx, mm, filters, list_options).await
     }
 
     pub async fn update(
@@ -71,9 +91,8 @@ impl UserBmc {
     pub async fn delete(ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<()> {
         base::delete::<Self>(ctx, mm, id).await
     }
-}
 
-impl UserBmc {
+    // TODO: Implement this
     pub async fn list_user_groups(
         ctx: &Ctx,
         mm: &ModelManager,

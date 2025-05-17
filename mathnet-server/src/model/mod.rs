@@ -17,6 +17,7 @@
 //!    to all Model Controllers functions.
 
 // region:    --- Modules
+
 mod base;
 pub mod chat;
 mod error;
@@ -27,9 +28,9 @@ pub mod thought;
 pub mod user;
 pub mod user_group;
 
+pub use self::error::{Error, Result};
 use store::{Db, new_db_pool};
 
-pub use self::error::{Error, Result};
 // endregion: --- Modules
 
 #[derive(Clone)]

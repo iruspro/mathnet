@@ -1,4 +1,8 @@
+// region:    --- Modules
+
 use serde::Serialize;
+
+// endregion: --- Modules
 
 pub type Result<T> = core::result::Result<T, Error>;
 

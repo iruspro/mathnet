@@ -1,14 +1,20 @@
-use serde::{Deserialize, Serialize};
-use sqlb::Fields;
-use sqlx::FromRow;
-
-use crate::ctx::Ctx;
+// region:    --- Modules
 
 use super::{
     ModelManager, Result,
     base::{self, DbBmc},
     user::User,
 };
+use crate::ctx::Ctx;
+
+use modql::{
+    field::Fields,
+    filter::{FilterNodes, ListOptions, OpValsInt64, OpValsString},
+};
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
+
+// endregion: --- Modules
 
 // region:    --- UserGroup Types
 #[derive(Debug, Clone, Fields, FromRow, Serialize)]
@@ -26,6 +32,13 @@ pub struct UserGroupForCreate {
 pub struct UserGroupForUpdate {
     pub name: Option<String>,
 }
+
+#[derive(FilterNodes, Deserialize, Default, Debug)]
+pub struct UserGroupFilter {
+    id: Option<OpValsInt64>,
+
+    name: Option<OpValsString>,
+}
 // endregion: --- UserGroup Types
 
 // region:    --- UserGroupBmc
@@ -37,7 +50,6 @@ impl DbBmc for UserGroupBmc {
 
 impl UserGroupBmc {
     pub async fn create(
-        // ctx and mm must be in all of the BMC functions
         ctx: &Ctx,
         mm: &ModelManager,
         user_group_c: UserGroupForCreate,
@@ -49,8 +61,13 @@ impl UserGroupBmc {
         base::get::<Self, _>(ctx, mm, id).await
     }
 
-    pub async fn list(ctx: &Ctx, mm: &ModelManager) -> Result<Vec<UserGroup>> {
-        base::list::<Self, _>(ctx, mm).await
+    pub async fn list(
+        ctx: &Ctx,
+        mm: &ModelManager,
+        filters: Option<Vec<UserGroupFilter>>,
+        list_options: Option<ListOptions>,
+    ) -> Result<Vec<UserGroup>> {
+        base::list::<Self, _, _>(ctx, mm, filters, list_options).await
     }
 
     pub async fn update(
@@ -65,9 +82,8 @@ impl UserGroupBmc {
     pub async fn delete(ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<()> {
         base::delete::<Self>(ctx, mm, id).await
     }
-}
 
-impl UserGroupBmc {
+    // TODO: Implement this
     pub async fn list_users(ctx: &Ctx, mm: &ModelManager, group_id: i64) -> Result<Vec<User>> {
         todo!()
     }

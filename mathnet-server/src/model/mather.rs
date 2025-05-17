@@ -1,15 +1,20 @@
-use serde::{Deserialize, Serialize};
-use sqlb::Fields;
-use sqlx::FromRow;
-
-use crate::ctx::Ctx;
+// region:    --- Modules
 
 use super::{
     ModelManager, Result,
     base::{self, DbBmc},
     thought::Thought,
-    user::User,
 };
+use crate::ctx::Ctx;
+
+use modql::{
+    field::Fields,
+    filter::{FilterNodes, ListOptions, OpValsInt64, OpValsString},
+};
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
+
+// endregion: --- Modules
 
 // #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize, Type)]
 // #[sqlx(type_name = "status", rename_all = "lowercase")]
@@ -41,6 +46,16 @@ pub struct MatherForUpdate {
     pub first_name: Option<String>,
     pub last_name: Option<String>,
 }
+
+#[derive(FilterNodes, Deserialize, Default, Debug)]
+pub struct MatherFilter {
+    id: Option<OpValsInt64>,
+
+    first_name: Option<OpValsString>,
+    last_name: Option<OpValsString>,
+    user_id: Option<OpValsInt64>,
+    // status: Option<_>,
+}
 // endregion: --- Mather Types
 
 // region:    --- MatherBmc
@@ -64,8 +79,13 @@ impl MatherBmc {
         base::get::<Self, _>(ctx, mm, id).await
     }
 
-    pub async fn list(ctx: &Ctx, mm: &ModelManager) -> Result<Vec<Mather>> {
-        base::list::<Self, _>(ctx, mm).await
+    pub async fn list(
+        ctx: &Ctx,
+        mm: &ModelManager,
+        filters: Option<Vec<MatherFilter>>,
+        list_options: Option<ListOptions>,
+    ) -> Result<Vec<Mather>> {
+        base::list::<Self, _, _>(ctx, mm, filters, list_options).await
     }
 
     pub async fn update(
@@ -80,9 +100,7 @@ impl MatherBmc {
     pub async fn delete(ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<()> {
         base::delete::<Self>(ctx, mm, id).await
     }
-}
 
-impl MatherBmc {
     pub async fn list_mather_friends(
         ctx: &Ctx,
         mm: &ModelManager,
