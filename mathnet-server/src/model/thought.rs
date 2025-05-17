@@ -1,17 +1,20 @@
-use chrono::DateTime;
-use chrono::Utc;
-use serde::{Deserialize, Serialize};
-use sqlb::Fields;
-use sqlx::FromRow;
-
-use crate::ctx::Ctx;
-use crate::model::ModelManager;
-use crate::model::Result;
+// region:    --- Modules
 
 use super::base::{self, DbBmc};
+use crate::ctx::Ctx;
+use crate::model::{ModelManager, Result};
+
+use chrono::{DateTime, Utc};
+use modql::{
+    field::Fields,
+    filter::{FilterNodes, ListOptions, OpValsBool, OpValsInt64, OpValsString},
+};
+use serde::{Deserialize, Serialize};
+use sqlx::FromRow;
+
+// endregion: --- Modules
 
 // region:    --- Thought Types
-// ---->
 #[derive(Debug, Clone, Fields, FromRow, Serialize)]
 pub struct Thought {
     pub id: i64,
@@ -21,18 +24,26 @@ pub struct Thought {
     pub on_latex: bool,
 }
 
-// <----
-#[derive(Fields, Deserialize)]
+#[derive(Deserialize, Fields)]
 pub struct ThoughtForCreate {
     pub content: String,
     pub mather_id: i64,
     pub on_latex: bool,
 }
 
-// <----
-#[derive(Fields, Deserialize)]
+#[derive(Deserialize, Fields)]
 pub struct ThoughtForUpdate {
     pub content: Option<String>,
+}
+
+#[derive(FilterNodes, Deserialize, Default, Debug)]
+pub struct ThoughtFilter {
+    id: Option<OpValsInt64>,
+
+    content: Option<OpValsString>,
+    mather_id: Option<OpValsInt64>,
+    // created_at: Option<OpValsDateTime<Utc>>,
+    on_latex: Option<OpValsBool>,
 }
 // endregion: --- Thought Types
 
@@ -44,13 +55,7 @@ impl DbBmc for ThoughtBmc {
 }
 
 impl ThoughtBmc {
-    pub async fn create(
-        // ctx and mm must be in all of the BMC functions
-        ctx: &Ctx,
-        mm: &ModelManager,
-        // Function specific arguments
-        thought_c: ThoughtForCreate,
-    ) -> Result<i64> {
+    pub async fn create(ctx: &Ctx, mm: &ModelManager, thought_c: ThoughtForCreate) -> Result<i64> {
         base::create::<Self, _>(ctx, mm, thought_c).await
     }
 
@@ -58,8 +63,13 @@ impl ThoughtBmc {
         base::get::<Self, _>(ctx, mm, id).await
     }
 
-    pub async fn list(ctx: &Ctx, mm: &ModelManager) -> Result<Vec<Thought>> {
-        base::list::<Self, _>(ctx, mm).await
+    pub async fn list(
+        ctx: &Ctx,
+        mm: &ModelManager,
+        filters: Option<Vec<ThoughtFilter>>,
+        list_options: Option<ListOptions>,
+    ) -> Result<Vec<Thought>> {
+        base::list::<Self, _, _>(ctx, mm, filters, list_options).await
     }
 
     pub async fn update(
@@ -74,9 +84,8 @@ impl ThoughtBmc {
     pub async fn delete(ctx: &Ctx, mm: &ModelManager, id: i64) -> Result<()> {
         base::delete::<Self>(ctx, mm, id).await
     }
-}
 
-impl ThoughtBmc {
+    // TODO: Implement this
     // pub async fn list_thought_reactions(
     //     ctx: &Ctx,
     //     mm: &ModelManager,
@@ -94,6 +103,7 @@ mod tests {
     use crate::_dev_utils;
     use crate::model::Error;
     use anyhow::{Ok, Result};
+    use serde_json::json;
     use serial_test::serial;
 
     #[serial]
@@ -150,25 +160,85 @@ mod tests {
 
     #[serial]
     #[tokio::test]
-    async fn test_list_ok() -> Result<()> {
+    async fn test_list_all_ok() -> Result<()> {
         // -- Setup & Fixtures
         let mm = _dev_utils::init_test().await;
         let ctx = Ctx::root_ctx();
-        let fx_contents = &["test_list_ok-thought 01", "test_list_ok-thought 02"];
+        let fx_contents = &["test_list_all_ok-thought 01", "test_list_all_ok-thought 02"];
         _dev_utils::seed_thoughts(&ctx, &mm, fx_contents).await?;
 
         // -- Exec
-        let thoughts = ThoughtBmc::list(&ctx, &mm).await?;
+        let thoughts = ThoughtBmc::list(&ctx, &mm, None, None).await?;
 
         // -- Check
-        // TODO: Add filters, limits, and other constraints
         let thoughts: Vec<Thought> = thoughts
             .into_iter()
-            .filter(|t| t.content.starts_with("test_list_ok-thought"))
+            .filter(|t| t.content.starts_with("test_list_all_ok-thought"))
             .collect();
         assert_eq!(thoughts.len(), 2, "number of seeded tasks");
 
         // -- Clean
+        for thought in thoughts.iter() {
+            ThoughtBmc::delete(&ctx, &mm, thought.id).await?;
+        }
+
+        Ok(())
+    }
+
+    #[serial]
+    #[tokio::test]
+    async fn test_list_by_filter_ok() -> Result<()> {
+        // -- Setup & Fixtures
+        let mm = _dev_utils::init_test().await;
+        let ctx = Ctx::root_ctx();
+        let fx_contents = &[
+            "test_list_by_filter_ok-thought 01.a",
+            "test_list_by_filter_ok-thought 01.b",
+            "test_list_by_filter_ok-thought 02.a",
+            "test_list_by_filter_ok-thought 02.b",
+            "test_list_by_filter_ok-thought 03",
+        ];
+        _dev_utils::seed_thoughts(&ctx, &mm, fx_contents).await?;
+
+        // -- Exec
+        let filters: Vec<ThoughtFilter> = serde_json::from_value(json!([
+            {
+                "content": {
+                    "$endsWith": ".a",
+                    "$containsAny": ["01", "02"],
+                },
+
+            },
+            {
+                "content": {
+                    "$contains": "03"
+                }
+            }
+        ]))?;
+
+        let list_options = serde_json::from_value(json!({
+            "order_bys": "!id"
+        }))?;
+
+        let thoughts = ThoughtBmc::list(&ctx, &mm, Some(filters), Some(list_options)).await?;
+
+        // -- Check
+        assert_eq!(thoughts.len(), 3);
+        assert!(thoughts[0].content.ends_with("03"));
+        assert!(thoughts[1].content.ends_with("02.a"));
+        assert!(thoughts[2].content.ends_with("01.a"));
+
+        // -- Clean
+        let thoughts = ThoughtBmc::list(
+            &ctx,
+            &mm,
+            Some(serde_json::from_value(json!([{
+                "content": {"$startsWith": "test_list_by_filter_ok"}
+            }]))?),
+            None,
+        )
+        .await?;
+        assert_eq!(thoughts.len(), 5);
         for thought in thoughts.iter() {
             ThoughtBmc::delete(&ctx, &mm, thought.id).await?;
         }
