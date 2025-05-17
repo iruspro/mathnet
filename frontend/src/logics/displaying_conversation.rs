@@ -45,7 +45,7 @@ pub fn show_conversation(chat_id : ChatId) -> Node<Msg>{
                         <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications))}>"Notifications"</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
+                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut))}>"Log out"</a>
                     </li>
                 </ul>
             </div>

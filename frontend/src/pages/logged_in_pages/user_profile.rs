@@ -60,9 +60,6 @@ pub fn view() -> Node<Msg> {
             <li class="nav-item">
                 <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToBothSidebars))}>"Both sidebars"</a>
-            </li>
                 </ul>
             </div>
 

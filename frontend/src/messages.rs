@@ -41,16 +41,16 @@ pub enum SwitchToPageSigned {
     GoToGroupsList,
     GoToUserProfile,
     GoToSettings,
-    GoToLogOut,
     GoToChatWithFriends,
     GoToNotifications,
 }
 
 #[derive(Debug,Clone)]
 pub enum SwitchToPageOther{
-    SuccessfullyChangedUserProfileData,
+    GoToSuccessfullyChangedUserProfileData,
     GoToDeleteAccount,
     GoToRetryChangingUserProfileData,
+    GoToLogOut
 }
 
 #[derive(Debug,Clone)]

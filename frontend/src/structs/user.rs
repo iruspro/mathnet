@@ -80,6 +80,6 @@ impl UserChangingProfileData{
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry)
         }
         else {
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSuccessfullyChangedUserProfileData))
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToSuccessfullyChangedUserProfileData))
         }
     }}

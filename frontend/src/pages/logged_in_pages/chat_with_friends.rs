@@ -1,5 +1,5 @@
 use sauron::prelude::*;
-use crate::messages::{Msg, GoToPage, SwitchToPageSigned};
+use crate::messages::{Msg, GoToPage, SwitchToPageSigned,SwitchToPageOther};
 use crate::app::App;
 use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_content}, displaying_conversation};
 use crate::experimental_examples::imaginary_friends;
@@ -33,7 +33,7 @@ pub fn view(data_provided : &App) -> Node<Msg> {
                         <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications))}>"Notifications"</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
+                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut))}>"Log out"</a>
                     </li>
                 </ul>
             </div>
