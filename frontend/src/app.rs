@@ -9,7 +9,9 @@ use sauron::dom::Program;
 use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData},group_struct::*};
 use crate::logics::{login_logics,registration_logics};
 use crate::messages::GoToPage;
+use crate::web_sys::console;
 
+#[derive(Debug)]
 pub struct App {
     pub current_page: Page,
     pub user_login_data : UserLoginData,
@@ -111,7 +113,9 @@ impl Application for App {
             Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity) => logged_out_pages::privacy_and_security::view(),
             Page::ItemUnsignedPage(UnsignedPage::Register) => logged_out_pages::register::view(),
 
-            Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::groups::view(&self),
+            Page::ItemSignedPage(SignedPage::GroupsList) => {
+                console::log_1(&"Hello 4!".into());
+                logged_in_pages::groups::view(&self)}
             Page::ItemSignedPage(SignedPage::Settings) => logged_in_pages::settings::view(&self),
             Page::ItemSignedPage(SignedPage::UserProfile) => logged_in_pages::user_profile::view(&self),
             Page::ItemSignedPage(SignedPage::PrivacyAndSecurity) => logged_in_pages::privacy_and_security::view(&self),
@@ -119,7 +123,9 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::Docs) => logged_in_pages::docs::view(&self),
             Page::ItemSignedPage(SignedPage::ChatWithFriends) => logged_in_pages::chat_with_friends::view(&self),
             Page::ItemSignedPage(SignedPage::Notifications) => logged_in_pages::notifications::view(&self), 
-            Page::ItemSignedPage(SignedPage::Conversation) => logged_in_pages::conversation::view(&self),
+            Page::ItemSignedPage(SignedPage::Conversation) => {
+                console::log_1(&"Rust8!".into());
+                logged_in_pages::conversation::view(&self)},
             Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(),
 
             Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => logged_in_pages::successfully_changed_user_profile_data::view(),
