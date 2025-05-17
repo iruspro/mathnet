@@ -9,7 +9,9 @@ use sauron::dom::Program;
 use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData},group_struct::*};
 use crate::logics::{login_logics,registration_logics};
 use crate::messages::GoToPage;
+use crate::web_sys::console;
 
+#[derive(Debug)]
 pub struct App {
     pub current_page: Page,
     pub user_login_data : UserLoginData,
@@ -120,7 +122,9 @@ impl Application for App {
             Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity) => logged_out_pages::privacy_and_security::view(),
             Page::ItemUnsignedPage(UnsignedPage::Register) => logged_out_pages::register::view(),
 
-            Page::ItemSignedPage(SignedPage::GroupsList) => logged_in_pages::groups::view(&self),
+            Page::ItemSignedPage(SignedPage::GroupsList) => {
+                console::log_1(&"Hello 4!".into());
+                logged_in_pages::groups::view(&self)}
             Page::ItemSignedPage(SignedPage::Settings) => logged_in_pages::settings::view(&self),
             Page::ItemSignedPage(SignedPage::UserProfile) => logged_in_pages::user_profile::view(&self),
             Page::ItemSignedPage(SignedPage::PrivacyAndSecurity) => logged_in_pages::privacy_and_security::view(&self),

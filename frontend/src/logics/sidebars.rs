@@ -5,10 +5,14 @@ use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_c
 use crate::experimental_examples::imaginary_friends;
 use crate::list_of_pages::{Page,SignedPage,OtherPage};
 use sauron::node;
+use crate::web_sys::console;
 
 fn show_nav_link(page : Page)->Node<Msg>{
+    let pagex = Page::ItemSignedPage(SignedPage::GroupsList);
+    console::log_1(&Page::page_name_to_string(page.clone()).into());
 match page{
 Page::ItemSignedPage(SignedPage::UserProfile) => {
+    console::log_1(&"Hello from Rust3!".into());
 node!{<li class="nav-item">
                         <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
                     </li>
@@ -70,7 +74,7 @@ _ => unimplemented!()
 fn show_active_nav_link(page_name : String)->Node<Msg>{
     node!{
 <li class="nav-item">
-                <a class="nav-link text-white" href="#">text!(page_name)</a>
+                <a class="nav-link text-white" href="#">{text(page_name)}</a>
             </li>
 
 }}
@@ -192,7 +196,8 @@ pub fn left_sidebar(current_page: Page) -> Node<Msg> {
         Page::ItemSignedPage(SignedPage::PrivacyAndSecurity),
         Page::ItemSignedPage(SignedPage::Notifications),
         Page::ItemSignedPage(SignedPage::Settings),
-        Page::ItemOtherPage(OtherPage::LogOut),
+        Page::ItemSignedPage(SignedPage::LogOut),
+       // let pagex = Page::ItemSignedPage(SignedPage::GroupsList);
     ];
 
     // Generate nav links as a Vec<Node<Msg>>
@@ -200,8 +205,11 @@ pub fn left_sidebar(current_page: Page) -> Node<Msg> {
         .iter()
         .map(|pagex| {
             if *pagex == current_page {
+                console::log_1(&"Rust5".into());
+                console::log_1(&Page::page_name_to_string(pagex.clone()).into());
                 show_active_nav_link(Page::page_name_to_string(pagex.clone()))
             } else {
+                console::log_1(&Page::page_name_to_string(pagex.clone()).into());
                 show_nav_link(pagex.clone())
             }
         })
