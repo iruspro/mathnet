@@ -93,8 +93,8 @@ impl ChatBmc {
         base::delete::<Self>(ctx, mm, id).await
     }
 
-    pub async fn list_user_chats(ctx: &Ctx, mm: &ModelManager, chat_id: i64) -> Result<Vec<Chat>> {
-        todo!()
-    }
+    // pub async fn list_user_chats(ctx: &Ctx, mm: &ModelManager, chat_id: i64) -> Result<Vec<Chat>> {
+    //     todo!()
+    // }
 }
 // endregion: --- ChatBmc

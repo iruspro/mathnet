@@ -3,7 +3,6 @@
 use super::{
     ModelManager, Result,
     base::{self, DbBmc},
-    thought::Thought,
 };
 use crate::ctx::Ctx;
 
@@ -101,21 +100,21 @@ impl MatherBmc {
         base::delete::<Self>(ctx, mm, id).await
     }
 
-    pub async fn list_mather_friends(
-        ctx: &Ctx,
-        mm: &ModelManager,
-        mather_id: i64,
-    ) -> Result<Vec<Mather>> {
-        todo!()
-    }
+    // pub async fn list_mather_friends(
+    //     ctx: &Ctx,
+    //     mm: &ModelManager,
+    //     mather_id: i64,
+    // ) -> Result<Vec<Mather>> {
+    //     todo!()
+    // }
 
-    pub async fn list_mather_thoughts(
-        ctx: &Ctx,
-        mm: &ModelManager,
-        mather_id: i64,
-    ) -> Result<Vec<Thought>> {
-        todo!()
-    }
+    // pub async fn list_mather_thoughts(
+    //     ctx: &Ctx,
+    //     mm: &ModelManager,
+    //     mather_id: i64,
+    // ) -> Result<Vec<Thought>> {
+    //     todo!()
+    // }
 
     // pub async fn list_mather_posts(
     //     ctx: &Ctx,
@@ -149,13 +148,13 @@ impl MatherBmc {
     //     todo!()
     // }
 
-    pub async fn add_new_friend(
-        ctx: &Ctx,
-        mm: &ModelManager,
-        mather_id: i64,
-        friend_id: i64,
-    ) -> Result<()> {
-        todo!()
-    }
+    // pub async fn add_new_friend(
+    //     ctx: &Ctx,
+    //     mm: &ModelManager,
+    //     mather_id: i64,
+    //     friend_id: i64,
+    // ) -> Result<()> {
+    //     todo!()
+    // }
 }
 // endregion: --- MatherBmc
