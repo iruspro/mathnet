@@ -3,7 +3,6 @@
 use super::{
     ModelManager, Result,
     base::{self, DbBmc},
-    user_group::UserGroup,
 };
 use crate::ctx::Ctx;
 
@@ -93,16 +92,16 @@ impl UserBmc {
     }
 
     // TODO: Implement this
-    pub async fn list_user_groups(
-        ctx: &Ctx,
-        mm: &ModelManager,
-        user_id: i64,
-    ) -> Result<Vec<UserGroup>> {
-        todo!()
-    }
+    // pub async fn list_user_groups(
+    //     ctx: &Ctx,
+    //     mm: &ModelManager,
+    //     user_id: i64,
+    // ) -> Result<Vec<UserGroup>> {
+    //     todo!()
+    // }
 
-    pub async fn deactivate(ctx: &Ctx, mm: &ModelManager, user_id: i64) -> Result<()> {
-        todo!()
-    }
+    // pub async fn deactivate(ctx: &Ctx, mm: &ModelManager, user_id: i64) -> Result<()> {
+    //     todo!()
+    // }
 }
 // endregion: --- UserBmc

@@ -92,12 +92,12 @@ impl MessageBmc {
         base::delete::<Self>(ctx, mm, id).await
     }
 
-    pub async fn list_chat_messages(
-        ctx: &Ctx,
-        mm: &ModelManager,
-        chat_id: i64,
-    ) -> Result<Vec<Message>> {
-        todo!()
-    }
+    // pub async fn list_chat_messages(
+    //     ctx: &Ctx,
+    //     mm: &ModelManager,
+    //     chat_id: i64,
+    // ) -> Result<Vec<Message>> {
+    //     todo!()
+    // }
 }
 // endregion: --- MessageBmc
