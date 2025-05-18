@@ -103,7 +103,7 @@ impl Application for App {
             Msg::NoAction => {unimplemented!()},
             Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
             Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {self.current_conversation = Some(chat_id); self.current_page = Page::ItemSignedPage(SignedPage::Conversation)},
-            Msg::SetConversationToNone => self.current_conversation = None,
+            Msg::SetConversationToNone => {self.current_conversation = None; self.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends)},
             Msg::NoOp =>{},
             Msg::SendConversationMessage(conversation_message) => {},
 
@@ -147,6 +147,7 @@ impl Application for App {
     }
 
     }
+    //Testing 
 
     #[wasm_bindgen(start)]
     pub fn start() {

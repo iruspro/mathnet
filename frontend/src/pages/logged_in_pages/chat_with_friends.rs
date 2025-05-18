@@ -1,42 +1,14 @@
 use sauron::prelude::*;
 use crate::messages::{Msg, GoToPage, SwitchToPageSigned,SwitchToPageOther};
 use crate::app::App;
-use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_content}, displaying_conversation};
+use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_content}, displaying_conversation, sidebars};
 use crate::experimental_examples::imaginary_friends;
 
 pub fn view(data_provided : &App) -> Node<Msg> {
     node! {
         <main>
             // Left Sidebar (Desktop)
-            <div class="sidebar d-none d-md-block text-white">
-                <h4>"Sidebar"</h4>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList))}>"Chat with friends"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))}>"Docs"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications))}>"Notifications"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut))}>"Log out"</a>
-                    </li>
-                </ul>
-            </div>
+            {sidebars::left_sidebar(data_provided.current_page.clone())}
 
             // Right Sidebar
             <div class="right-sidebar d-none d-md-block text-white">
@@ -55,7 +27,7 @@ pub fn view(data_provided : &App) -> Node<Msg> {
                 <div class="scrollable-container"> //scrollable-container doesn't do anything because sidebars are already fixed (independent from scrolling the content.)
                     <h1 class="text-center">"Find friends"</h1>
                     <p class="basicparagraph text-start">
-                        "View other people's profiles or chat with somebody."
+                        "View other people's profiles or chat with somebody and have fun!"
                         {for _ in (0..100){show_chats_in_content(vec!(
                             imaginary_friends::dummy_show_chat(),
                             ))
