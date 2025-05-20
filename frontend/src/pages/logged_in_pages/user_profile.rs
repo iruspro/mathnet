@@ -92,6 +92,9 @@ pub fn view(current_state_of_app : &App) -> Node<Msg> {
                         <li class="nav-item">
                             <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
                         </li>
+                        //<li class="nav-item">
+                        //    <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserSuggestsDevelopers))}>"Suggest us"</a>
+                        //</li>
                         <li class="nav-item">
                             <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
                         </li>
