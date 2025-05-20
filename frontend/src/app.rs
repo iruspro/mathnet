@@ -1,0 +1,146 @@
+use sauron::prelude::*;
+use wasm_bindgen::prelude::*;
+use web_sys::window;
+use crate::{list_of_pages::OtherPage, logics::registration_logics::check_registration_validity, messages::*, pages::logged_in_pages::conversation, structs::chat_message::ChatId};
+pub use crate::messages::{Msg, UserLoginAttempt,UserRegister,SwitchToPageSigned,SwitchToPageUnsigned,GoToPage::{GoToPageSigned, GoToPageUnsigned}};
+use crate::list_of_pages::{Page,UnsignedPage,SignedPage};
+use crate::pages::{logged_out_pages,logged_in_pages};
+use sauron::dom::Program;
+use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData},group_struct::*};
+use crate::logics::{login_logics,registration_logics};
+use crate::messages::GoToPage;
+use crate::web_sys::console;
+
+#[derive(Debug)]
+pub struct App {
+    pub current_page: Page,
+    pub user_login_data : UserLoginData,
+    pub user_register_data : UserRegisterData,
+    pub user_data : User,
+    pub user_changing_data_structure : UserChangingProfileData,
+    pub current_conversation : Option<ChatId>,
+    pub reload_current_page : bool,
+}
+
+impl App {
+    pub fn new() -> Self {
+        App {
+            current_page : Page::ItemUnsignedPage(UnsignedPage::Home),
+            user_login_data : UserLoginData{user_name : String::new(), user_password : String::new()},
+            user_register_data : crate::structs::user::get_user_register_data(),
+            user_data : crate::structs::user::new(),
+            user_changing_data_structure : crate::structs::user::UserChangingProfileData::new(),
+            current_conversation : None,
+            reload_current_page : false,
+        }
+    }
+    //fn parse_location() -> Page {
+    //    let path = window().unwrap().location().pathname().unwrap_or_default();
+    //    match path.as_str() {
+    //        "/" => Page::Home,
+    //        "/docs" => Page::Docs,
+    //        "/chat" => Page::Chat,
+    //        "/exercise" => Page::Exercise,
+    //        "/list_of_exercises" => Page::ListOfExercise,
+    //        "/login" => Page::Login,
+    //        "/register" => Page::Register,
+    //        "/settings" => Page::Settings,
+    //        "/user_profile" => Page::UserProfile,
+    //        _ => Page::Home,
+    //    }
+    //}
+}//
+
+impl Application for App {
+    type MSG = Msg;
+    fn update(&mut self, msg: Self::MSG) -> Cmd<Msg> {
+        match msg {
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::Home),
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::Docs),
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage) )=> self.current_page = Page::ItemUnsignedPage(UnsignedPage::Login),
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::Register),
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::AboutProject),
+            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity),
+            
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList)) => self.current_page = Page::ItemSignedPage(SignedPage::GroupsList),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject)) => self.current_page = Page::ItemSignedPage(SignedPage::AboutProject),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity)) => self.current_page = Page::ItemSignedPage(SignedPage::PrivacyAndSecurity),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile)) => self.current_page = Page::ItemSignedPage(SignedPage::UserProfile),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings)) => self.current_page = Page::ItemSignedPage(SignedPage::Settings),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage)) => self.current_page = Page::ItemSignedPage(SignedPage::Docs),
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications)) => self.current_page = Page::ItemSignedPage(SignedPage::Notifications),  
+            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends)) => self.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends),          
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToDeleteAccount)) => self.current_page = Page::ItemOtherPage(OtherPage::DeleteAccount),
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToRetryChangingUserProfileData)) => self.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData),
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToSuccessfullyChangedUserProfileData)) => self.current_page = Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData),
+            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut)) => self.current_page = Page::ItemOtherPage(OtherPage::LogOut),
+            
+            Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
+            Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
+            Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => login_logics::check_login_attempt_validity(self),
+            
+            Msg::Registration(UserRegister::UpdateUserRegisterName(name)) => self.user_register_data.user_name = name, 
+            Msg::Registration(UserRegister::UpdateUserRegisterPassword(passw)) => self.user_register_data.user_password = passw,
+            Msg::Registration(UserRegister::UpdateUserRegisterPasswordAgain(passw_again)) =>self.user_register_data.user_password_again = passw_again,
+            Msg::Registration(UserRegister::UpdateUserRegisterEmail(email)) => self.user_register_data.user_email = email,
+            Msg::Registration(UserRegister::RegistrationAttempt) => registration_logics::check_registration_validity(self),
+        
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserName(new_name)) => self.user_changing_data_structure.new_user_name = new_name,
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(new_email)) => self.user_changing_data_structure.new_user_email = new_email,
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(new_password)) => self.user_changing_data_structure.new_user_password = new_password,
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(new_password)) => self.user_changing_data_structure.new_user_password_confirmation = new_password,
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {self.current_page = Page::ItemOtherPage(OtherPage::DeleteAccount)},
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => self.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges) => {},
+            Msg::SearchFriend(searched_person) => {unimplemented!()},
+            Msg::NoAction => {unimplemented!()},
+            Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
+            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {self.current_conversation = Some(chat_id); self.current_page = Page::ItemSignedPage(SignedPage::Conversation)},
+            Msg::SetConversationToNone => {self.current_conversation = None; self.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends)},
+            Msg::NoOp =>{},
+            Msg::SendConversationMessage(conversation_message) => {},
+        
+        }
+        Cmd::none()
+    }
+
+    fn view(&self) -> Node<Self::MSG> {
+        match self.current_page {
+            Page::ItemUnsignedPage(UnsignedPage::Home) => logged_out_pages::home::view(),
+            Page::ItemUnsignedPage(UnsignedPage::Docs) => logged_out_pages::docs::view(),
+            Page::ItemUnsignedPage(UnsignedPage::AboutProject) => logged_out_pages::about_project::view(),
+            Page::ItemUnsignedPage(UnsignedPage::Login) => logged_out_pages::login::view(&self),
+            Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity) => logged_out_pages::privacy_and_security::view(),
+            Page::ItemUnsignedPage(UnsignedPage::Register) => logged_out_pages::register::view(),
+
+            Page::ItemSignedPage(SignedPage::GroupsList) => {
+                console::log_1(&"Hello 4!".into());
+                logged_in_pages::groups::view(&self)}
+            Page::ItemSignedPage(SignedPage::Settings) => logged_in_pages::settings::view(&self),
+            Page::ItemSignedPage(SignedPage::UserProfile) => logged_in_pages::user_profile::view(&self),
+            Page::ItemSignedPage(SignedPage::PrivacyAndSecurity) => logged_in_pages::privacy_and_security::view(&self),
+            Page::ItemSignedPage(SignedPage::AboutProject) => logged_in_pages::about_project::view(&self),
+            Page::ItemSignedPage(SignedPage::Docs) => logged_in_pages::docs::view(&self),
+            Page::ItemSignedPage(SignedPage::ChatWithFriends) => logged_in_pages::chat_with_friends::view(&self),
+            Page::ItemSignedPage(SignedPage::Notifications) => logged_in_pages::notifications::view(&self), 
+            Page::ItemSignedPage(SignedPage::Conversation) => {
+                console::log_1(&"Rust8!".into());
+                logged_in_pages::conversation::view(&self)},
+            Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(),
+
+            Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => logged_in_pages::successfully_changed_user_profile_data::view(),
+            Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
+            Page::ItemOtherPage(OtherPage::DeleteAccount) => logged_in_pages::delete_account::view(),
+            Page::ItemOtherPage(OtherPage::LogOut) => logged_in_pages::log_out::view(), 
+        }
+    }
+
+    }
+    //Testing 
+
+    #[wasm_bindgen(start)]
+    pub fn start() {
+        console_log::init_with_level(log::Level::Trace).unwrap();
+        console_error_panic_hook::set_once();
+        Program::mount_to_body(App::new());
+    }
