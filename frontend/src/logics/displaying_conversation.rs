@@ -8,10 +8,12 @@ pub use crate::structs::friends_at_sidebar::{FriendAtSidebar,ShowChats};
 pub use sauron::{node,text};
 pub use crate::app::App;
 pub use crate::communication_with_server::get_conversation::get_whole_conversation_from_server;
-pub use crate::logics::date_and_time;
+pub use crate::logics::{date_and_time, post_new_message,sidebars};
+pub use crate::list_of_pages::Page;
+
 
 /* When you click on some person in show_chats_in_content, you get the selected conversation.*/
-pub fn show_conversation(chat_id : ChatId) -> Node<Msg>{
+pub fn show_conversation(chat_id : ChatId, current_page: Page ) -> Node<Msg>{
     let tuple_of_vec_of_chat_messages_and_friend_name = get_whole_conversation_from_server(chat_id);
     let friend_name:String = tuple_of_vec_of_chat_messages_and_friend_name.1;
     let vec_of_chat_messages_unused:Vec<ChatMessage> = tuple_of_vec_of_chat_messages_and_friend_name.0;
@@ -20,35 +22,7 @@ pub fn show_conversation(chat_id : ChatId) -> Node<Msg>{
     node! {
         <main>
             // Left Sidebar (Desktop)
-            <div class="sidebar d-none d-md-block text-white">
-                <h4>"Sidebar"</h4>
-                <ul class="nav flex-column">
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList))}>"Chat with friends"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))}>"Docs"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications))}>"Notifications"</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut))}>"Log out"</a>
-                    </li>
-                </ul>
-            </div>
+             {sidebars::left_sidebar_special(current_page.clone())}
 
             // Right Sidebar
             <div class="right-sidebar d-none d-md-block text-white">
@@ -96,6 +70,7 @@ pub fn show_conversation(chat_id : ChatId) -> Node<Msg>{
                             
                         }}
                 </div>
+{post_new_message::post_new_message()}
             </div>
         </main>
     }}
