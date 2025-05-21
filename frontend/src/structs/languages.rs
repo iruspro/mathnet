@@ -1,5 +1,5 @@
-#[derive(Clone,Debug)]
-pub enum Languages{
+#[derive(Clone, Debug)]
+pub enum Languages {
     English,
     Slovenian,
 }
