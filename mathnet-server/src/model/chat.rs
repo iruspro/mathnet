@@ -34,10 +34,7 @@ pub struct Chat {
 }
 
 #[derive(Fields, Deserialize)]
-pub struct ChatForCreate {
-    pub chat_id: i64,
-    pub content: String,
-}
+pub struct ChatForCreate {}
 
 #[derive(Fields, Deserialize)]
 pub struct ChatForUpdate {
