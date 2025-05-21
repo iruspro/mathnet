@@ -5,7 +5,6 @@ the project is relatively small.)
 
 pub mod app;
 pub mod messages;
-pub mod router;
 pub mod structs;
 pub mod pages;
 pub mod list_of_pages;
