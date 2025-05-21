@@ -1,89 +1,90 @@
-use sauron::prelude::*;
-use crate::messages::{Msg,GoToPage,UserLoginAttempt,SwitchToPageSigned,SwitchToPageUnsigned};
-use sauron::html::{meta,title,link};
 use crate::app::App;
+use crate::messages::{GoToPage, Msg, SwitchToPageSigned, SwitchToPageUnsigned, UserLoginAttempt};
 use crate::structs::user::UserLoginData;
+use sauron::html::{link, meta, title};
+use sauron::prelude::*;
 
-pub fn view(app : &App) -> Node<Msg> {
+pub fn view(app: &App) -> Node<Msg> {
     let username = app.user_login_data.user_name.clone();
     let password = app.user_login_data.user_password.clone();
     node! {
-      <main>
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">"MathNet"</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <main>
+        <nav class="navbar navbar-expand navbar-dark bg-dark">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="#">"MathNet"</a>
+            <div class="collapse navbar-collapse">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage))}>"Home page"</a>
+            </li>
             <li class="nav-item">
-            <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage))}>"Home page"</a>
-        </li>
-        <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">"Log in"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"Register"</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"About this project"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
-                </li>
-            </ul>
+                        <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="#">"Log in"</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"Register"</a>
+                    </li>
+                    <li class="nav-item">
+                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"About this project"</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>
-    </nav>
-    <div class="container-fluid">
-    <div class="row">
-      <div class="col-2">
-        
-      </div>
-      <div class="col-8" class="col text-start">
-        <h1 class="text-center">"Login"</h1>
-        <div class="col-2">
-      </div>
-      </div>
-      <div class="row">
-      <div class="col-5">
-      </div>
-      <div class="col-2">
-        <label for="inputPassword5" class="form-label">"Username"</label>
-    <input
-        type="text"
-        id="inputPassword5"
-        class="form-control"
-        aria-describedby="passwordHelpBlock"
-        value={username.clone()}
-        on_input=|input| Msg::LoginAttempt(UserLoginAttempt::UpdateUserName((input.value())))
-    />
-    <div id="passwordHelpBlock" class="form-text">
-        "Enter your username."
-    </div>
+        </nav>
+        <div class="container-fluid">
+        <div class="row">
+          <div class="col-2">
 
-    <label for="inputPassword6" class="form-label">"Password"</label>
-    <input
-        type="password"
-        id="inputPassword6"
-        class="form-control"
-        aria-describedby="passwordHelpBlock"
-        value={password.clone()}
-        on_input=|input| Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword((input.value())))
-    />
-    <div id="passwordHelpBlock" class="form-text">
-        "Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji."
-    </div>
-    <button class="btn btn-primary w-100" on_click=move |_| Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy)>
-        "Log in"
-    </button> <br></br>
-<div>"Don't you have an account yet? Click" <a on_click=|_|{Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}> " here " </a> "and make one."</div>
+          </div>
+          <div class="col-8" class="col text-start">
+            <h1 class="text-center">"Login"</h1>
+            <div class="col-2">
+          </div>
+          </div>
+          <div class="row">
+          <div class="col-5">
+          </div>
+          <div class="col-2">
+            <label for="inputPassword5" class="form-label">"Username"</label>
+        <input
+            type="text"
+            id="inputPassword5"
+            class="form-control"
+            aria-describedby="passwordHelpBlock"
+            value={username.clone()}
+            on_input=|input| Msg::LoginAttempt(UserLoginAttempt::UpdateUserName((input.value())))
+        />
+        <div id="passwordHelpBlock" class="form-text">
+            "Enter your username."
+        </div>
+
+        <label for="inputPassword6" class="form-label">"Password"</label>
+        <input
+            type="password"
+            id="inputPassword6"
+            class="form-control"
+            aria-describedby="passwordHelpBlock"
+            value={password.clone()}
+            on_input=|input| Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword((input.value())))
+        />
+        <div id="passwordHelpBlock" class="form-text">
+            "Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji."
+        </div>
+        <button class="btn btn-primary w-100" on_click=move |_| Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy)>
+            "Log in"
+        </button> <br></br>
+    <div>"Don't you have an account yet? Click" <a on_click=|_|{Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}> " here " </a> "and make one."</div>
+          </div>
+          <div class="col-5">
+          </div>
+        </div>
       </div>
-      <div class="col-5">
       </div>
-    </div>
-  </div>
-  </div>
-    </main>
-  }}
+        </main>
+      }
+}
