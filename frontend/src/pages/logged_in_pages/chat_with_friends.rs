@@ -1,10 +1,14 @@
-use sauron::prelude::*;
-use crate::messages::{Msg, GoToPage, SwitchToPageSigned,SwitchToPageOther};
 use crate::app::App;
-use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_content}, displaying_conversation, sidebars};
 use crate::experimental_examples::imaginary_friends;
+use crate::logics::{
+    displaying_conversation,
+    displaying_friends::{show_chats_in_content, show_friends_at_sidebar},
+    sidebars,
+};
+use crate::messages::{GoToPage, Msg, SwitchToPageOther, SwitchToPageSigned};
+use sauron::prelude::*;
 
-pub fn view(data_provided : &App) -> Node<Msg> {
+pub fn view(data_provided: &App) -> Node<Msg> {
     node! {
         <main>
             // Left Sidebar (Desktop)
@@ -36,4 +40,5 @@ pub fn view(data_provided : &App) -> Node<Msg> {
                 </div>
             </div>
         </main>
-    }}
+    }
+}

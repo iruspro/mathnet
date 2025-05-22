@@ -11,20 +11,26 @@
 //!  - Model Controllers (e.g., `ThoughtBmc`, `ProjectBmc`) implement
 //!    CRUD and other data access methods on a given "entity"
 //!    (e.g., `Task`, `Project`).
-//!    (`Bmc is shorn for Backend Model Controller`).
+//!    (`Bmc is short for Backend Model Controller`).
 //!  - In frameworks like Axum `ModelManager` are typically used ass App State.
 //!  - ModelManager are designed to be passed as an argument
 //!    to all Model Controllers functions.
 
 // region:    --- Modules
+
 mod base;
+pub mod chat;
 mod error;
+pub mod mather;
+pub mod message;
 mod store;
 pub mod thought;
-
-use store::{Db, new_db_pool};
+pub mod user;
+pub mod user_group;
 
 pub use self::error::{Error, Result};
+use store::{Db, new_db_pool};
+
 // endregion: --- Modules
 
 #[derive(Clone)]

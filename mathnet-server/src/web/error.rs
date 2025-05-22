@@ -1,7 +1,8 @@
+use std::sync::Arc;
+
 use crate::{model, web};
 use axum::http::StatusCode;
 use axum::response::{IntoResponse, Response};
-use lazy_regex::regex;
 use serde::Serialize;
 use tracing::debug;
 
@@ -51,7 +52,7 @@ impl IntoResponse for Error {
         let mut response = StatusCode::INTERNAL_SERVER_ERROR.into_response();
 
         // Insert the Error into the reponse.
-        response.extensions_mut().insert(self);
+        response.extensions_mut().insert(Arc::new(self));
 
         response
     }

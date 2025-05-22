@@ -1,9 +1,0 @@
-[build]
-target = "wasm32-unknown-unknown"
-release = false
-profile = "dev"
-
-[serve]
-open = true
-port = 8080
-watch = true

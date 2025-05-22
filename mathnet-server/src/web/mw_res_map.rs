@@ -1,3 +1,5 @@
+use std::sync::Arc;
+
 use crate::ctx::Ctx;
 use crate::log::log_request;
 use crate::web;
@@ -18,10 +20,10 @@ pub async fn mw_response_map(
     debug!("{:<12} - mw_reponse_map", "RES_MAPPER");
     let uuid = Uuid::new_v4();
 
-    let rpc_info = res.extensions().get::<RpcInfo>();
+    let rpc_info = res.extensions().get::<Arc<RpcInfo>>().map(Arc::as_ref);
 
     // -- Get the eventual response error.
-    let web_error = res.extensions().get::<web::Error>();
+    let web_error = res.extensions().get::<Arc<web::Error>>().map(Arc::as_ref);
     let client_status_error = web_error.map(|se| se.client_status_and_error());
 
     // -- If client error, build the new response.

@@ -1,104 +1,104 @@
 use std::thread::current;
 
-use sauron::prelude::*;
-use crate::messages::{Msg, GoToPage,SwitchToPageSigned,SwitchToPageUnsigned};
-use crate::logics::sidebars;
 use crate::app::App;
+use crate::logics::sidebars;
+use crate::messages::{GoToPage, Msg, SwitchToPageSigned, SwitchToPageUnsigned};
+use sauron::prelude::*;
 
-pub fn view(current_state_of_app : &App) -> Node<Msg> {
+pub fn view(current_state_of_app: &App) -> Node<Msg> {
     node! {
-        <main>
-            {sidebars::left_sidebar(current_state_of_app.current_page.clone())}
+            <main>
+                {sidebars::left_sidebar(current_state_of_app.current_page.clone())}
 
-            // Top Navbar
-            //<nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
-            //    <div class="container-fluid">
-            //        <a class="navbar-brand" href="#">"MathNet"</a>
-            //        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
-            //            <span class="navbar-toggler-icon"></span>
-            //        </button>
-            //        <div class="collapse navbar-collapse">
-            //            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            //                <li class="nav-item">
-            //                    <a class="nav-link active" aria-current="page" href="#">"Home page"</a>
-            //                </li>
-            //                <li class="nav-item">
-            //                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToDocsPage)}>"Docs"</a>
-            //                </li>
-            //            </ul>
-            //        </div>
-            //    </div>
-            //</nav>
+                // Top Navbar
+                //<nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
+                //    <div class="container-fluid">
+                //        <a class="navbar-brand" href="#">"MathNet"</a>
+                //        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
+                //            <span class="navbar-toggler-icon"></span>
+                //        </button>
+                //        <div class="collapse navbar-collapse">
+                //            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                //                <li class="nav-item">
+                //                    <a class="nav-link active" aria-current="page" href="#">"Home page"</a>
+                //                </li>
+                //                <li class="nav-item">
+                //                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToDocsPage)}>"Docs"</a>
+                //                </li>
+                //            </ul>
+                //        </div>
+                //    </div>
+                //</nav>
 
-            // Fixed Sidebar (desktop)
-//            <div class="sidebar d-none d-md-block text-white">
-//                <h4>"Sidebar"</h4>
-//                <ul class="nav flex-column">
-//                <li class="nav-item">
-//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
-//            </li>
-//            <li class="nav-item">
-//                <a class="nav-link text-white" href="#">"Groups"</a>
-//            </li>
-//            <li class="nav-item">
-//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
-//            </li>
-//            <li class="nav-item">
-//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
-//            </li>
-//            <li class="nav-item">
-//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
-//            </li>
-//            <li class="nav-item">
-//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
-//            </li>
-//            <li class="nav-item">
-//                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
-//            </li>
-//                </ul>
-//            </div>
-//
-//            // Offcanvas Sidebar (mobile)
-//            <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="offcanvasSidebar">
-//                <div class="offcanvas-header">
-//                    <h5 class="offcanvas-title">"Sidebar"</h5>
-//                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-//                </div>
-//                <div class="offcanvas-body">
-//                    <ul class="nav flex-column">
-//                        <li class="nav-item">
-//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
-//                        </li>
-//                        <li class="nav-item">
-//                            <a class="nav-link text-white" href="#">"Groups"</a>
-//                        </li>
-//                        <li class="nav-item">
-//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
-//                        </li>
-//                        <li class="nav-item">
-//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
-//                        </li>
-//                        <li class="nav-item">
-//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
-//                        </li>
-//                        <li class="nav-item">
-//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
-//                        </li>
-//                        <li class="nav-item">
-//                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
-//                        </li>
-//                    </ul>
-//                </div>
-//            </div>
+                // Fixed Sidebar (desktop)
+    //            <div class="sidebar d-none d-md-block text-white">
+    //                <h4>"Sidebar"</h4>
+    //                <ul class="nav flex-column">
+    //                <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" href="#">"Groups"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
+    //            </li>
+    //                </ul>
+    //            </div>
+    //
+    //            // Offcanvas Sidebar (mobile)
+    //            <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="offcanvasSidebar">
+    //                <div class="offcanvas-header">
+    //                    <h5 class="offcanvas-title">"Sidebar"</h5>
+    //                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    //                </div>
+    //                <div class="offcanvas-body">
+    //                    <ul class="nav flex-column">
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" href="#">"Groups"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
+    //                        </li>
+    //                    </ul>
+    //                </div>
+    //            </div>
 
-            // Main Content
-            <div class="content">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="col-12">
-                            <h1 class="text-center">"Your groups"</h1>
-                            <p class="basicparagraph text-start">
-                                "Groups you belong to.
+                // Main Content
+                <div class="content">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-12">
+                                <h1 class="text-center">"Your groups"</h1>
+                                <p class="basicparagraph text-start">
+                                    "Groups you belong to.
                                 
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras luctus consectetur placerat. Donec non pretium sapien. Donec ac placerat ex. Aenean tempus massa nulla, nec ullamcorper leo tempus eget. Vestibulum at lectus ut libero ullamcorper consectetur. Vestibulum auctor urna venenatis libero eleifend, in sodales odio dictum. Curabitur auctor, massa eget ultricies efficitur, justo nulla porta purus, in laoreet quam turpis ut risus. Aliquam nunc nibh, placerat eget bibendum varius, porta eget tellus. Phasellus in lacinia augue, sed consequat ex. Curabitur laoreet mi nec eros tristique, ac tristique mauris tempus.
@@ -168,11 +168,11 @@ Phasellus sagittis aliquam urna, eget aliquam dolor malesuada sit amet. Pellente
 Mauris ex tellus, placerat sed purus at, facilisis efficitur dolor. Sed ac ex rhoncus, faucibus nisl ac, volutpat odio. Nullam a quam sit amet risus venenatis imperdiet in quis felis. Praesent auctor sollicitudin quam ut vehicula. Nam a tellus ut est facilisis ornare. Praesent ornare in turpis quis consectetur. Ut efficitur, diam a sagittis auctor, velit nisl auctor turpis, vel rhoncus ipsum eros eget velit. Ut sit amet velit vitae lacus auctor bibendum nec ut odio. Nam urna sapien, tristique nec est eget, imperdiet auctor est. Nullam sollicitudin felis vitae est rhoncus porttitor. Duis gravida, enim ac bibendum ultricies, urna justo vulputate augue, id elementum odio felis gravida lorem.
 
 Cras felis tellus, egestas ut varius quis, tempor et felis. Mauris in purus auctor, dictum sapien vitae, tristique dolor. Ut felis nisi, feugiat a efficitur ut, imperdiet sit amet tellus. Quisque ante leo, efficitur quis mi hendrerit, posuere congue ante. "
-                            </p>
+                                </p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </main>
-    }
+            </main>
+        }
 }

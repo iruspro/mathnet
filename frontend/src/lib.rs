@@ -1,18 +1,15 @@
 /*
-This module includes router (currently 
+This module includes router (currently
 the project is relatively small.)
 */
 
 pub mod app;
-pub mod messages;
-pub mod router;
-pub mod structs;
-pub mod pages;
 pub mod list_of_pages;
+pub mod messages;
+pub mod pages;
+pub mod structs;
 use sauron::prelude::*;
-pub mod logics;
 pub mod experimental_examples;
+pub mod logics;
 use sauron::node;
 pub mod communication_with_server;
-
-

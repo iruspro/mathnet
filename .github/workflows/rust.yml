@@ -40,27 +40,47 @@ jobs:
           sleep 2
         done
 
+    - name: Check formatting (backend)
+      run: |
+        cd mathnet-server
+        cargo fmt --all -- --check
+
+    - name: Lint with Clippy (backend)
+      run: |
+        cd mathnet-server
+        cargo clippy --all-targets --all-features -- -D warnings
+
     - name: Build backend
       run: |
         cd mathnet-server
         cargo build --verbose
 
     - name: Run mathnet-server tests
-      env:
-        SERVICE_DB_URL: postgres://app_user:dev_only_pwd@localhost/app_db
       run: |
         cd mathnet-server
         cargo test --verbose
 
-  # build-client:
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - uses: actions/checkout@v4
-  #   - name: Build client
-  #     run: |
-  #       cd client
-  #       cargo build --verbose
-  #   - name: Run client tests
-  #     run: |
-  #       cd client
-  #       cargo test --verbose
+  build-frontend:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check formatting (frontend)
+      run: |
+        cd frontend
+        cargo fmt --all -- --check
+
+    # - name: Lint with Clippy (frontend)
+    #   run: |
+    #     cd frontend
+    #     cargo clippy --all-targets --all-features -- -D warnings
+
+    - name: Build frontend
+      run: |
+        cd frontend
+        cargo build --verbose
+        
+    - name: Run frontend tests
+      run: |
+        cd frontend
+        cargo test --verbose
