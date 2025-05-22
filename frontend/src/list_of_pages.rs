@@ -1,3 +1,5 @@
+/* This page is for proper routing and also manages url-s. */
+
 pub use crate::structs::chat_message::ChatId;
 
 #[derive(Debug, Clone, PartialEq)]
@@ -8,6 +10,85 @@ pub enum Page {
 }
 
 impl Page {
+    pub fn parse(hash: &str) -> Self {
+        let hash = hash.trim_start_matches('#').trim_start_matches('/');
+        let segments: Vec<&str> = hash.split('/').collect();
+
+        match segments.as_slice() {
+            // logout pages
+            ["home"] => Page::ItemUnsignedPage(UnsignedPage::Home),
+            ["login"] => Page::ItemUnsignedPage(UnsignedPage::Login),
+            ["privacy_and_security"] => Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity),
+            ["register"] => Page::ItemUnsignedPage(UnsignedPage::Register),
+
+            // login pages
+            ["chat_with_friends", user_id] =>
+            ["conversation", chat_id] =>
+            ["exercise", exercise_id] =>
+            ["friends"] =>
+            ["groups"] =>
+            ["group", group_id] =>
+            ["list_of_exercises", list_of_exercises_id] => 
+            ["notifications", user_id] =>
+            ["settings"] =>
+            ["profile", user_id] =>
+            ["user_profile", user_id] =>
+
+            // other pages
+            ["delete_account"] =>
+            ["log_out"] => 
+            ["retry_changing_user_profile_data", user_id] => 
+            ["successfully_changed_user_profile_data", user_id] => 
+
+
+            // shared pages
+            ["login"] => Page::ItemUnsignedPage(UnsignedPage::Login),
+            ["docs"] => Page::ItemUnsignedPage(UnsignedPage::Docs),
+            ["about_project"] => Page::ItemUnsignedPage(UnsignedPage::AboutProject),
+
+
+
+
+
+
+            ["profile"] => Route::Profile,
+            ["post", id] => id.parse().ok().map(Route::Post).unwrap_or(Route::NotFound),
+            _ => Route::NotFound,
+        }
+    }
+
+    pub fn to_hash(&self) -> String {
+        match self {
+            Route::Home => "#/home".into(),
+            Route::Profile => "#/profile".into(),
+            Route::Post(id) => format!("#/post/{}", id),
+            Route::NotFound => "#/404".into(),
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     pub fn page_name_to_string(page_name: Page) -> String {
         match page_name {
             Page::ItemUnsignedPage(UnsignedPage::Home) => "Home".to_string(),
@@ -41,7 +122,6 @@ impl Page {
             }
         }
     }
-}
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum UnsignedPage {

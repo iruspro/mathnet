@@ -1,15 +1,11 @@
-pub mod about_project;
+
 pub mod chat_with_friends;
 pub mod conversation;
-pub mod delete_account;
-pub mod docs;
 pub mod exercise;
 pub mod groups;
 pub mod list_of_exercises;
-pub mod log_out;
 pub mod notifications;
-pub mod privacy_and_security;
-pub mod retry_changing_user_profile_data;
 pub mod settings;
-pub mod successfully_changed_user_profile_data;
 pub mod user_profile;
+pub mod profile;
+pub mod friends;
