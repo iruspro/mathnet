@@ -38,12 +38,12 @@ pub struct ThoughtForUpdate {
 
 #[derive(FilterNodes, Deserialize, Default, Debug)]
 pub struct ThoughtFilter {
-    id: Option<OpValsInt64>,
+    pub id: Option<OpValsInt64>,
 
-    content: Option<OpValsString>,
-    mather_id: Option<OpValsInt64>,
+    pub content: Option<OpValsString>,
+    pub mather_id: Option<OpValsInt64>,
     // created_at: Option<OpValsDateTime<Utc>>,
-    on_latex: Option<OpValsBool>,
+    pub on_latex: Option<OpValsBool>,
 }
 // endregion: --- Thought Types
 
