@@ -1,11 +1,12 @@
 pub use crate::logics::date_and_time::{DateAndTime, display_current_date_and_time};
 pub use crate::structs::emojis_and_reactions;
-pub use crate::structs::user;
+pub use crate::structs::{user, group_struct::{GroupId}};
 
 #[derive(Clone, Debug, Copy, PartialEq)]
 pub enum ChatId {
     ChatIdNumber(u32),
 }
+
 
 pub struct ChatChannel {
     chat_id: ChatId,

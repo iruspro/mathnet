@@ -29,7 +29,7 @@ pub fn get_user_register_data() -> UserRegisterData {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub enum UserId {
     UserIdNumber(u32),
 }
