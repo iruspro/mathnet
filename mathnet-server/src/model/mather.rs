@@ -3,6 +3,7 @@
 use super::{
     ModelManager, Result,
     base::{self, DbBmc},
+    thought::{Thought, ThoughtBmc, ThoughtFilter},
 };
 use crate::ctx::Ctx;
 
@@ -116,30 +117,6 @@ impl MatherBmc {
     //     mm: &ModelManager,
     //     mather_id: i64,
     // ) -> Result<Vec<Mather>> {
-    //     todo!()
-    // }
-
-    // pub async fn list_mather_thoughts(
-    //     ctx: &Ctx,
-    //     mm: &ModelManager,
-    //     mather_id: i64,
-    // ) -> Result<Vec<Thought>> {
-    //     todo!()
-    // }
-
-    // pub async fn list_mather_posts(
-    //     ctx: &Ctx,
-    //     mm: &ModelManager,
-    //     mather_id: i64,
-    // ) -> Result<Vec<Post>> {
-    //     todo!()
-    // }
-
-    // pub async fn list_mather_tasks(
-    //     ctx: &Ctx,
-    //     mm: &ModelManager,
-    //     mather_id: i64,
-    // ) -> Result<Vec<Task>> {
     //     todo!()
     // }
 
