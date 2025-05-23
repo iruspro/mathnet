@@ -40,7 +40,7 @@ pub async fn log_request(
         rpc_id: rpc_info.and_then(|rpc| rpc.id.as_ref().map(|id| id.to_string())),
         rpc_method: rpc_info.map(|rpc| rpc.method.to_string()),
 
-        user_id: ctx.map(|c| c.user_id()),
+        mather_id: ctx.map(|c| c.mather_id()),
 
         client_error_type: client_error.map(|e| e.as_ref().to_string()),
 
@@ -61,8 +61,8 @@ struct RequestLogLine {
     uuid: String,      // uuid string formatted
     timestamp: String, // (should be iso8601)
 
-    // -- User and context attributes.
-    user_id: Option<i64>,
+    // -- Mather and context attributes.
+    mather_id: Option<i64>,
 
     // -- http request attributes.
     http_path: String,

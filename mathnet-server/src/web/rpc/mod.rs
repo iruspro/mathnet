@@ -6,7 +6,6 @@ mod message_rpc;
 mod params;
 mod thought_rpc;
 mod user_group_rpc;
-mod user_rpc;
 
 use super::{Error, Result};
 use crate::ctx::Ctx;
@@ -19,7 +18,6 @@ use thought_rpc::{create_thought, delete_thought, get_thought, list_thoughts, up
 use user_group_rpc::{
     create_user_group, delete_user_group, get_user_group, list_user_groups, update_user_group,
 };
-use user_rpc::{create_user, delete_user, get_user, list_users, update_user};
 
 use axum::{
     Json, Router,
@@ -140,13 +138,6 @@ async fn _rpc_handler(ctx: Ctx, mm: ModelManager, rpc_req: RpcRequest) -> Result
         "list_user_groups" => exec_rpc_fn!(list_user_groups, ctx, mm, rpc_params),
         "update_user_group" => exec_rpc_fn!(update_user_group, ctx, mm, rpc_params),
         "delete_user_group" => exec_rpc_fn!(delete_user_group, ctx, mm, rpc_params),
-
-        // -- User RPC methods
-        "create_user" => exec_rpc_fn!(create_user, ctx, mm, rpc_params),
-        "get_user" => exec_rpc_fn!(get_user, ctx, mm, rpc_params),
-        "list_users" => exec_rpc_fn!(list_users, ctx, mm, rpc_params),
-        "update_user" => exec_rpc_fn!(update_user, ctx, mm, rpc_params),
-        "delete_user" => exec_rpc_fn!(delete_user, ctx, mm, rpc_params),
 
         // -- Fallback as Err
         _ => return Err(Error::RpcMethodUnknown(rpc_method)),

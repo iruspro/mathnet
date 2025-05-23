@@ -26,22 +26,34 @@ use sqlx::FromRow;
 #[derive(Debug, Clone, Fields, FromRow, Serialize)]
 pub struct Mather {
     pub id: i64,
+    // Mather auth data
+    pub email: String,
+    // pub password: String,
+    pub is_active: bool,
+    pub is_staff: bool,
+    // Mather profile data
     pub first_name: String,
     pub last_name: String,
-    pub user_id: i64,
     // TODO: Add status, with custom sqlx Type.
     // pub status: Status,
 }
 
 #[derive(Fields, Deserialize)]
 pub struct MatherForCreate {
+    // Mather auth data
+    pub email: String,
+    pub password: String,
+    // Mather profile data
     pub first_name: String,
     pub last_name: String,
-    pub user_id: i64,
 }
 
 #[derive(Fields, Deserialize)]
 pub struct MatherForUpdate {
+    // Mather auth data
+    pub email: Option<String>,
+    pub password: Option<String>,
+    // Mather profile data
     pub first_name: Option<String>,
     pub last_name: Option<String>,
 }
@@ -52,7 +64,6 @@ pub struct MatherFilter {
 
     first_name: Option<OpValsString>,
     last_name: Option<OpValsString>,
-    user_id: Option<OpValsInt64>,
     // status: Option<_>,
 }
 // endregion: --- Mather Types
