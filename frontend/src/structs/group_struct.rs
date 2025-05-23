@@ -1,8 +1,7 @@
 pub use crate::structs::chat_message;
 pub use crate::structs::user::*;
 
-#[derive(Debug, Clone)]
-
+#[derive(Debug, Clone,PartialEq)]
 pub enum GroupId {
     GroupId(u32),
 }

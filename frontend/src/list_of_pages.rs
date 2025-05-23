@@ -1,6 +1,7 @@
 /* This page is for proper routing and also manages url-s. */
 
 use crate::logics::special_parsing;
+use crate::pages::logged_in_pages::exercise;
 pub use crate::structs::chat_message::{ChatId};
 pub use crate::structs::{user::{UserId},group_struct::{GroupId}, exercise::{ExerciseId}};
 pub use crate::logics::special_parsing::parse_from_str_to_u32;
@@ -28,15 +29,15 @@ impl Page {
             // login pages
             ["chat_with_friends"] => Page::ItemSignedPage(SignedPage::ChatWithFriends),
             ["chat", chat_id] => Page::ItemSignedPage(SignedPage::Chat(ChatId::ChatIdNumber(parse_from_str_to_u32(chat_id)))),
-            ["exercise", exercise_id] => Page::ItemSignedPage(SignedPage::Exercise(ExerciseId::ExerciseIdNumber(parse_from_str_to_u32(exercise_id)))),
+            ["exercise", list_of_exercises_id, exercise_id] => Page::ItemSignedPage(SignedPage::Exercise(ListOfExercisesId::ListOdExercisesIdNumber(parse_from_str_to_u32(list_of_exercises_id)),ExerciseId::ExerciseIdNumber(parse_from_str_to_u32(exercise_id)))),
             ["groups"] => Page::ItemSignedPage(SignedPage::GroupsList),
             ["group", group_id] => Page::ItemSignedPage(SignedPage::Group(GroupId::GroupId(parse_from_str_to_u32(group_id)))),
-            ["list_of_exercises", list_of_exercises_id] => ///////////////////////////////////////// Remained here!!!!!!!!!!!!!!!!!
-            ["notifications", user_id] =>Page::ItemSignedPage(SignedPage::Notifications),
+            ["list_of_exercises", list_of_exercises_id] => Page::ItemSignedPage(SignedPage::ListOfExercises(ListOfExercisesId::ListOdExercisesIdNumber(parse_from_str_to_u32(list_of_exercises_id)))),
+            ["notifications"] =>Page::ItemSignedPage(SignedPage::Notifications),
             ["settings"] => Page::ItemSignedPage(SignedPage::Settings),
-            ["user_profile", user_id] =>Page::ItemSignedPage(SignedPage::UserProfile(user_id)),
+            ["user_profile", user_id] => Page::ItemSignedPage(SignedPage::UserProfile(UserId::UserIdNumber(parse_from_str_to_u32(user_id)))),
             ["friends"] => Page::ItemSignedPage(SignedPage::Friends),
-            ["profile", user_id] => Page::ItemSignedPage(SignedPage::Profile(user_id)),
+            ["profile", user_id] => Page::ItemSignedPage(SignedPage::Profile(UserId::UserIdNumber(parse_from_str_to_u32(user_id)))),
 
             // other pages
             ["delete_account"] => Page::ItemOtherPage(OtherPage::DeleteAccount),
@@ -49,6 +50,7 @@ impl Page {
             ["privacy_and_security"] => Page::ItemSharedPage(SharedPage::PrivacyAndSecurity),
             ["docs"] => Page::ItemSharedPage(SharedPage::Docs),
             ["about_project"] => Page::ItemSharedPage(SharedPage::AboutProject),
+            _ => Page::ItemOtherPage(OtherPage::NotFound)
 
         }
     }
@@ -62,13 +64,16 @@ impl Page {
 
             //Signed pages
             Page::ItemSignedPage(SignedPage::GroupsList) => "#/groups_list".into(),
-            Page::ItemSignedPage(SignedPage::UserProfile(user_id)) => format!("#/user_profile/{:?}", user_id.clone())
+            Page::ItemSignedPage(SignedPage::UserProfile(user_id)) => format!("#/user_profile/{:?}", user_id.clone()),
             Page::ItemSignedPage(SignedPage::Settings) => "#/settings".into(),
             Page::ItemSignedPage(SignedPage::Notifications) => "#/notifications".into(),
             Page::ItemSignedPage(SignedPage::ChatWithFriends) => "#/chat_with_friends".into(),
-            Page::ItemSignedPage(SignedPage::Chat(chat_id)) => format!("#/chat/{:?}", chat_id),
+            Page::ItemSignedPage(SignedPage::Chat(chat_id)) => format!("#/chat/{:?}", chat_id.clone()),
             Page::ItemSignedPage(SignedPage::Friends) => "#/friends".into(),
-            Page::ItemSignedPage(SignedPage::Profile(user_id)) => format!("#/profile/{:?}", user_id),
+            Page::ItemSignedPage(SignedPage::Profile(user_id)) => format!("#/profile/{:?}", user_id.clone()),
+            Page::ItemSignedPage(SignedPage::Group(group_id)) => format!("#/groups_list/group/{:?}", group_id.clone()),
+            Page::ItemSignedPage(SignedPage::Exercise(list_of_exercises_id, exercise_id)) => format!("#/list_of_exercises/{:?}/exercise/{:?}", list_of_exercises_id.clone(),exercise_id.clone()),
+            Page::ItemSignedPage(SignedPage::ListOfExercises(list_of_exercise_id)) => format!("#/list_of_exercises/{:?}", list_of_exercise_id.clone()),
            
            //Other pages
 
@@ -89,7 +94,7 @@ impl Page {
             Page::ItemSharedPage(SharedPage::Docs) => "#/docs".into(),
             Page::ItemSharedPage(SharedPage::AboutProject) => "#/about_this_project".into(),
             Page::ItemSharedPage(SharedPage::PrivacyAndSecurity) => {
-                "privacy_and_security".into()
+                "#/privacy_and_security".into()
         }
         }
     }
@@ -181,11 +186,11 @@ pub enum SignedPage {
     Notifications,
     ChatWithFriends,
     Chat(ChatId),
-    LogOut,
     Friends,
     Profile(UserId) ,
     Group(GroupId),
-    Exercise(ExerciseId),
+    Exercise(ListOfExercisesId,ExerciseId),
+    ListOfExercises(ListOfExercisesId),
     /* User profile is for managing user's personal data, while profile is for
     sharing personal thoughts and presenting viewer to general public */
 }
@@ -208,4 +213,10 @@ pub enum SharedPage{
     PrivacyAndSecurity,
 
 
+}
+
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum ListOfExercisesId{
+    ListOdExercisesIdNumber(u32)
 }

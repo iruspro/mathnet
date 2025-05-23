@@ -23,9 +23,11 @@ use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
 
+
+// (Main) model of this project
 #[derive(Debug)]
 pub struct App {
-    pub current_page: Page,
+    pub current_page: Page, // routing for pages
     pub user_login_data: UserLoginData,
     pub user_register_data: UserRegisterData,
     pub user_data: User,
@@ -49,25 +51,12 @@ impl App {
             reload_current_page: false,
         }
     }
-    //fn parse_location() -> Page {
-    //    let path = window().unwrap().location().pathname().unwrap_or_default();
-    //    match path.as_str() {
-    //        "/" => Page::Home,
-    //        "/docs" => Page::Docs,
-    //        "/chat" => Page::Chat,
-    //        "/exercise" => Page::Exercise,
-    //        "/list_of_exercises" => Page::ListOfExercise,
-    //        "/login" => Page::Login,
-    //        "/register" => Page::Register,
-    //        "/settings" => Page::Settings,
-    //        "/user_profile" => Page::UserProfile,
-    //        _ => Page::Home,
-    //    }
-    //}
-} //
+    
+}
 
 impl Application for App {
     type MSG = Msg;
+
     fn update(&mut self, msg: Self::MSG) -> Cmd<Msg> {
         match msg {
             Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage)) => {
@@ -204,6 +193,8 @@ impl Application for App {
 
     fn view(&self) -> Node<Self::MSG> {
         match self.current_page {
+
+        // Unsigned pages
             Page::ItemUnsignedPage(UnsignedPage::Home) => logged_out_pages::home::view(),
             Page::ItemUnsignedPage(UnsignedPage::Docs) => logged_out_pages::docs::view(),
             Page::ItemUnsignedPage(UnsignedPage::AboutProject) => {
@@ -215,6 +206,7 @@ impl Application for App {
             }
             Page::ItemUnsignedPage(UnsignedPage::Register) => logged_out_pages::register::view(),
 
+        // Signed pages
             Page::ItemSignedPage(SignedPage::GroupsList) => {
                 console::log_1(&"Hello 4!".into());
                 logged_in_pages::groups::view(&self)
@@ -241,6 +233,10 @@ impl Application for App {
                 logged_in_pages::conversation::view(&self)
             }
             Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(),
+
+            // Shared pages
+
+            //Other pages
 
             Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => {
                 logged_in_pages::successfully_changed_user_profile_data::view()
