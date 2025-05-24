@@ -1,20 +1,21 @@
+use std::thread::current;
+
 use crate::app::App;
 use crate::experimental_examples::imaginary_friends;
-use crate::list_of_pages::{OtherPage, Page, SignedPage,SharedPage};
+use crate::list_of_pages::{OtherPage, Page, SignedPage,SharedPage,page_name_to_string};
 use crate::logics::{
     displaying_conversation,
     displaying_friends::{show_chats_in_content, show_friends_at_sidebar},
 };
-use crate::messages::DefinedMsg;
+use crate::messages::{DefinedMsg, GoToPage,SwitchToPageOther,SwitchToPageSigned,SwitchToPageUnsigned,SwitchToPageShared};
 use crate::web_sys::console;
 use sauron::node;
 use sauron::prelude::*;
 
+
 fn show_nav_link(page: Page) -> Node<DefinedMsg> {
-    let pagex = Page::ItemSignedPage(SignedPage::GroupsList);
     match page {
         Page::ItemSignedPage(SignedPage::UserProfile(_)) => {
-            console::log_1(&"Hello from Rust3!".into());
             node! {<li class="nav-item">
                                 <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
                             </li>
@@ -199,28 +200,30 @@ use sauron::prelude::*;
 // Assume DefinedMsg and Page/SignedPage types are already defined
 
 pub fn left_sidebar(current_page: Page) -> Node<DefinedMsg> {
-    let list_of_signed_pages: [Page; 11] = [
-        Page::ItemSignedPage(SignedPage::UserProfile(_)),
-        Page::ItemSignedPage(SignedPage::ChatWithFriends),
-        Page::ItemSignedPage(SignedPage::GroupsList),
-        Page::ItemSignedPage(SignedPage::Notifications),
-        Page::ItemSignedPage(SignedPage::Settings),
-        Page::ItemSignedPage(SignedPage::Chat(_)),    
-        Page::ItemSignedPage(SignedPage::Exercise(_, _)),
-        Page::ItemSignedPage(SignedPage::Profile(_)),
-        Page::ItemSignedPage(SignedPage::UserSuggestsToDevelopers),
-        Page::ItemSignedPage(SignedPage::ListOfExercises(_)),
-        Page::ItemSignedPage(SignedPage::Friends)
-    ]
+    let page_titles: [String; 12] = [
+    "Groups list".to_string(),
+    "User profile".to_string(),
+    "Settings".to_string(),
+    "Notifications".to_string(),
+    "Chat with friends".to_string(),
+    "Chat".to_string(),
+    "Friends".to_string(),
+    "Profile".to_string(),
+    "Exercise".to_string(),
+    "List_of_exercises".to_string(),
+    "Group".to_string(),
+    "Suggest to the developers".to_string(),
+];
 
+let string_of_current_page = page_name_to_string(current_page.clone());
     // Generate nav links as a Vec<Node<DefinedMsg>>
-    let nav_links: Vec<Node<DefinedMsg>> = list_of_signed_pages
+    let nav_links: Vec<Node<DefinedMsg>> = page_titles
         .iter()
         .map(|pagex| {
-            if *pagex == current_page {
-                show_active_nav_link(Page::page_name_to_string(pagex.clone()))
+            if *pagex == string_of_current_page {
+                show_active_nav_link(pagex.clone())
             } else {
-                show_nav_link(pagex.clone())
+                show_nav_link(current_page.clone())
             }
         })
         .collect();
@@ -249,18 +252,16 @@ pub fn left_sidebar_special(current_page: Page) -> Node<DefinedMsg> {
         Page::ItemSignedPage(SignedPage::Settings),
         Page::ItemSignedPage(SignedPage::LogOut),
     ];
+    let string_of_current_page = page_name_to_string(current_page.clone());
     let mut nav_links: Vec<Node<DefinedMsg>>;
-    if current_page == Page::ItemSignedPage(SignedPage::Conversation) {
+    if string_of_current_page == "Chat".to_string() {
         nav_links = list_of_signed_pages
             .iter()
             .map(|pagex| {
                 if *pagex != Page::ItemSignedPage(SignedPage::ChatWithFriends) {
-                    console::log_1(&"Rust5".into());
-                    console::log_1(&Page::page_name_to_string(pagex.clone()).into());
                     show_nav_link(pagex.clone())
                 } else {
-                    console::log_1(&Page::page_name_to_string(pagex.clone()).into());
-                    show_active_nav_link(Page::page_name_to_string(pagex.clone()))
+                    show_active_nav_link(page_name_to_string(pagex.clone()))
                 }
             })
             .collect()

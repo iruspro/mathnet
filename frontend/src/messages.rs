@@ -39,14 +39,14 @@ pub enum SwitchToPageUnsigned {
 #[derive(Debug, Clone,PartialEq)]
 pub enum SwitchToPageSigned {
     GoToGroupsList,
-    GoToUserProfile(UserId),
+    GoToUserProfile,
     GoToSettings,
     GoToChatWithFriends,
     GoToNotifications,
-    GoToExercise(ListOfExercisesId,ExerciseId),
-    GoToListOfExercises(ListOfExercisesId),
-    GoToGroup(GroupId),
-    GoToProfile(UserId),
+    GoToExercise,
+    GoToListOfExercises,
+    GoToGroup,
+    GoToProfile,
     GoToUserSuggestsDevelopers,
     GoToFriends,
 }
