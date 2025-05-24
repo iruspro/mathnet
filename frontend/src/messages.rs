@@ -1,8 +1,7 @@
 use crate::structs::chat_message::ChatId;
 use crate::structs::user::{
     UserChangingProfileData, UserDemandsUserProfileDataChanges, UserId, UserLoginData,
-    UserRegisterData, get_user_register_data,UserRegister,UserLoginAttempt
-};
+    UserRegisterData, get_user_register_data};
 use crate::list_of_pages::Page;
 
 #[derive(Debug, Clone,PartialEq)]

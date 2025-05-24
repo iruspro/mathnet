@@ -1,9 +1,7 @@
 use crate::list_of_pages::{Page, SharedPage, SignedPage, UnsignedPage};
 use crate::logics::{login_logics, registration_logics};
-use crate::messages::GoToPage;
 pub use crate::messages::{
-    GoToPage::{GoToPageSigned, GoToPageUnsigned},
-    DefinedMsg,SwitchToPageSigned, SwitchToPageUnsigned, UserLoginAttempt, UserRegister,
+    DefinedMsg, UserLoginAttempt, UserRegister,
 };
 use crate::pages::{logged_in_pages, logged_out_pages, other_pages, shared_pages};
 use crate::structs::{
@@ -68,8 +66,8 @@ impl Application for App {
 }
 
     fn update(&mut self, message: DefinedMsg) -> Cmd<DefinedMsg> {
-        match message {
-            DefinedMsg::SetPage(page) => {routing::routing_page_messages(message, &mut self);}
+        match message.clone() {
+            DefinedMsg::SetPage(page) => {routing::routing_page_messages(message, self);}
 
             DefinedMsg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => {
                 self.user_login_data.user_name = name
@@ -132,7 +130,7 @@ impl Application for App {
             }
             DefinedMsg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {
                 self.current_conversation = Some(chat_id);
-                self.current_page = Page::ItemSignedPage(SignedPage::Chat)
+                self.current_page = Page::ItemSignedPage(SignedPage::Chat(chat_id));
             }
             DefinedMsg::SetConversationToNone => {
                 self.current_conversation = None;
@@ -158,6 +156,7 @@ impl Application for App {
                 logged_in_pages::groups::view(&self)
             }
             Page::ItemSignedPage(SignedPage::Settings) => logged_in_pages::settings::view(&self),
+
             Page::ItemSignedPage(SignedPage::UserProfile(user_id)) => {
                 logged_in_pages::user_profile::view(&self)
             }
@@ -175,8 +174,8 @@ impl Application for App {
                 logged_in_pages::friends::view()
             }
             Page::ItemSignedPage(SignedPage::Profile(user_id)) => {
-                logged_in_pages::profile::view(),
-            }
+                logged_in_pages::profile::view()
+            },
 
             // Shared pages
             Page::ItemSharedPage(SharedPage::AboutProject) => shared_pages::about_project::view(&self),
