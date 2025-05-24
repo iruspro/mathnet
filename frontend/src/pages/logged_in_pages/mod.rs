@@ -1,6 +1,6 @@
 
 pub mod chat_with_friends;
-pub mod conversation;
+pub mod chat;
 pub mod exercise;
 pub mod groups;
 pub mod list_of_exercises;

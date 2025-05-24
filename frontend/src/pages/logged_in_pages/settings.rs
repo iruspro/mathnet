@@ -1,105 +1,19 @@
 use crate::app::App;
 use crate::logics::sidebars;
-use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned};
+use crate::messages::DefinedMsg;
 use sauron::prelude::*;
 
 pub fn view(current_state_of_app: &App) -> Node<DefinedMsg> {
     node! {
             <main>
-                // Top Navbar
-                //<nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
-                //    <div class="container-fluid">
-                //        <a class="navbar-brand" href="#">"MathNet"</a>
-                //        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
-                //            <span class="navbar-toggler-icon"></span>
-                //        </button>
-                //        <div class="collapse navbar-collapse">
-                //            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                //                <li class="nav-item">
-                //                    <a class="nav-link active" aria-current="page" href="#">"Home page"</a>
-                //                </li>
-                //                <li class="nav-item">
-                //                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToDocsPage)}>"Docs"</a>
-                //                </li>
-                //            </ul>
-                //        </div>
-                //    </div>
-                //</nav>
-
-                // Fixed Sidebar (desktop)
-                /*
-                <div class="sidebar d-none d-md-block text-white">
-                    <h4>"Sidebar"</h4>
-                    <ul class="nav flex-column">
-                    <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList))}>"Chat with friends"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList))}>"Groups"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" href="#">"Notifications"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
-                </li>
-                    </ul>
-                </div>
-
-                // Offcanvas Sidebar (mobile)
-                <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="offcanvasSidebar">
-                    <div class="offcanvas-header">
-                        <h5 class="offcanvas-title">"Sidebar"</h5>
-                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
-                    </div>
-                    <div class="offcanvas-body">
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends))}>"Chat with friends"</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-    */
     {sidebars::left_sidebar(current_state_of_app.current_page.clone())}
                 // Main Content
                 <div class="content">
                     <div class="container-fluid">
                         <div class="row">
-                            <div class="col-10">
+                        <div class="col-2">
+                            </div>
+                            <div class="col-8">
                                 <h1 class="text-center">"Your groups"</h1>
                                 <p class="basicparagraph text-start">
                                     "Groups you belong to.

@@ -2,12 +2,14 @@
 use crate::list_of_pages::{Page, SignedPage, UnsignedPage,SharedPage,OtherPage};
 use crate::pages::logged_in_pages::{exercise, list_of_exercises};
 use crate::structs::{chat_message::{ChatId}, list_of_exercises::{ListOfExercisesId}, group_struct::{GroupId}, exercise::ExerciseId,user::{UserId}};
-use crate::messages::DefinedMsg;
+use crate::messages::{DefinedMsg, GoToPage, SwitchToPageSigned,SwitchToPageUnsigned,SwitchToPageShared,SwitchToPageOther};
 use crate::logics::special_parsing::parse_from_str_to_u32;
 use crate::app::App;
+use crate::logics::converting_ids_to_string::{chat_id_to_string,group_id_to_string,exercise_id_to_string,list_of_exercises_id_to_string,user_id_to_string};
+use crate::web_sys;
 
 impl Page {
-    pub fn parse(hash: &str) -> Self{
+    pub fn parse(hash: &str) -> Page{
         let hash = hash.trim_start_matches('#').trim_start_matches('/');
         let segments: Vec<&str> = hash.split('/').collect();
 
@@ -93,6 +95,93 @@ impl Page {
 
 }
 
+
+
+pub fn routing_page_messages(page_message: DefinedMsg, current_state_of_app: &mut App) {
+    match page_message {
+        DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage)) => {
+            current_state_of_app.current_page = Page::ItemUnsignedPage(UnsignedPage::Home);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage)) => {
+            current_state_of_app.current_page = Page::ItemUnsignedPage(UnsignedPage::Login);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister)) => {
+            current_state_of_app.current_page = Page::ItemUnsignedPage(UnsignedPage::Register);
+        }
+
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList)) => {
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::GroupsList);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile)) => {
+            current_state_of_app.current_page =
+                Page::ItemSignedPage(SignedPage::UserProfile(current_state_of_app.user_data.user_id.clone()));
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings)) => {
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Settings);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends)) => {
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications)) => {
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Notifications);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToExercise)) => {
+            let list_id = ListOfExercisesId::ListOdExercisesIdNumber(0);
+            let exercise_id = ExerciseId::ExerciseIdNumber(0);
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Exercise(list_id, exercise_id));
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToListOfExercises)) => {
+            let list_id = ListOfExercisesId::ListOdExercisesIdNumber(0);
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::ListOfExercises(list_id));
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroup)) => {
+            let group_id = GroupId::GroupId(0);
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Group(group_id));
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToProfile)) => {
+            let user_id = UserId::UserIdNumber(0);
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Profile(user_id));
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserSuggestsDevelopers)) => {
+            let user_id = UserId::UserIdNumber(0);
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::UserProfile(user_id));
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToFriends)) => {
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Friends);
+        }
+
+        DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToAboutProject)) => {
+            current_state_of_app.current_page = Page::ItemSharedPage(SharedPage::AboutProject);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToDocsPage)) => {
+            current_state_of_app.current_page = Page::ItemSharedPage(SharedPage::Docs);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToPrivacyAndSecurity)) => {
+            current_state_of_app.current_page = Page::ItemSharedPage(SharedPage::PrivacyAndSecurity);
+        }
+
+        DefinedMsg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToDeleteAccount)) => {
+            current_state_of_app.current_page = Page::ItemOtherPage(OtherPage::DeleteAccount);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut)) => {
+            current_state_of_app.current_page = Page::ItemOtherPage(OtherPage::LogOut);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToRetryChangingUserProfileData)) => {
+            current_state_of_app.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData);
+        }
+        DefinedMsg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToSuccessfullyChangedUserProfileData)) => {
+            current_state_of_app.current_page = Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData);
+        }
+
+        // Any other variant of DefinedMsg is ignored
+        _ => {}
+    }
+}
+
+
+
+
+/* Old routing_page_messages function
 pub fn routing_page_messages(page_message : DefinedMsg, current_state_of_app: &mut App){
 match page_message{
 //Unsigned pages
@@ -167,6 +256,7 @@ DefinedMsg::SetPage(Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData)
     current_state_of_app.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData)
 },
 _ => current_state_of_app.current_page = Page::ItemOtherPage(OtherPage::NotFound)
+*/
 
 /* Code that is no longer in use
 
@@ -226,4 +316,45 @@ _ => current_state_of_app.current_page = Page::ItemOtherPage(OtherPage::NotFound
                 current_state_of_app.current_page = Page::ItemOtherPage(OtherPage::LogOut)
             }
 */
-        }}
+fn go_to_page_to_hash_convertor(go_to_page: GoToPage) -> String {
+    match go_to_page {
+        GoToPage::GoToPageSigned(page) => match page {
+            SwitchToPageSigned::GoToGroupsList => "#groups".to_string(),
+            SwitchToPageSigned::GoToUserProfile(user_id) => format!("#user_profile/{}", user_id.0),
+            SwitchToPageSigned::GoToSettings => "#settings".to_string(),
+            SwitchToPageSigned::GoToChatWithFriends => "#chat".to_string(),
+            SwitchToPageSigned::GoToNotifications => "#notifications".to_string(),
+            SwitchToPageSigned::GoToExercise(list_id, ex_id) => format!("#list_of_exercises/{:?}/exercise/{:?}", list_of_exercises_id_to_string(list_id), exercise_id_to_string(ex_id)),
+            SwitchToPageSigned::GoToListOfExercises(list_id) => format!("#list_of_exercises/{}", list_of_exercises_id_to_string(list_id)),
+            SwitchToPageSigned::GoToGroup(group_id) => format!("#group/{}", group_id_to_string(group_id)),
+            SwitchToPageSigned::GoToProfile(user_id) => format!("#profile/{}", user_id_to_string(user_id)),
+            SwitchToPageSigned::GoToUserSuggestsDevelopers => "#suggest_developers".to_string(),
+            SwitchToPageSigned::GoToFriends => "#friends".to_string(),
+        },
+        GoToPage::GoToPageUnsigned(page) => match page {
+            SwitchToPageUnsigned::GoToHomePage => "#home".to_string(),
+            SwitchToPageUnsigned::GoToLoginPage => "#login".to_string(),
+            SwitchToPageUnsigned::GoToRegister => "#register".to_string(),
+        },
+        GoToPage::GoToPageShared(page) => match page {
+            SwitchToPageShared::GoToDocsPage => "#docs".to_string(),
+            SwitchToPageShared::GoToAboutProject => "#about".to_string(),
+            SwitchToPageShared::GoToPrivacyAndSecurity => "#privacy".to_string(),
+        },
+        GoToPage::GoToPageOther(page) => match page {
+            SwitchToPageOther::GoToDeleteAccount => "#delete_account".to_string(),
+            SwitchToPageOther::GoToLogOut => "#logout".to_string(),
+            SwitchToPageOther::GoToRetryChangingUserProfileData => "#retry_profile_update".to_string(),
+            SwitchToPageOther::GoToSuccessfullyChangedUserProfileData => "#profile_update_success".to_string(),
+        },
+    }
+}
+
+
+pub fn change_hash_while_navigating(go_to_page: GoToPage){
+let new_hash = go_to_page_to_hash_convertor(go_to_page.clone());
+
+            // 2. Update the browser hash:
+            if let Some(win) = web_sys::window() {
+                let _ = win.location().set_hash(&new_hash);
+            }}

@@ -14,7 +14,7 @@ use crate::structs::{
 use crate::web_sys::console;
 use crate::{
     list_of_pages::OtherPage, logics::registration_logics::check_registration_validity,
-    messages::*, pages::logged_in_pages::conversation, structs::chat_message::ChatId,
+    messages::*, pages::logged_in_pages::chat, structs::chat_message::ChatId,
 };
 use sauron::dom::Program;
 use sauron::prelude::*;
@@ -33,6 +33,7 @@ pub struct App {
     pub user_changing_data_structure: UserChangingProfileData,
     pub current_conversation: Option<ChatId>,
     pub reload_current_page: bool,
+    pub is_user_logged_in: bool,
 }
 
 impl App {
@@ -48,6 +49,7 @@ impl App {
             user_changing_data_structure: crate::structs::user::UserChangingProfileData::new(),
             current_conversation: None,
             reload_current_page: false,
+            is_user_logged_in: false
         }
     }
     
@@ -61,17 +63,17 @@ impl Application for App {
         .and_then(|win| win.location().hash().ok())
         .unwrap_or_default();
     // Probably there exists more convenient way to handle this, but for some reason this code doesn't work in any other way.
-    let new_effects = Effects::new(vec![DefinedMsg::SetPage(Page::parse(&current_hash.as_str()))],vec![()] );
+    let new_effects = Effects::new(vec![DefinedMsg::ChangingHash(Page::parse(&current_hash.as_str()))],vec![()] );
     Cmd::from(new_effects)
 }
 
     fn update(&mut self, message: DefinedMsg) -> Cmd<DefinedMsg> {
         match message.clone() {
-            DefinedMsg::SetPage(page) => {routing::routing_page_messages(message, self);}
-
-            DefinedMsg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => {
-                self.user_login_data.user_name = name
-            }
+            DefinedMsg::SetPage(page) => {
+                routing::change_hash_while_navigating(page.clone());
+                routing::routing_page_messages(message, self)},
+            DefinedMsg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => 
+            {},
             DefinedMsg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => {
                 self.user_login_data.user_password = passw
             }
@@ -138,9 +140,10 @@ impl Application for App {
             }
             DefinedMsg::NoOp => {}
             DefinedMsg::SendConversationMessage(conversation_message) => {}
-        }
-        Cmd::none()
-    }
+            DefinedMsg::ChangingHash(page) => {routing::routing_page_messages(message, self)}
+            _ => todo!("Why did update function receive DefinedMsg::SetPage message?")}
+        Cmd::none()}
+
 
     fn view(&self) -> Node<DefinedMsg> {
         match self.current_page {
@@ -168,7 +171,7 @@ impl Application for App {
             }
             Page::ItemSignedPage(SignedPage::Chat(chat_id)) => {
                 console::log_1(&"Rust8!".into());
-                logged_in_pages::conversation::view(&self)
+                logged_in_pages::chat::view(&self)
             }
             Page::ItemSignedPage(SignedPage::Friends) => {
                 logged_in_pages::friends::view()
@@ -195,8 +198,8 @@ impl Application for App {
             Page::ItemOtherPage(OtherPage::LogOut) => other_pages::log_out::view(),
         }
     }
-
 }
+
 //Testing
 
 /*
@@ -224,7 +227,7 @@ pub fn start() {
     // Setup hashchange listener
     let closure = Closure::wrap(Box::new(move |_: HashChangeEvent| {
         if let Some(hash) = window().and_then(|win| win.location().hash().ok()) {
-            program.dispatch(DefinedMsg::SetPage(Page::parse(&hash)));
+            program.dispatch(DefinedMsg::ChangingHash(Page::parse(&hash)));
         }
     }) as Box<dyn FnMut(_)>);
 

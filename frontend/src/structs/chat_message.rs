@@ -13,6 +13,7 @@ pub struct ChatChannel {
     chat_messages_vec: Vec<ChatMessage>,
 }
 
+#[derive(Clone, Debug, Copy, PartialEq)]
 pub enum ChatMessagesId {
     ChatMessagesIdValue(u32),
 }

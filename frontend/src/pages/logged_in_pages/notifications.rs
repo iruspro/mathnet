@@ -1,7 +1,7 @@
 use crate::app::App;
 use crate::{
     logics::sidebars,
-    messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned},
+    messages::{DefinedMsg},
 };
 use sauron::prelude::*;
 

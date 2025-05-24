@@ -1,6 +1,6 @@
 pub use crate::app::App;
 pub use crate::logics::sidebars;
-pub use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned};
+pub use crate::messages::{DefinedMsg};
 pub use crate::structs::user;
 pub use crate::structs::user::*;
 use sauron::prelude::*;

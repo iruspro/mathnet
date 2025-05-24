@@ -1,12 +1,14 @@
+use crate::pages::logged_in_pages::list_of_exercises;
 use crate::structs::chat_message::ChatId;
 use crate::structs::user::{
     UserChangingProfileData, UserDemandsUserProfileDataChanges, UserId, UserLoginData,
     UserRegisterData, get_user_register_data};
-use crate::list_of_pages::Page;
+use crate::list_of_pages::{ExerciseId, ListOfExercisesId, Page};
 
 #[derive(Debug, Clone,PartialEq)]
 pub enum DefinedMsg {
-    SetPage(Page),
+    SetPage(GoToPage),
+    ChangingHash(Page),
     LoginAttempt(UserLoginAttempt),
     Registration(UserRegister),
     UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges),
@@ -19,47 +21,50 @@ pub enum DefinedMsg {
     SendConversationMessage(String),
 }
 
-/* This enums are not needed anymore, because there is simpler way to 
-do page swithcing using only SetPage message
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub enum GoToPage {
     GoToPageSigned(SwitchToPageSigned),
     GoToPageUnsigned(SwitchToPageUnsigned),
+    GoToPageShared(SwitchToPageShared),
     GoToPageOther(SwitchToPageOther),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub enum SwitchToPageUnsigned {
     GoToHomePage,
     GoToLoginPage,
-    GoToDocsPage,
     GoToRegister,
-    GoToAboutProject,
-    GoToPrivacyAndSecurity,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub enum SwitchToPageSigned {
-    GoToDocsPage,
-    GoToAboutProject,
-    GoToPrivacyAndSecurity,
     GoToGroupsList,
-    GoToUserProfile,
+    GoToUserProfile(UserId),
     GoToSettings,
     GoToChatWithFriends,
     GoToNotifications,
+    GoToExercise(ListOfExercisesId,ExerciseId),
+    GoToListOfExercises(ListOfExercisesId),
+    GoToGroup(GroupId),
+    GoToProfile(UserId),
+    GoToUserSuggestsDevelopers,
+    GoToFriends,
+}
+#[derive(Debug, Clone,PartialEq)]
+pub enum SwitchToPageShared {
+    GoToDocsPage,
+    GoToAboutProject,
+    GoToPrivacyAndSecurity,
 }
 
-#[derive(Debug, Clone)]
-pub enum SwitchToPageOther {
-    GoToSuccessfullyChangedUserProfileData,
+#[derive(Debug, Clone,PartialEq)]
+pub enum SwitchToPageOther{
     GoToDeleteAccount,
-    GoToRetryChangingUserProfileData,
     GoToLogOut,
+    GoToRetryChangingUserProfileData,
+    GoToSuccessfullyChangedUserProfileData
+    
 }
-
-*/
 
 #[derive(Debug, Clone,PartialEq)]
 pub enum UserLoginAttempt {

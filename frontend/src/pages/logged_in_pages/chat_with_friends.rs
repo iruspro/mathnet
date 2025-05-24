@@ -5,7 +5,7 @@ use crate::logics::{
     displaying_friends::{show_chats_in_content, show_friends_at_sidebar},
     sidebars,
 };
-use crate::messages::{GoToPage, DefinedMsg, SwitchToPageOther, SwitchToPageSigned};
+use crate::messages::DefinedMsg;
 use sauron::prelude::*;
 
 pub fn view(data_provided: &App) -> Node<DefinedMsg> {

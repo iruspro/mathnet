@@ -1,21 +1,19 @@
 use crate::app::App;
 use crate::experimental_examples::imaginary_friends;
-use crate::list_of_pages::{OtherPage, Page, SignedPage};
+use crate::list_of_pages::{OtherPage, Page, SignedPage,SharedPage};
 use crate::logics::{
     displaying_conversation,
     displaying_friends::{show_chats_in_content, show_friends_at_sidebar},
 };
-use crate::messages::GoToPage::GoToPageSigned;
-use crate::messages::{GoToPage, DefinedMsg, SwitchToPageOther, SwitchToPageSigned};
+use crate::messages::DefinedMsg;
 use crate::web_sys::console;
 use sauron::node;
 use sauron::prelude::*;
 
 fn show_nav_link(page: Page) -> Node<DefinedMsg> {
     let pagex = Page::ItemSignedPage(SignedPage::GroupsList);
-    console::log_1(&Page::page_name_to_string(page.clone()).into());
     match page {
-        Page::ItemSignedPage(SignedPage::UserProfile) => {
+        Page::ItemSignedPage(SignedPage::UserProfile(_)) => {
             console::log_1(&"Hello from Rust3!".into());
             node! {<li class="nav-item">
                                 <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
@@ -82,7 +80,7 @@ fn show_active_nav_link(page_name: String) -> Node<DefinedMsg> {
                     </li>
             }
     } else {
-        if page_name == "Conversation" {
+        if page_name == "Chat with friends" {
             node! {
             <li class="nav-item">
                             <a class="nav-link text-white" arria-current = "page" href="#">"Chat with friends"</a>
@@ -201,29 +199,27 @@ use sauron::prelude::*;
 // Assume DefinedMsg and Page/SignedPage types are already defined
 
 pub fn left_sidebar(current_page: Page) -> Node<DefinedMsg> {
-    let list_of_signed_pages: [Page; 9] = [
-        Page::ItemSignedPage(SignedPage::UserProfile),
+    let list_of_signed_pages: [Page; 11] = [
+        Page::ItemSignedPage(SignedPage::UserProfile(_)),
         Page::ItemSignedPage(SignedPage::ChatWithFriends),
         Page::ItemSignedPage(SignedPage::GroupsList),
-        Page::ItemSignedPage(SignedPage::Docs),
-        Page::ItemSignedPage(SignedPage::AboutProject),
-        Page::ItemSignedPage(SignedPage::PrivacyAndSecurity),
         Page::ItemSignedPage(SignedPage::Notifications),
         Page::ItemSignedPage(SignedPage::Settings),
-        Page::ItemSignedPage(SignedPage::LogOut),
-        // let pagex = Page::ItemSignedPage(SignedPage::GroupsList);
-    ];
+        Page::ItemSignedPage(SignedPage::Chat(_)),    
+        Page::ItemSignedPage(SignedPage::Exercise(_, _)),
+        Page::ItemSignedPage(SignedPage::Profile(_)),
+        Page::ItemSignedPage(SignedPage::UserSuggestsToDevelopers),
+        Page::ItemSignedPage(SignedPage::ListOfExercises(_)),
+        Page::ItemSignedPage(SignedPage::Friends)
+    ]
 
     // Generate nav links as a Vec<Node<DefinedMsg>>
     let nav_links: Vec<Node<DefinedMsg>> = list_of_signed_pages
         .iter()
         .map(|pagex| {
             if *pagex == current_page {
-                console::log_1(&"Rust5".into());
-                console::log_1(&Page::page_name_to_string(pagex.clone()).into());
                 show_active_nav_link(Page::page_name_to_string(pagex.clone()))
             } else {
-                console::log_1(&Page::page_name_to_string(pagex.clone()).into());
                 show_nav_link(pagex.clone())
             }
         })

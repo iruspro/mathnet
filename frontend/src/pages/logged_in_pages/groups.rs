@@ -2,7 +2,7 @@ use std::thread::current;
 
 use crate::app::App;
 use crate::logics::sidebars;
-use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned};
+use crate::messages::{DefinedMsg};
 use sauron::prelude::*;
 
 pub fn view(current_state_of_app: &App) -> Node<DefinedMsg> {

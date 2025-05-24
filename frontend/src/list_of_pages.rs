@@ -18,6 +18,12 @@ pub enum Page {
     ItemSharedPage(SharedPage),
 }
 
+impl Page{
+    pub fn page_name_to_string(page_name : Page)->String{
+
+    }
+}
+
 
 
 
@@ -110,6 +116,7 @@ pub enum SignedPage {
     Group(GroupId),
     Exercise(ListOfExercisesId,ExerciseId),
     ListOfExercises(ListOfExercisesId),
+    UserSuggestsToDevelopers,
     /* User profile is for managing user's personal data, while profile is for
     sharing personal thoughts and presenting viewer to general public */
 }

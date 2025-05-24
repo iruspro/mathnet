@@ -3,7 +3,7 @@ pub use crate::structs::user::*;
 
 #[derive(Debug, Clone,PartialEq)]
 pub enum GroupId {
-    GroupId(u32),
+    GroupIdNumber(u32),
 }
 
 #[derive(Debug, Clone)]
