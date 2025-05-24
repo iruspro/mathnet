@@ -92,7 +92,7 @@ impl UserChangingProfileData {
         if self.new_user_password != self.new_user_password_confirmation {
             DefinedMsg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry)
         } else {
-            DefinedMsg::SetPage(Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData))
+            DefinedMsg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToSuccessfullyChangedUserProfileData))
         }
     }
 }

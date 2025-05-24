@@ -22,10 +22,10 @@ impl Page {
             // login pages
             ["chat_with_friends"] => Page::ItemSignedPage(SignedPage::ChatWithFriends),
             ["chat", chat_id] => Page::ItemSignedPage(SignedPage::Chat(ChatId::ChatIdNumber(parse_from_str_to_u32(chat_id)))),
-            ["exercise", list_of_exercises_id, exercise_id] => Page::ItemSignedPage(SignedPage::Exercise(ListOfExercisesId::ListOdExercisesIdNumber(parse_from_str_to_u32(list_of_exercises_id)),ExerciseId::ExerciseIdNumber(parse_from_str_to_u32(exercise_id)))),
+            ["exercise", list_of_exercises_id, exercise_id] => Page::ItemSignedPage(SignedPage::Exercise(ListOfExercisesId::ListOfExercisesIdNumber(parse_from_str_to_u32(list_of_exercises_id)),ExerciseId::ExerciseIdNumber(parse_from_str_to_u32(exercise_id)))),
             ["groups"] => Page::ItemSignedPage(SignedPage::GroupsList),
-            ["group", group_id] => Page::ItemSignedPage(SignedPage::Group(GroupId::GroupId(parse_from_str_to_u32(group_id)))),
-            ["list_of_exercises", list_of_exercises_id] => Page::ItemSignedPage(SignedPage::ListOfExercises(ListOfExercisesId::ListOdExercisesIdNumber(parse_from_str_to_u32(list_of_exercises_id)))),
+            ["group", group_id] => Page::ItemSignedPage(SignedPage::Group(GroupId::GroupIdNumber(parse_from_str_to_u32(group_id)))),
+            ["list_of_exercises", list_of_exercises_id] => Page::ItemSignedPage(SignedPage::ListOfExercises(ListOfExercisesId::ListOfExercisesIdNumber(parse_from_str_to_u32(list_of_exercises_id)))),
             ["notifications"] =>Page::ItemSignedPage(SignedPage::Notifications),
             ["settings"] => Page::ItemSignedPage(SignedPage::Settings),
             ["user_profile", user_id] => Page::ItemSignedPage(SignedPage::UserProfile(UserId::UserIdNumber(parse_from_str_to_u32(user_id)))),
@@ -126,16 +126,16 @@ pub fn routing_page_messages(page_message: DefinedMsg, current_state_of_app: &mu
             current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Notifications);
         }
         DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToExercise)) => {
-            let list_id = ListOfExercisesId::ListOdExercisesIdNumber(0);
+            let list_id = ListOfExercisesId::ListOfExercisesIdNumber(0);
             let exercise_id = ExerciseId::ExerciseIdNumber(0);
             current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Exercise(list_id, exercise_id));
         }
         DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToListOfExercises)) => {
-            let list_id = ListOfExercisesId::ListOdExercisesIdNumber(0);
+            let list_id = ListOfExercisesId::ListOfExercisesIdNumber(0);
             current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::ListOfExercises(list_id));
         }
         DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroup)) => {
-            let group_id = GroupId::GroupId(0);
+            let group_id = GroupId::GroupIdNumber(0);
             current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Group(group_id));
         }
         DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToProfile)) => {
@@ -320,7 +320,7 @@ fn go_to_page_to_hash_convertor(go_to_page: GoToPage) -> String {
     match go_to_page {
         GoToPage::GoToPageSigned(page) => match page {
             SwitchToPageSigned::GoToGroupsList => "#groups".to_string(),
-            SwitchToPageSigned::GoToUserProfile(user_id) => format!("#user_profile/{}", user_id.0),
+            SwitchToPageSigned::GoToUserProfile(user_id) => format!("#user_profile/{}", user_id_to_string(user_id)),
             SwitchToPageSigned::GoToSettings => "#settings".to_string(),
             SwitchToPageSigned::GoToChatWithFriends => "#chat".to_string(),
             SwitchToPageSigned::GoToNotifications => "#notifications".to_string(),

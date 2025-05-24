@@ -2,5 +2,5 @@
 
 #[derive(Debug,Clone,PartialEq)]
 pub enum ListOfExercisesId{
-    ListOdExercisesIdNumber(u32)
+    ListOfExercisesIdNumber(u32)
 }
