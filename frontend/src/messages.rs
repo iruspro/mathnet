@@ -1,7 +1,10 @@
-use crate::structs::user::{UserLoginData, UserRegisterData, get_user_register_data,UserChangingProfileData,UserDemandsUserProfileDataChanges,UserId};
 use crate::structs::chat_message::ChatId;
+use crate::structs::user::{
+    UserChangingProfileData, UserDemandsUserProfileDataChanges, UserId, UserLoginData,
+    UserRegisterData, get_user_register_data,
+};
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub enum Msg {
     SetPage(GoToPage),
     LoginAttempt(UserLoginAttempt),
@@ -16,14 +19,14 @@ pub enum Msg {
     SendConversationMessage(String),
 }
 
-#[derive(Debug,Clone)]
-pub enum GoToPage{
-GoToPageSigned(SwitchToPageSigned),
-GoToPageUnsigned(SwitchToPageUnsigned),
-GoToPageOther(SwitchToPageOther),
+#[derive(Debug, Clone)]
+pub enum GoToPage {
+    GoToPageSigned(SwitchToPageSigned),
+    GoToPageUnsigned(SwitchToPageUnsigned),
+    GoToPageOther(SwitchToPageOther),
 }
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub enum SwitchToPageUnsigned {
     GoToHomePage,
     GoToLoginPage,
@@ -33,7 +36,7 @@ pub enum SwitchToPageUnsigned {
     GoToPrivacyAndSecurity,
 }
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub enum SwitchToPageSigned {
     GoToDocsPage,
     GoToAboutProject,
@@ -45,27 +48,26 @@ pub enum SwitchToPageSigned {
     GoToNotifications,
 }
 
-#[derive(Debug,Clone)]
-pub enum SwitchToPageOther{
+#[derive(Debug, Clone)]
+pub enum SwitchToPageOther {
     GoToSuccessfullyChangedUserProfileData,
     GoToDeleteAccount,
     GoToRetryChangingUserProfileData,
-    GoToLogOut
+    GoToLogOut,
 }
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub enum UserLoginAttempt {
     UpdateUserName(String),
     UpdateUserPassword(String),
     CheckLoginValidy,
 }
 
-#[derive(Debug,Clone)]
+#[derive(Debug, Clone)]
 pub enum UserRegister {
-    	UpdateUserRegisterName(String),
-        UpdateUserRegisterPassword(String),
-        UpdateUserRegisterPasswordAgain(String),
-        UpdateUserRegisterEmail(String),
-        RegistrationAttempt
+    UpdateUserRegisterName(String),
+    UpdateUserRegisterPassword(String),
+    UpdateUserRegisterPasswordAgain(String),
+    UpdateUserRegisterEmail(String),
+    RegistrationAttempt,
 }
-

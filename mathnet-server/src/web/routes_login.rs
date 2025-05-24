@@ -14,7 +14,7 @@ async fn api_login_handler(cookies: Cookies, payload: Json<LoginPayload>) -> Res
     debug!("{:<12} - api_login_handler", "HANDLER");
 
     // TODO: Implement real db/auth logic.
-    if payload.username != "demo1" || payload.pwd != "welcome" {
+    if payload.username != "admin" || payload.pwd != "password" {
         return Err(Error::LoginFail);
     }
 

@@ -1,8 +1,11 @@
 use crate::ctx::Ctx;
 use crate::model::ModelManager;
-use crate::model::thought::{self, Thought, ThoughtBmc, ThoughtForCreate, ThoughtForUpdate};
+use crate::model::thought::{
+    Thought, ThoughtBmc, ThoughtFilter, ThoughtForCreate, ThoughtForUpdate,
+};
 use crate::web::Result;
 
+use super::params::ParamsList;
 use super::{ParamsForCreate, ParamsForUpdate, ParamsIded};
 
 pub async fn create_thought(
@@ -26,9 +29,12 @@ pub async fn get_thought(ctx: Ctx, mm: ModelManager, params: ParamsIded) -> Resu
     Ok(thought)
 }
 
-pub async fn list_thoughts(ctx: Ctx, mm: ModelManager) -> Result<Vec<Thought>> {
-    // TODO: Add filters, limits, and other constraints
-    let thoughts = ThoughtBmc::list(&ctx, &mm).await?;
+pub async fn list_thoughts(
+    ctx: Ctx,
+    mm: ModelManager,
+    params: ParamsList<ThoughtFilter>,
+) -> Result<Vec<Thought>> {
+    let thoughts = ThoughtBmc::list(&ctx, &mm, params.filters, params.list_options).await?;
 
     Ok(thoughts)
 }

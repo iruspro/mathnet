@@ -1,6 +1,5 @@
 use sqlx::{Pool, Postgres, postgres::PgPoolOptions};
 use std::{fs, path::PathBuf, time::Duration};
-use tokio::fs::read_dir;
 use tracing::info;
 
 type Db = Pool<Postgres>;

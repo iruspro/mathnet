@@ -19,7 +19,7 @@ pub async fn init_dev() {
     static INIT: OnceCell<()> = OnceCell::const_new();
 
     INIT.get_or_init(|| async {
-        info!("{:<12} - init_dev_all()", "FOR-DEV-ONLY");
+        info!("{:<12} - init_dev()", "FOR-DEV-ONLY");
 
         dev_db::init_dev_db().await.unwrap();
     })
@@ -53,6 +53,8 @@ pub async fn seed_thoughts(
             mm,
             ThoughtForCreate {
                 content: content.to_string(),
+                mather_id: 1000,
+                on_latex: true,
             },
         )
         .await?;
