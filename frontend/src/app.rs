@@ -1,11 +1,11 @@
-use crate::list_of_pages::{Page, SignedPage, UnsignedPage};
+use crate::list_of_pages::{Page, SharedPage, SignedPage, UnsignedPage};
 use crate::logics::{login_logics, registration_logics};
 use crate::messages::GoToPage;
 pub use crate::messages::{
     GoToPage::{GoToPageSigned, GoToPageUnsigned},
-    Msg, SwitchToPageSigned, SwitchToPageUnsigned, UserLoginAttempt, UserRegister,
+    DefinedMsg,SwitchToPageSigned, SwitchToPageUnsigned, UserLoginAttempt, UserRegister,
 };
-use crate::pages::{logged_in_pages, logged_out_pages};
+use crate::pages::{logged_in_pages, logged_out_pages, other_pages, shared_pages};
 use crate::structs::{
     group_struct::*,
     user::{
@@ -21,8 +21,9 @@ use crate::{
 use sauron::dom::Program;
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
-use web_sys::window;
-
+use web_sys::{Window, window, HashChangeEvent};
+use sauron::{html::{attributes::*, events::*, *},Cmd,Application,Effects};
+use crate::routing;
 
 // (Main) model of this project
 #[derive(Debug)]
@@ -54,156 +55,101 @@ impl App {
     
 }
 
+
 impl Application for App {
-    type MSG = Msg;
+    type MSG = DefinedMsg;
+    fn init(&mut self) -> Cmd<DefinedMsg> {
+    let current_hash = window()
+        .and_then(|win| win.location().hash().ok())
+        .unwrap_or_default();
+    // Probably there exists more convenient way to handle this, but for some reason this code doesn't work in any other way.
+    let new_effects = Effects::new(vec![DefinedMsg::SetPage(Page::parse(&current_hash.as_str()))],vec![()] );
+    Cmd::from(new_effects)
+}
 
-    fn update(&mut self, msg: Self::MSG) -> Cmd<Msg> {
-        match msg {
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage)) => {
-                self.current_page = Page::ItemUnsignedPage(UnsignedPage::Home)
-            }
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage)) => {
-                self.current_page = Page::ItemUnsignedPage(UnsignedPage::Docs)
-            }
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage)) => {
-                self.current_page = Page::ItemUnsignedPage(UnsignedPage::Login)
-            }
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister)) => {
-                self.current_page = Page::ItemUnsignedPage(UnsignedPage::Register)
-            }
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject)) => {
-                self.current_page = Page::ItemUnsignedPage(UnsignedPage::AboutProject)
-            }
-            Msg::SetPage(GoToPage::GoToPageUnsigned(
-                SwitchToPageUnsigned::GoToPrivacyAndSecurity,
-            )) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity),
+    fn update(&mut self, message: DefinedMsg) -> Cmd<DefinedMsg> {
+        match message {
+            DefinedMsg::SetPage(page) => {routing::routing_page_messages(message, &mut self);}
 
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList)) => {
-                self.current_page = Page::ItemSignedPage(SignedPage::GroupsList)
-            }
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject)) => {
-                self.current_page = Page::ItemSignedPage(SignedPage::AboutProject)
-            }
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity)) => {
-                self.current_page = Page::ItemSignedPage(SignedPage::PrivacyAndSecurity)
-            }
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile)) => {
-                self.current_page = Page::ItemSignedPage(SignedPage::UserProfile)
-            }
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings)) => {
-                self.current_page = Page::ItemSignedPage(SignedPage::Settings)
-            }
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage)) => {
-                self.current_page = Page::ItemSignedPage(SignedPage::Docs)
-            }
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications)) => {
-                self.current_page = Page::ItemSignedPage(SignedPage::Notifications)
-            }
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends)) => {
-                self.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends)
-            }
-            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToDeleteAccount)) => {
-                self.current_page = Page::ItemOtherPage(OtherPage::DeleteAccount)
-            }
-            Msg::SetPage(GoToPage::GoToPageOther(
-                SwitchToPageOther::GoToRetryChangingUserProfileData,
-            )) => self.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData),
-            Msg::SetPage(GoToPage::GoToPageOther(
-                SwitchToPageOther::GoToSuccessfullyChangedUserProfileData,
-            )) => {
-                self.current_page =
-                    Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData)
-            }
-            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut)) => {
-                self.current_page = Page::ItemOtherPage(OtherPage::LogOut)
-            }
-
-            Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => {
+            DefinedMsg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => {
                 self.user_login_data.user_name = name
             }
-            Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => {
+            DefinedMsg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => {
                 self.user_login_data.user_password = passw
             }
-            Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => {
+            DefinedMsg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => {
                 login_logics::check_login_attempt_validity(self)
             }
 
-            Msg::Registration(UserRegister::UpdateUserRegisterName(name)) => {
+            DefinedMsg::Registration(UserRegister::UpdateUserRegisterName(name)) => {
                 self.user_register_data.user_name = name
             }
-            Msg::Registration(UserRegister::UpdateUserRegisterPassword(passw)) => {
+            DefinedMsg::Registration(UserRegister::UpdateUserRegisterPassword(passw)) => {
                 self.user_register_data.user_password = passw
             }
-            Msg::Registration(UserRegister::UpdateUserRegisterPasswordAgain(passw_again)) => {
+            DefinedMsg::Registration(UserRegister::UpdateUserRegisterPasswordAgain(passw_again)) => {
                 self.user_register_data.user_password_again = passw_again
             }
-            Msg::Registration(UserRegister::UpdateUserRegisterEmail(email)) => {
+            DefinedMsg::Registration(UserRegister::UpdateUserRegisterEmail(email)) => {
                 self.user_register_data.user_email = email
             }
-            Msg::Registration(UserRegister::RegistrationAttempt) => {
+            DefinedMsg::Registration(UserRegister::RegistrationAttempt) => {
                 registration_logics::check_registration_validity(self)
             }
 
-            Msg::UserWantsToChangeProfileData(
+            DefinedMsg::UserWantsToChangeProfileData(
                 UserDemandsUserProfileDataChanges::ChangeUserName(new_name),
             ) => self.user_changing_data_structure.new_user_name = new_name,
-            Msg::UserWantsToChangeProfileData(
+            DefinedMsg::UserWantsToChangeProfileData(
                 UserDemandsUserProfileDataChanges::ChangeUserEmail(new_email),
             ) => self.user_changing_data_structure.new_user_email = new_email,
-            Msg::UserWantsToChangeProfileData(
+            DefinedMsg::UserWantsToChangeProfileData(
                 UserDemandsUserProfileDataChanges::ChangeUserPassword(new_password),
             ) => self.user_changing_data_structure.new_user_password = new_password,
-            Msg::UserWantsToChangeProfileData(
+            DefinedMsg::UserWantsToChangeProfileData(
                 UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(new_password),
             ) => {
                 self.user_changing_data_structure
                     .new_user_password_confirmation = new_password
             }
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {
+            DefinedMsg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {
                 self.current_page = Page::ItemOtherPage(OtherPage::DeleteAccount)
             }
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => {
+            DefinedMsg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => {
                 self.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData)
             }
-            Msg::UserWantsToChangeProfileData(
+            DefinedMsg::UserWantsToChangeProfileData(
                 UserDemandsUserProfileDataChanges::ConfirmChanges,
             ) => {}
-            Msg::SearchFriend(searched_person) => {
+            DefinedMsg::SearchFriend(searched_person) => {
                 unimplemented!()
             }
-            Msg::NoAction => {
+            DefinedMsg::NoAction => {
                 unimplemented!()
             }
-            Msg::UserWantsToChatWithSomePerson(user_id) => {
+            DefinedMsg::UserWantsToChatWithSomePerson(user_id) => {
                 unimplemented!()
             }
-            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {
+            DefinedMsg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {
                 self.current_conversation = Some(chat_id);
-                self.current_page = Page::ItemSignedPage(SignedPage::Conversation)
+                self.current_page = Page::ItemSignedPage(SignedPage::Chat)
             }
-            Msg::SetConversationToNone => {
+            DefinedMsg::SetConversationToNone => {
                 self.current_conversation = None;
                 self.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends)
             }
-            Msg::NoOp => {}
-            Msg::SendConversationMessage(conversation_message) => {}
+            DefinedMsg::NoOp => {}
+            DefinedMsg::SendConversationMessage(conversation_message) => {}
         }
         Cmd::none()
     }
 
-    fn view(&self) -> Node<Self::MSG> {
+    fn view(&self) -> Node<DefinedMsg> {
         match self.current_page {
 
         // Unsigned pages
             Page::ItemUnsignedPage(UnsignedPage::Home) => logged_out_pages::home::view(),
-            Page::ItemUnsignedPage(UnsignedPage::Docs) => logged_out_pages::docs::view(),
-            Page::ItemUnsignedPage(UnsignedPage::AboutProject) => {
-                logged_out_pages::about_project::view()
-            }
             Page::ItemUnsignedPage(UnsignedPage::Login) => logged_out_pages::login::view(&self),
-            Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity) => {
-                logged_out_pages::privacy_and_security::view()
-            }
             Page::ItemUnsignedPage(UnsignedPage::Register) => logged_out_pages::register::view(),
 
         // Signed pages
@@ -212,50 +158,81 @@ impl Application for App {
                 logged_in_pages::groups::view(&self)
             }
             Page::ItemSignedPage(SignedPage::Settings) => logged_in_pages::settings::view(&self),
-            Page::ItemSignedPage(SignedPage::UserProfile) => {
+            Page::ItemSignedPage(SignedPage::UserProfile(user_id)) => {
                 logged_in_pages::user_profile::view(&self)
             }
-            Page::ItemSignedPage(SignedPage::PrivacyAndSecurity) => {
-                logged_in_pages::privacy_and_security::view(&self)
-            }
-            Page::ItemSignedPage(SignedPage::AboutProject) => {
-                logged_in_pages::about_project::view(&self)
-            }
-            Page::ItemSignedPage(SignedPage::Docs) => logged_in_pages::docs::view(&self),
             Page::ItemSignedPage(SignedPage::ChatWithFriends) => {
                 logged_in_pages::chat_with_friends::view(&self)
             }
             Page::ItemSignedPage(SignedPage::Notifications) => {
                 logged_in_pages::notifications::view(&self)
             }
-            Page::ItemSignedPage(SignedPage::Conversation) => {
+            Page::ItemSignedPage(SignedPage::Chat(chat_id)) => {
                 console::log_1(&"Rust8!".into());
                 logged_in_pages::conversation::view(&self)
             }
-            Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(),
+            Page::ItemSignedPage(SignedPage::Friends) => {
+                logged_in_pages::friends::view()
+            }
+            Page::ItemSignedPage(SignedPage::Profile(user_id)) => {
+                logged_in_pages::profile::view(),
+            }
 
             // Shared pages
+            Page::ItemSharedPage(SharedPage::AboutProject) => shared_pages::about_project::view(&self),
+            Page::ItemSharedPage(SharedPage::Docs) => shared_pages::docs::view(&self),
+            Page::ItemSharedPage(SharedPage::PrivacyAndSecurity) => shared_pages::privacy_and_security::view(&self),
 
             //Other pages
-
             Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => {
-                logged_in_pages::successfully_changed_user_profile_data::view()
+                other_pages::successfully_changed_user_profile_data::view()
             }
             Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData) => {
-                logged_in_pages::retry_changing_user_profile_data::view()
+                other_pages::retry_changing_user_profile_data::view()
             }
             Page::ItemOtherPage(OtherPage::DeleteAccount) => {
-                logged_in_pages::delete_account::view()
+                other_pages::delete_account::view()
             }
-            Page::ItemOtherPage(OtherPage::LogOut) => logged_in_pages::log_out::view(),
+            Page::ItemOtherPage(OtherPage::LogOut) => other_pages::log_out::view(),
         }
     }
+
 }
 //Testing
 
+/*
 #[wasm_bindgen(start)]
 pub fn start() {
     console_log::init_with_level(log::Level::Trace).unwrap();
     console_error_panic_hook::set_once();
     Program::mount_to_body(App::new());
+}
+*/
+
+#[wasm_bindgen(start)]
+pub fn start() {
+    use wasm_bindgen::closure::Closure;
+    use wasm_bindgen::JsCast;
+    use web_sys::{window, HashChangeEvent};
+    use sauron::dom::Program;
+
+    console_log::init_with_level(log::Level::Trace).unwrap();
+    console_error_panic_hook::set_once();
+
+    let app = App::new();
+    let mut program = Program::mount_to_body(app);
+
+    // Setup hashchange listener
+    let closure = Closure::wrap(Box::new(move |_: HashChangeEvent| {
+        if let Some(hash) = window().and_then(|win| win.location().hash().ok()) {
+            program.dispatch(DefinedMsg::SetPage(Page::parse(&hash)));
+        }
+    }) as Box<dyn FnMut(_)>);
+
+    window()
+        .unwrap()
+        .add_event_listener_with_callback("hashchange", closure.as_ref().unchecked_ref())
+        .unwrap();
+
+    closure.forget(); // Keeps the closure alive
 }

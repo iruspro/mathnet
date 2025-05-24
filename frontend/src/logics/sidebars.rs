@@ -6,67 +6,67 @@ use crate::logics::{
     displaying_friends::{show_chats_in_content, show_friends_at_sidebar},
 };
 use crate::messages::GoToPage::GoToPageSigned;
-use crate::messages::{GoToPage, Msg, SwitchToPageOther, SwitchToPageSigned};
+use crate::messages::{GoToPage, DefinedMsg, SwitchToPageOther, SwitchToPageSigned};
 use crate::web_sys::console;
 use sauron::node;
 use sauron::prelude::*;
 
-fn show_nav_link(page: Page) -> Node<Msg> {
+fn show_nav_link(page: Page) -> Node<DefinedMsg> {
     let pagex = Page::ItemSignedPage(SignedPage::GroupsList);
     console::log_1(&Page::page_name_to_string(page.clone()).into());
     match page {
         Page::ItemSignedPage(SignedPage::UserProfile) => {
             console::log_1(&"Hello from Rust3!".into());
             node! {<li class="nav-item">
-                                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
+                                <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
                             </li>
             }
         }
         Page::ItemSignedPage(SignedPage::ChatWithFriends) => {
             node! {<li class="nav-item">
-                                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends))}>"Chat with friends"</a>
+                                <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends))}>"Chat with friends"</a>
                             </li>
             }
         }
         Page::ItemSignedPage(SignedPage::GroupsList) => {
             node! {<li class="nav-item">
-                                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList))}>"Groups"</a>
+                                <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList))}>"Groups"</a>
                             </li>
             }
         }
         Page::ItemSignedPage(SignedPage::Docs) => {
             node! {<li class="nav-item">
-                                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))}>"Docs"</a>
+                                <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))}>"Docs"</a>
                             </li>
             }
         }
         Page::ItemSignedPage(SignedPage::AboutProject) => {
             node! {<li class="nav-item">
-                                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About this project"</a>
+                                <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About this project"</a>
                             </li>
             }
         }
         Page::ItemSignedPage(SignedPage::PrivacyAndSecurity) => {
             node! {<li class="nav-item">
-                                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+                                <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
                             </li>
             }
         }
         Page::ItemSignedPage(SignedPage::Notifications) => {
             node! {<li class="nav-item">
-                                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications))}>"Notifications"</a>
+                                <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications))}>"Notifications"</a>
                             </li>
             }
         }
         Page::ItemSignedPage(SignedPage::Settings) => {
             node! {<li class="nav-item">
-                                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
+                                <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
                             </li>
             }
         }
         Page::ItemSignedPage(SignedPage::LogOut) => {
             node! {<li class="nav-item">
-                                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut))}>"Log out"</a>
+                                <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut))}>"Log out"</a>
                             </li>
             }
         }
@@ -74,7 +74,7 @@ fn show_nav_link(page: Page) -> Node<Msg> {
     }
 }
 
-fn show_active_nav_link(page_name: String) -> Node<Msg> {
+fn show_active_nav_link(page_name: String) -> Node<DefinedMsg> {
     if page_name == "Groups list" {
         node! {
         <li class="nav-item">
@@ -98,7 +98,7 @@ fn show_active_nav_link(page_name: String) -> Node<Msg> {
     }
 }
 
-//pub fn left_sidebar(current_page: Page) -> Node<Msg> {
+//pub fn left_sidebar(current_page: Page) -> Node<DefinedMsg> {
 //    let list_of_signed_pages: [Page; 9] = [
 //        Page::ItemSignedPage(SignedPage::UserProfile),
 //        Page::ItemSignedPage(SignedPage::ChatWithFriends),
@@ -112,7 +112,7 @@ fn show_active_nav_link(page_name: String) -> Node<Msg> {
 //    ];
 //
 //    // Generate list items outside the node! macro
-//    let nav_links: Vec<Node<Msg>> = list_of_signed_pages
+//    let nav_links: Vec<Node<DefinedMsg>> = list_of_signed_pages
 //        .iter()
 //        .map(|pagex| {
 //            if *pagex == current_page {
@@ -145,7 +145,7 @@ fn show_active_nav_link(page_name: String) -> Node<Msg> {
 /* Handling left sidebar display*/
 
 /*
-pub fn left_sidebar(current_page : Page) -> Node<Msg>{
+pub fn left_sidebar(current_page : Page) -> Node<DefinedMsg>{
 let list_of_signed_pages :[Page;9]=[
 Page::ItemSignedPage(SignedPage::UserProfile),
 Page::ItemSignedPage(SignedPage::ChatWithFriends),
@@ -181,13 +181,13 @@ node!{
 */
 
 /* Handling left sidebar display*/
-//pub fn right_sidebar() -> Node<Msg> {
+//pub fn right_sidebar() -> Node<DefinedMsg> {
 //node!{
 //    <div class="right-sidebar d-none d-md-block text-white">
 //                <h4>"Right Sidebar"</h4>
 //                <ul class="nav flex-column">
 //                <div class="search-container">
-//        <input type="text" class="form-control search-input" placeholder="Find a person" on_input=|input|{Msg::SearchFriend(input.value())}></input>
+//        <input type="text" class="form-control search-input" placeholder="Find a person" on_input=|input|{DefinedMsg::SearchFriend(input.value())}></input>
 //        <i class="fas fa-search search-icon"></i>
 //      </div>
 //                    //{show_friends_at_sidebar()};
@@ -198,9 +198,9 @@ node!{
 
 use sauron::prelude::*;
 
-// Assume Msg and Page/SignedPage types are already defined
+// Assume DefinedMsg and Page/SignedPage types are already defined
 
-pub fn left_sidebar(current_page: Page) -> Node<Msg> {
+pub fn left_sidebar(current_page: Page) -> Node<DefinedMsg> {
     let list_of_signed_pages: [Page; 9] = [
         Page::ItemSignedPage(SignedPage::UserProfile),
         Page::ItemSignedPage(SignedPage::ChatWithFriends),
@@ -214,8 +214,8 @@ pub fn left_sidebar(current_page: Page) -> Node<Msg> {
         // let pagex = Page::ItemSignedPage(SignedPage::GroupsList);
     ];
 
-    // Generate nav links as a Vec<Node<Msg>>
-    let nav_links: Vec<Node<Msg>> = list_of_signed_pages
+    // Generate nav links as a Vec<Node<DefinedMsg>>
+    let nav_links: Vec<Node<DefinedMsg>> = list_of_signed_pages
         .iter()
         .map(|pagex| {
             if *pagex == current_page {
@@ -241,7 +241,7 @@ pub fn left_sidebar(current_page: Page) -> Node<Msg> {
     }
 }
 
-pub fn left_sidebar_special(current_page: Page) -> Node<Msg> {
+pub fn left_sidebar_special(current_page: Page) -> Node<DefinedMsg> {
     let list_of_signed_pages: [Page; 9] = [
         Page::ItemSignedPage(SignedPage::UserProfile),
         Page::ItemSignedPage(SignedPage::ChatWithFriends),
@@ -253,7 +253,7 @@ pub fn left_sidebar_special(current_page: Page) -> Node<Msg> {
         Page::ItemSignedPage(SignedPage::Settings),
         Page::ItemSignedPage(SignedPage::LogOut),
     ];
-    let mut nav_links: Vec<Node<Msg>>;
+    let mut nav_links: Vec<Node<DefinedMsg>>;
     if current_page == Page::ItemSignedPage(SignedPage::Conversation) {
         nav_links = list_of_signed_pages
             .iter()

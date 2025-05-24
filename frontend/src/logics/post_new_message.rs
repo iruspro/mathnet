@@ -10,7 +10,7 @@ pub use crate::structs::friends_at_sidebar::{FriendAtSidebar, ShowChats};
 pub use crate::structs::user::{User, UserId, new};
 pub use sauron::{node, text};
 
-pub fn post_new_message() -> Node<Msg> {
+pub fn post_new_message() -> Node<DefinedMsg> {
     node! {
                                     <div class="card mb-3" style="max-width: 540px;">
       <div class="row g-0">
@@ -21,7 +21,7 @@ pub fn post_new_message() -> Node<Msg> {
         class="form-control"
         id="exampleFormControlInput1"
         placeholder= "Send new message"
-        on_input=|input|{Msg::SendConversationMessage(input.value())}></input>
+        on_input=|input|{DefinedMsg::SendConversationMessage(input.value())}></input>
       </div>
     </form>
         </div>

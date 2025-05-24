@@ -1,11 +1,11 @@
 pub use crate::app::App;
 pub use crate::logics::sidebars;
-pub use crate::messages::{GoToPage, Msg, SwitchToPageSigned, SwitchToPageUnsigned};
+pub use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned};
 pub use crate::structs::user;
 pub use crate::structs::user::*;
 use sauron::prelude::*;
 
-pub fn view(current_state_of_app: &App) -> Node<Msg> {
+pub fn view(current_state_of_app: &App) -> Node<DefinedMsg> {
     let mut user = user::new();
     let mut user_profile_changes = UserChangingProfileData::new();
     node! {
@@ -23,7 +23,7 @@ pub fn view(current_state_of_app: &App) -> Node<Msg> {
                 //                    <a class="nav-link active" aria-current="page" href="#">"Home page"</a>
                 //                </li>
                 //                <li class="nav-item">
-                //                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToDocsPage)}>"Docs"</a>
+                //                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToDocsPage)}>"Docs"</a>
                 //                </li>
                 //            </ul>
                 //        </div>
@@ -36,31 +36,31 @@ pub fn view(current_state_of_app: &App) -> Node<Msg> {
                     <h4>"Sidebar"</h4>
                     <ul class="nav flex-column">
                     <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
+                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends))}>"Chat with friends"</a>
+                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends))}>"Chat with friends"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList))}>"Groups"</a>
+                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList))}>"Groups"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
+                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
+                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
+                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white" href="#">"Notifications"</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
+                    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
                 </li>
                     </ul>
                 </div>
@@ -74,28 +74,28 @@ pub fn view(current_state_of_app: &App) -> Node<Msg> {
                     <div class="offcanvas-body">
                         <ul class="nav flex-column">
                             <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
+                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends))}>"Chat with friends"</a>
+                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends))}>"Chat with friends"</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
+                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
+                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
+                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
                             </li>
                             //<li class="nav-item">
-                            //    <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserSuggestsDevelopers))}>"Suggest us"</a>
+                            //    <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserSuggestsDevelopers))}>"Suggest us"</a>
                             //</li>
                             <li class="nav-item">
-                                <a class="nav-link text-white" on_click=|_|{Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
+                                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
                             </li>
                         </ul>
                     </div>
@@ -125,7 +125,7 @@ pub fn view(current_state_of_app: &App) -> Node<Msg> {
         aria-describedby="passwordHelpBlock"
         id="exampleFormControlInput1"
         placeholder= user.user_name.clone()
-        on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserName(input.value()))}></input>
+        on_input=|input|{DefinedMsg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserName(input.value()))}></input>
       </div>
       <div id="passwordHelpBlock" class="form-text">
             "Enter new user name."
@@ -138,7 +138,7 @@ pub fn view(current_state_of_app: &App) -> Node<Msg> {
         aria-describedby="passwordHelpBlock"
         id="exampleFormControlInput1"
         placeholder= user.user_email.clone()
-        on_input=|input| {Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(input.value()))}></input>
+        on_input=|input| {DefinedMsg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(input.value()))}></input>
       </div>
       <div id="passwordHelpBlock" class="form-text">
             "Enter new email address."
@@ -151,7 +151,7 @@ pub fn view(current_state_of_app: &App) -> Node<Msg> {
         aria-describedby="passwordHelpBlock"
         id="exampleFormControlInput1"
         placeholder=user.user_password.clone()
-        on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(input.value()))}></input>
+        on_input=|input|{DefinedMsg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(input.value()))}></input>
       </div>
       <div id="passwordHelpBlock" class="form-text">
             "Enter new password."
@@ -164,14 +164,14 @@ pub fn view(current_state_of_app: &App) -> Node<Msg> {
         aria-describedby="passwordHelpBlock"
         id="exampleFormControlInput1"
         placeholder=user.user_password.clone()
-        on_input=|input|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(input.value()))}></input>
+        on_input=|input|{DefinedMsg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(input.value()))}></input>
       </div>
       <div id="passwordHelpBlock" class="form-text">
             "Enter new  password again. This step is necessary in order to prevent typos."
         </div>
 
         <div class="d-grid gap-2 col-6 mx-auto">
-        <button class="btn btn-primary" type="button" on_click=|_|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges)}>"Confirm changes"</button>
+        <button class="btn btn-primary" type="button" on_click=|_|{DefinedMsg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges)}>"Confirm changes"</button>
       </div>
       <div id="passwordHelpBlock" class="form-text">
              "A confirmation letter will be sent to that address."
@@ -189,7 +189,7 @@ pub fn view(current_state_of_app: &App) -> Node<Msg> {
           <h5 class="card-title">"Delete account"</h5>
           <form>
           <div class="d-grid gap-2 col-6 mx-auto">
-          <button class="btn btn-danger" type="button" on_click=|_|{Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount)}>"Delete account"</button>
+          <button class="btn btn-danger" type="button" on_click=|_|{DefinedMsg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount)}>"Delete account"</button>
         </div>
         <div id="passwordHelpBlock" class="form-text">
                "After deletion your data will be unrecovable."

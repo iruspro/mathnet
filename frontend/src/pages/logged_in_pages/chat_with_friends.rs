@@ -5,10 +5,10 @@ use crate::logics::{
     displaying_friends::{show_chats_in_content, show_friends_at_sidebar},
     sidebars,
 };
-use crate::messages::{GoToPage, Msg, SwitchToPageOther, SwitchToPageSigned};
+use crate::messages::{GoToPage, DefinedMsg, SwitchToPageOther, SwitchToPageSigned};
 use sauron::prelude::*;
 
-pub fn view(data_provided: &App) -> Node<Msg> {
+pub fn view(data_provided: &App) -> Node<DefinedMsg> {
     node! {
         <main>
             // Left Sidebar (Desktop)
@@ -19,7 +19,7 @@ pub fn view(data_provided: &App) -> Node<Msg> {
                 <h4>"Right Sidebar"</h4>
                 <ul class="nav flex-column">
                 <div class="search-container">
-        <input type="text" class="form-control search-input" placeholder="Find a person" on_input=|input|{Msg::SearchFriend(input.value())}></input>
+        <input type="text" class="form-control search-input" placeholder="Find a person" on_input=|input|{DefinedMsg::SearchFriend(input.value())}></input>
         <i class="fas fa-search search-icon"></i>
       </div>
                     //{show_friends_at_sidebar()};

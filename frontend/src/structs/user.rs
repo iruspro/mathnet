@@ -2,17 +2,18 @@ use crate::app::SwitchToPageSigned;
 pub use crate::messages::*;
 pub use crate::structs::group_struct::GroupId;
 pub use crate::structs::languages;
+pub use crate::list_of_pages::{Page,OtherPage};
 
 use self::languages::Languages;
 
 use super::friends_at_sidebar::FriendAtSidebar;
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub struct UserLoginData {
     pub user_name: String,
     pub user_password: String,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub struct UserRegisterData {
     pub user_name: String,
     pub user_password: String,
@@ -34,7 +35,7 @@ pub enum UserId {
     UserIdNumber(u32),
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub struct User {
     pub user_id: UserId,
     pub user_name: String,
@@ -57,7 +58,7 @@ pub fn new() -> User {
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub enum UserDemandsUserProfileDataChanges {
     ChangeUserName(String),
     ChangeUserEmail(String),
@@ -68,7 +69,7 @@ pub enum UserDemandsUserProfileDataChanges {
     Retry,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub struct UserChangingProfileData {
     pub user_id: u32,
     pub new_user_name: String,
@@ -87,13 +88,11 @@ impl UserChangingProfileData {
             new_user_password_confirmation: String::new(),
         }
     }
-    pub fn confirm_changes(self) -> Msg {
+    pub fn confirm_changes(self) -> DefinedMsg {
         if self.new_user_password != self.new_user_password_confirmation {
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry)
+            DefinedMsg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry)
         } else {
-            Msg::SetPage(GoToPage::GoToPageOther(
-                SwitchToPageOther::GoToSuccessfullyChangedUserProfileData,
-            ))
+            DefinedMsg::SetPage(Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData))
         }
     }
 }

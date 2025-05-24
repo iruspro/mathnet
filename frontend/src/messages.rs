@@ -1,12 +1,13 @@
 use crate::structs::chat_message::ChatId;
 use crate::structs::user::{
     UserChangingProfileData, UserDemandsUserProfileDataChanges, UserId, UserLoginData,
-    UserRegisterData, get_user_register_data,
+    UserRegisterData, get_user_register_data,UserRegister,UserLoginAttempt
 };
+use crate::list_of_pages::Page;
 
-#[derive(Debug, Clone)]
-pub enum Msg {
-    SetPage(GoToPage),
+#[derive(Debug, Clone,PartialEq)]
+pub enum DefinedMsg {
+    SetPage(Page),
     LoginAttempt(UserLoginAttempt),
     Registration(UserRegister),
     UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges),
@@ -18,6 +19,9 @@ pub enum Msg {
     NoOp,
     SendConversationMessage(String),
 }
+
+/* This enums are not needed anymore, because there is simpler way to 
+do page swithcing using only SetPage message
 
 #[derive(Debug, Clone)]
 pub enum GoToPage {
@@ -56,14 +60,16 @@ pub enum SwitchToPageOther {
     GoToLogOut,
 }
 
-#[derive(Debug, Clone)]
+*/
+
+#[derive(Debug, Clone,PartialEq)]
 pub enum UserLoginAttempt {
     UpdateUserName(String),
     UpdateUserPassword(String),
     CheckLoginValidy,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub enum UserRegister {
     UpdateUserRegisterName(String),
     UpdateUserRegisterPassword(String),

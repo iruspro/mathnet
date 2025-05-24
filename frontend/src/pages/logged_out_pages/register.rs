@@ -1,8 +1,8 @@
-use crate::messages::{GoToPage, Msg, SwitchToPageSigned, SwitchToPageUnsigned, UserRegister};
+use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned, UserRegister};
 use sauron::html::{link, meta, title};
 use sauron::prelude::*;
 
-pub fn view() -> Node<Msg> {
+pub fn view() -> Node<DefinedMsg> {
     let mut username: String = String::new();
     let mut userpassword: String = String::new();
     let mut userpassword_again: String = String::new();
@@ -16,22 +16,22 @@ pub fn view() -> Node<Msg> {
             <div class="collapse navbar-collapse">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage))}>"Home page"</a>
+                <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage))}>"Home page"</a>
             </li>
             <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage))}>"Log in"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage))}>"Log in"</a>
                     </li>
                     <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">"Register"</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject))}>"About this project"</a>
+                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject))}>"About this project"</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
                     </li>
                 </ul>
             </div>
@@ -58,7 +58,7 @@ pub fn view() -> Node<Msg> {
             class="form-control"
             aria-describedby="passwordHelpBlock"
             value={username.clone()}
-            on_input=|input| Msg::Registration(UserRegister::UpdateUserRegisterName((input.value())))
+            on_input=|input| DefinedMsg::Registration(UserRegister::UpdateUserRegisterName((input.value())))
         />
         <div id="passwordHelpBlock" class="form-text">
             "Enter your username."
@@ -71,7 +71,7 @@ pub fn view() -> Node<Msg> {
             class="form-control"
             aria-describedby="passwordHelpBlock"
             value={username.clone()}
-            on_input=|input| Msg::Registration(UserRegister::UpdateUserRegisterEmail((input.value())))
+            on_input=|input| DefinedMsg::Registration(UserRegister::UpdateUserRegisterEmail((input.value())))
         />
         <div id="passwordHelpBlock" class="form-text">
             "Enter your valid email address. A confirmation letter will be sent to that address."
@@ -84,7 +84,7 @@ pub fn view() -> Node<Msg> {
             class="form-control"
             aria-describedby="passwordHelpBlock"
             value={userpassword.clone()}
-            on_input=|input| Msg::Registration(UserRegister::UpdateUserRegisterPassword((input.value())))
+            on_input=|input| DefinedMsg::Registration(UserRegister::UpdateUserRegisterPassword((input.value())))
         />
         <div id="passwordHelpBlock" class="form-text">
         "Your password must be 8-20 characters long, contain letters and numbers, and must not contain spaces, special characters, or emoji."
@@ -97,14 +97,14 @@ pub fn view() -> Node<Msg> {
             class="form-control"
             aria-describedby="passwordHelpBlock"
             value={userpassword_again.clone()}
-            on_input=|input| Msg::Registration(UserRegister::UpdateUserRegisterPasswordAgain((input.value())))
+            on_input=|input| DefinedMsg::Registration(UserRegister::UpdateUserRegisterPasswordAgain((input.value())))
         />
         <div id="passwordHelpBlock" class="form-text">
             "Enter chosen password again. This step is necessary in order to prevent typos."
         </div>
 
 
-        <button class="btn btn-primary w-100" on_click=move |_| Msg::Registration(UserRegister::RegistrationAttempt)>
+        <button class="btn btn-primary w-100" on_click=move |_| DefinedMsg::Registration(UserRegister::RegistrationAttempt)>
             "Register"
         </button>
           </div>

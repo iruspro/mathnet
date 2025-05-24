@@ -12,7 +12,7 @@ pub use crate::structs::user::{User, UserId, new};
 pub use sauron::{node, text};
 
 /* When you click on some person in show_chats_in_content, you get the selected conversation.*/
-pub fn show_conversation(chat_id: ChatId, current_page: Page) -> Node<Msg> {
+pub fn show_conversation(chat_id: ChatId, current_page: Page) -> Node<DefinedMsg> {
     let tuple_of_vec_of_chat_messages_and_friend_name = get_whole_conversation_from_server(chat_id);
     let friend_name: String = tuple_of_vec_of_chat_messages_and_friend_name.1;
     let vec_of_chat_messages_unused: Vec<ChatMessage> =
@@ -29,7 +29,7 @@ pub fn show_conversation(chat_id: ChatId, current_page: Page) -> Node<Msg> {
                     <h4>"Right Sidebar"</h4>
                     <ul class="nav flex-column">
                     <div class="search-container">
-            <input type="text" class="form-control search-input" placeholder="Find a person" on_input=|input|{Msg::SearchFriend(input.value())}></input>
+            <input type="text" class="form-control search-input" placeholder="Find a person" on_input=|input|{DefinedMsg::SearchFriend(input.value())}></input>
             <i class="fas fa-search search-icon"></i>
           </div>
                         //{show_friends_at_sidebar()};
@@ -41,7 +41,7 @@ pub fn show_conversation(chat_id: ChatId, current_page: Page) -> Node<Msg> {
                     <div class="container-fluid"> //scrollable-container doesn't do anything because sidebars are already fixed (independent from scrolling the content.)
                         <h1 class="text-center">{text!("{}",friend_name)}</h1>
     <div class="d-grid gap-2 d-md-flex justify-content-md-start">
-      <button class="btn btn-primary" type="button" on_click=|_| {Msg::SetConversationToNone}>"Go back to all messages"</button>
+      <button class="btn btn-primary" type="button" on_click=|_| {DefinedMsg::SetConversationToNone}>"Go back to all messages"</button>
       </div>
                             {for chat_message in vec_of_chat_messages{
                                 node!{

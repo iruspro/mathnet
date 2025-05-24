@@ -1,7 +1,7 @@
-use crate::messages::{GoToPage, Msg, SwitchToPageSigned, SwitchToPageUnsigned};
+use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned};
 use sauron::prelude::*;
 
-pub fn view() -> Node<Msg> {
+pub fn view() -> Node<DefinedMsg> {
     node! {
           <main>
         <nav class="navbar navbar-expand navbar-dark bg-dark">
@@ -15,19 +15,19 @@ pub fn view() -> Node<Msg> {
                     </li>
             </li>
             <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage))}>"Log in"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage))}>"Log in"</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"Register"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"Register"</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject))}>"About this project"</a>
+                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject))}>"About this project"</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
                     </li>
                 </ul>
             </div>

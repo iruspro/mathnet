@@ -17,7 +17,7 @@ pub fn get_user_friends_data_from_server(vec_of_friends_id: Vec<FriendAtSidebar>
 }
 
 // Current function show_friends_at_sidebar clones data, but I don't think that is necessary ... or is it? Think about it again.
-pub fn show_friends_at_sidebar(current_state_of_app: &App) -> Node<Msg> {
+pub fn show_friends_at_sidebar(current_state_of_app: &App) -> Node<DefinedMsg> {
     let friends_data =
         get_user_friends_data_from_server(current_state_of_app.user_data.user_friends.clone());
     node! {
@@ -25,7 +25,7 @@ pub fn show_friends_at_sidebar(current_state_of_app: &App) -> Node<Msg> {
         node!{
             <div class="card">
             <div class="card-body">
-            <a on_click =move |_| {Msg::UserWantsToChatWithSomePerson(friend.user_id.clone())}>text(friend.user_name.clone())</a>
+            <a on_click =move |_| {DefinedMsg::UserWantsToChatWithSomePerson(friend.user_id.clone())}>text(friend.user_name.clone())</a>
             </div>
             </div>
         }
@@ -33,16 +33,16 @@ pub fn show_friends_at_sidebar(current_state_of_app: &App) -> Node<Msg> {
     }}
 }
 
-pub fn show_chats_in_content(v: Vec<ShowChats>) -> Node<Msg> {
+pub fn show_chats_in_content(v: Vec<ShowChats>) -> Node<DefinedMsg> {
     node! {
     {for chat in v{
         node!{
             <div class="card">
             <div class="card-body">
 
-            // <button type="button" class="btn btn-dark" on_click= move |_| Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))>{text!("{}",chat.friend.user_name.clone())}</button>
+            // <button type="button" class="btn btn-dark" on_click= move |_| DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))>{text!("{}",chat.friend.user_name.clone())}</button>
             /* The problem is not on the button itself, but somewhere else. Probably message isn't handled properly. */
-            <button type="button" class="btn btn-dark" on_click= move |_| Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat.chat_id.clone())>{text!("{}",chat.friend.user_name.clone())}</button>
+            <button type="button" class="btn btn-dark" on_click= move |_| DefinedMsg::UserWantsToChatWithSomePersonViaPersonalConversation(chat.chat_id.clone())>{text!("{}",chat.friend.user_name.clone())}</button>
             <p>{text!("{}", chat.last_message.content.clone())}</p>
             <p>{text!("{}",chat.date_and_time.date_and_time_to_string())}</p>
             <p></p>

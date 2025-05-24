@@ -13,3 +13,4 @@ pub mod experimental_examples;
 pub mod logics;
 use sauron::node;
 pub mod communication_with_server;
+pub mod routing;

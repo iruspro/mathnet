@@ -1,4 +1,4 @@
-pub use crate::messages::Msg;
+pub use crate::messages::DefinedMsg;
 pub use sauron::Node;
 
 pub use crate::app::App;
@@ -11,7 +11,7 @@ use self::date_and_time::display_current_date_and_time;
 
 use super::chat_message::DateAndTime;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone,PartialEq)]
 pub struct FriendAtSidebar {
     pub friend: UserId,
     pub ordering_number: u32,
