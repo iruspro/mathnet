@@ -73,6 +73,8 @@ pub enum UserLoginAttempt {
     UpdateUserName(String),
     UpdateUserPassword(String),
     CheckLoginValidy,
+    LoginSuccess,
+    LoginFailure,
 }
 
 #[derive(Debug, Clone,PartialEq)]

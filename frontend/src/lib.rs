@@ -15,3 +15,4 @@ use sauron::node;
 pub mod communication_with_server;
 pub mod routing;
 pub mod page_names;
+pub mod rpc_client;

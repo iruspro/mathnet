@@ -2,13 +2,12 @@
 In this file pages of the app are listed.
 This file is also meant for proper routing and also managing url-s. */
 
-use crate::messages::DefinedMsg;
+use crate::app::DefinedMsg;
 use crate::logics::special_parsing;
 use crate::pages::logged_in_pages::exercise;
 pub use crate::structs::chat_message::{ChatId};
 pub use crate::structs::{user::{UserId},group_struct::{GroupId}, exercise::{ExerciseId},list_of_exercises::ListOfExercisesId};
 pub use crate::logics::special_parsing::parse_from_str_to_u32;
-
 
 
 #[derive(Debug, Clone, PartialEq)]
@@ -21,46 +20,43 @@ pub enum Page {
 
 
 
-pub fn page_name_to_string(page_name: Page) -> String{
-   match page_name {
-    // Unsigned pages
-    Page::ItemUnsignedPage(UnsignedPage::Home) => "Home".to_string(),
-    Page::ItemUnsignedPage(UnsignedPage::Login) => "Login".to_string(),
-    Page::ItemUnsignedPage(UnsignedPage::Register) => "Register".to_string(),
-
-    // Signed pages
-    Page::ItemSignedPage(SignedPage::GroupsList) => "Groups_list".to_string(),
-    Page::ItemSignedPage(SignedPage::UserProfile(_)) => "User_profile".to_string(),
-    Page::ItemSignedPage(SignedPage::Settings) => "Settings".to_string(),
-    Page::ItemSignedPage(SignedPage::Notifications) => "Notifications".to_string(),
-    Page::ItemSignedPage(SignedPage::ChatWithFriends) => "Chat_with_friends".to_string(),
-    Page::ItemSignedPage(SignedPage::Chat(_)) => "Chat".to_string(),
-    Page::ItemSignedPage(SignedPage::Friends) => "Friends".to_string(),
-    Page::ItemSignedPage(SignedPage::Profile(_)) => "Profile".to_string(),
-    Page::ItemSignedPage(SignedPage::Exercise(_, _)) => "Exercise".to_string(),
-    Page::ItemSignedPage(SignedPage::ListOfExercises(_)) => "List_of_exercises".to_string(),
-    Page::ItemSignedPage(SignedPage::Group(_)) => "Group".to_string(),
-    Page::ItemSignedPage(SignedPage::UserSuggestsToDevelopers) => "Suggest_to_the_developers".to_string(),
-
-    // Other pages
-    Page::ItemOtherPage(OtherPage::LogOut) => "Logout".to_string(),
-    Page::ItemOtherPage(OtherPage::DeleteAccount) => "Delete_account".to_string(),
-    Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => {
-        "Successfully_changed_user_profile_data".to_string()
-    }
-    Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData) => {
-        "Retry_changing_user_profile_data".to_string()
-    }
-    Page::ItemOtherPage(OtherPage::NotFound) => "Page_not_found".to_string(),
-
-    // Shared pages
-    Page::ItemSharedPage(SharedPage::Docs) => "Docs".to_string(),
-    Page::ItemSharedPage(SharedPage::AboutProject) => "About_this_project".to_string(),
-    Page::ItemSharedPage(SharedPage::PrivacyAndSecurity) => {
-        "Privacy_and_security".to_string()
+pub fn page_name_to_string(page_name: Page) -> String {
+    match page_name {
+        // Unsigned pages
+        Page::ItemUnsignedPage(UnsignedPage::Home) => "Home".to_string(),
+        Page::ItemUnsignedPage(UnsignedPage::Login) => "Log in".to_string(),
+        Page::ItemUnsignedPage(UnsignedPage::Register) => "Register".to_string(),
+        //Signed pages
+        Page::ItemSignedPage(SignedPage::GroupsList) => "Groups list".to_string(),
+        Page::ItemSignedPage(SignedPage::UserProfile(_)) => "User profile".to_string(),
+        Page::ItemSignedPage(SignedPage::Settings) => "Settings".to_string(),
+        Page::ItemSignedPage(SignedPage::Notifications) => "Notifications".to_string(),
+        Page::ItemSignedPage(SignedPage::ChatWithFriends) => "Chat with friends".to_string(),
+        Page::ItemSignedPage(SignedPage::Chat(_)) => "Chat".to_string(),
+        Page::ItemSignedPage(SignedPage::Friends) => "Friends".to_string(),
+        Page::ItemSignedPage(SignedPage::Profile(_)) => "Profile".to_string(),
+        Page::ItemSignedPage(SignedPage::Exercise(_,_)) => "Exercise".to_string(),
+        Page::ItemSignedPage(SignedPage::ListOfExercises(_)) => "List_of_exercises".to_string(),
+        Page::ItemSignedPage(SignedPage::Group(_)) => "Group".to_string(),
+        Page::ItemSignedPage(SignedPage::UserSuggestsToDevelopers) => "Suggest to the developers".to_string(),
+       
+       //Other pages
+        Page::ItemOtherPage(OtherPage::LogOut) => "Log out".to_string(),
+        Page::ItemOtherPage(OtherPage::DeleteAccount) => "Delete account".to_string(),
+        Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => {
+            "Successfully changed user profile data".to_string()
+        }
+        Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData) => {
+            "Retry changing user profile data".to_string()
+        }
+        Page::ItemOtherPage(OtherPage::NotFound) => {"Page not found".to_string()},
+        //Shared pages
+        Page::ItemSharedPage(SharedPage::Docs) => "Docs".to_string(),
+        Page::ItemSharedPage(SharedPage::AboutProject) => "About this project".to_string(),
+        Page::ItemSharedPage(SharedPage::PrivacyAndSecurity) => {
+            "Privacy and security".to_string()
     }
 }}
-
 
 
 #[derive(Debug, Clone, PartialEq)]
@@ -99,8 +95,8 @@ pub enum OtherPage {
     DeleteAccount,
     LogOut,
     NotFound,
+    LoginFailed,
 }
-
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum SharedPage{
@@ -108,5 +104,7 @@ pub enum SharedPage{
     AboutProject,
     Docs,
     PrivacyAndSecurity,
+
+
 }
 

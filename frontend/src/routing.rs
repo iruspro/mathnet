@@ -254,10 +254,13 @@ fn go_to_page_to_hash_convertor(go_to_page: GoToPage) -> String {
 }
 
 
-pub fn change_hash_while_navigating(go_to_page: GoToPage){
-let new_hash = go_to_page_to_hash_convertor(go_to_page.clone());
+pub fn change_hash_while_navigating(go_to_page: GoToPage) {
+    let new_hash = go_to_page_to_hash_convertor(go_to_page.clone());
+    let new_hash_2 = new_hash.clone();
+    // 2. Update the browser hash:
+    if let Some(win) = web_sys::window() {
+        console::log_1(&new_hash.into());
 
-            // 2. Update the browser hash:
-            if let Some(win) = web_sys::window() {
-                let _ = win.location().set_hash(&new_hash);
-            }}
+        let _ = win.location().set_hash(&new_hash_2);
+    }
+}

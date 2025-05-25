@@ -25,8 +25,13 @@ use web_sys::{Window, window, HashChangeEvent};
 use sauron::{html::{attributes::*, events::*, *},Cmd,Application,Effects};
 use crate::routing;
 use crate::logics::go_to_page_to_page_convertion::{go_to_page_to_page, defined_msg_to_page,page_to_go_to_page};
+use wasm_bindgen_futures::spawn_local;
+use crate::rpc_client::login::rpc_login;
+
 
 // (Main) model of this project
+
+
 #[derive(Debug)]
 pub struct App {
     pub current_page: Page, // routing for pages
@@ -81,8 +86,24 @@ impl Application for App {
                 self.user_login_data.user_password = passw
             }
             DefinedMsg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => {
-                login_logics::check_login_attempt_validity(self)
+            let login_data = self.user_login_data.clone();
+            spawn_local(async {
+                let user_name = login_data.user_name.clone();
+                let user_password = login_data.user_password.clone();
+                match rpc_login(user_name,user_password).await {
+                    Ok(user) => {
+                        DefinedMsg::LoginAttempt(UserLoginAttempt::LoginSuccess)
+                    }
+                    Err(err) => {
+                        // Show error to user
+                        //web_sys::console::log_1(&err.into());
+                        DefinedMsg::LoginAttempt(UserLoginAttempt::LoginFailure)
+                    }
+                }
+            })
             }
+            DefinedMsg::LoginAttempt(UserLoginAttempt::LoginFailure)=>{
+            self.current_page = Page::ItemOtherPage(OtherPage::LoginFailed);}
 
             DefinedMsg::Registration(UserRegister::UpdateUserRegisterName(name)) => {
                 self.user_register_data.user_name = name
