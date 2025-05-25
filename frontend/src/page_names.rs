@@ -1,0 +1,43 @@
+
+// For sites that have left_sidebar
+pub const PAGE_NAMES : [&'static str;13]= [
+    "Groups_list",
+    "User_profile",
+    "Settings",
+    "Notifications",
+    "Chat_with_friends",
+    "Friends",
+    "Profile",
+    "List_of_exercises",
+    "Suggest_to_the_developers",
+    "Privacy_and_security",
+    "Docs",
+    "About_this_project",
+    "Logout",
+];
+
+pub const ALL_PAGE_NAMES : [&'static str;23] = [
+    "Groups_list",
+    "User_profile",
+    "Settings",
+    "Notifications",
+    "Chat_with_friends",
+    "Friends",
+    "Profile",
+    "List_of_exercises",
+    "Suggest_to_the_developers",
+    "Privacy_and_security",
+    "Docs",
+    "About_this_project",
+    "Logout",
+    "Home",
+    "Login",
+    "Register",
+    "Chat",
+    "Exercise",
+    "Group",
+    "Delete_account",
+    "Successfully_changed_user_profile_data",
+    "Retry_changing_user_profile_data",
+    "Page_not_found",
+];

@@ -14,3 +14,4 @@ pub mod logics;
 use sauron::node;
 pub mod communication_with_server;
 pub mod routing;
+pub mod page_names;

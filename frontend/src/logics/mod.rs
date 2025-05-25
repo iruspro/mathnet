@@ -7,3 +7,4 @@ pub mod registration_logics;
 pub mod sidebars;
 pub mod special_parsing;
 pub mod converting_ids_to_string;
+pub mod go_to_page_to_page_convertion;

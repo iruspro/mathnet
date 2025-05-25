@@ -1,7 +1,7 @@
 use crate::list_of_pages::{Page, SharedPage, SignedPage, UnsignedPage};
 use crate::logics::{login_logics, registration_logics};
 pub use crate::messages::{
-    DefinedMsg, UserLoginAttempt, UserRegister,
+    UserLoginAttempt, UserRegister,
 };
 use crate::pages::logged_in_pages::{exercise, list_of_exercises};
 use crate::pages::{logged_in_pages, logged_out_pages, other_pages, shared_pages};
@@ -15,14 +15,16 @@ use crate::structs::{
 use crate::web_sys::console;
 use crate::{
     list_of_pages::OtherPage, logics::registration_logics::check_registration_validity,
-    messages::*, pages::logged_in_pages::chat, structs::chat_message::ChatId,
+    messages::{DefinedMsg,GoToPage,SwitchToPageSigned,SwitchToPageUnsigned,SwitchToPageOther,SwitchToPageShared}, pages::logged_in_pages::chat, structs::chat_message::ChatId,
 };
+
 use sauron::dom::Program;
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::{Window, window, HashChangeEvent};
 use sauron::{html::{attributes::*, events::*, *},Cmd,Application,Effects};
 use crate::routing;
+use crate::logics::go_to_page_to_page_convertion::{go_to_page_to_page, defined_msg_to_page,page_to_go_to_page};
 
 // (Main) model of this project
 #[derive(Debug)]
@@ -64,7 +66,7 @@ impl Application for App {
         .and_then(|win| win.location().hash().ok())
         .unwrap_or_default();
     // Probably there exists more convenient way to handle this, but for some reason this code doesn't work in any other way.
-    let new_effects = Effects::new(vec![DefinedMsg::ChangingHash(Page::parse(&current_hash.as_str()))],vec![()] );
+    let new_effects = Effects::new(vec![DefinedMsg::ChangingHash(defined_msg_to_page(Page::parse_hashes(&current_hash.as_str())).unwrap())],vec![()] );
     Cmd::from(new_effects)
 }
 
@@ -241,7 +243,7 @@ pub fn start() {
     // Setup hashchange listener
     let closure = Closure::wrap(Box::new(move |_: HashChangeEvent| {
         if let Some(hash) = window().and_then(|win| win.location().hash().ok()) {
-            program.dispatch(DefinedMsg::ChangingHash(Page::parse(&hash)));
+            program.dispatch(DefinedMsg::SetPage(page_to_go_to_page(Page::parse(&hash))));
         }
     }) as Box<dyn FnMut(_)>);
 

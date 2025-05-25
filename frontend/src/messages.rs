@@ -50,6 +50,7 @@ pub enum SwitchToPageSigned {
     GoToProfile(UserId),
     GoToUserSuggestsDevelopers,
     GoToFriends,
+    GoToChat(ChatId),
 }
 #[derive(Debug, Clone,PartialEq)]
 pub enum SwitchToPageShared {

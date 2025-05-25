@@ -2,7 +2,7 @@ use std::thread::current;
 
 use crate::app::App;
 use crate::experimental_examples::imaginary_friends;
-use crate::list_of_pages::{OtherPage, Page, SignedPage,SharedPage,page_name_to_string};
+use crate::list_of_pages::{page_name_to_string, ListOfExercisesId, OtherPage, Page, SharedPage, SignedPage};
 use crate::logics::{
     displaying_conversation,
     displaying_friends::{show_chats_in_content, show_friends_at_sidebar},
@@ -13,6 +13,7 @@ use crate::pages::logged_in_pages::{exercise, list_of_exercises};
 use crate::web_sys::console;
 use sauron::node;
 use sauron::prelude::*;
+use crate::page_names::PAGE_NAMES;
 
 
 fn show_nav_link(page: Page) -> Node<DefinedMsg> {
@@ -52,11 +53,7 @@ fn show_nav_link(page: Page) -> Node<DefinedMsg> {
                 }>"Chat with friends"</a>
             </li>
         },
-        /* Page::ItemSignedPage(SignedPage::Chat(_)) => node! {
-            <li class="nav-item">
-                <a class="nav-link">"Chat (not linked)"</a>
-            </li>
-        },*/
+        
         Page::ItemSignedPage(SignedPage::Friends) => node! {
             <li class="nav-item">
                 <a class="nav-link" on_click=|_| {
@@ -71,36 +68,67 @@ fn show_nav_link(page: Page) -> Node<DefinedMsg> {
                 }>"Profile"</a>
             </li>
         },
-        /*
-        Page::ItemSignedPage(SignedPage::Exercise(list_of_exercises_id, exercise_id)) => node! {
-            <li class="nav-item">
-                <a class="nav-link" on_click=move|_| {
-                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToExercise(list_of_exercises_id.clone(),exercise_id.clone())))
-                }>"Exercise"</a>
-            </li>
-        },
-        
-        Page::ItemSignedPage(SignedPage::ListOfExercises(list_of_exercises_id)) => node! {
-            <li class="nav-item">
-                <a class="nav-link" on_click=move|_| {
-                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToListOfExercises(list_of_exercises_id.clone())))
-                }>"List of exercises"</a>
-            </li>
-        },
-        Page::ItemSignedPage(SignedPage::Group(group_id)) => node! {
-            <li class="nav-item">
-                <a class="nav-link" on_click=move|_| {
-                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroup(group_id.clone())))
-                }>"Group"</a>
-            </li>
-        },
-        */
+
         Page::ItemSignedPage(SignedPage::UserSuggestsToDevelopers) => node! {
             <li class="nav-item">
                 <a class="nav-link" on_click=|_| {
                     DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserSuggestsDevelopers))
                 }>"Suggest to the developers"</a>
             </li>
+        },
+
+        Page::ItemSharedPage(SharedPage::AboutProject) => {
+            node! {
+            <li class="nav-item">
+                <a class="nav-link" on_click=|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToAboutProject))
+                }>"About this project"</a>
+            </li>
+        }
+        },
+         Page::ItemSharedPage(SharedPage::Docs) => {
+            node! {
+            <li class="nav-item">
+                <a class="nav-link" on_click=|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToDocsPage))
+                }>"Docs"</a>
+            </li>
+        }},
+        Page::ItemSharedPage(SharedPage::PrivacyAndSecurity) => {
+            node! {
+            <li class="nav-item">
+                <a class="nav-link" on_click=|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToPrivacyAndSecurity))
+                }>"Privacy and security"</a>
+            </li>
+        }},
+        Page::ItemSignedPage(SignedPage::Notifications) => {
+           node! {
+            <li class="nav-item">
+                <a class="nav-link" on_click=|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications))
+                }>"Notifications"</a>
+            </li>
+        } 
+        },
+        Page::ItemSignedPage(SignedPage::ListOfExercises(_)) => {
+           node! {
+            <li class="nav-item">
+                <a class="nav-link" on_click=|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToListOfExercises(ListOfExercisesId::ListOfExercisesIdNumber(1))))
+                }>"List of exercises"</a>
+            </li>
+        } 
+        },
+        Page::ItemOtherPage(OtherPage::LogOut) => {
+            node! {
+            <li class="nav-item">
+                <a class="nav-link" on_click=|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut))
+                }>"Logout"</a>
+            </li>
+        } 
+
         },
         _ => node! {
             <li class="nav-item">
@@ -173,6 +201,10 @@ fn show_nav_link(page: Page) -> Node<DefinedMsg> {
 }
     */
 
+    pub fn underscores_to_spaces(s: String) -> String {
+    s.replace('_', " ")
+}
+
 fn show_active_nav_link(page_name: String) -> Node<DefinedMsg> {
     if page_name == "Groups list" {
         node! {
@@ -187,9 +219,10 @@ fn show_active_nav_link(page_name: String) -> Node<DefinedMsg> {
                             <a class="nav-link text-white" arria-current = "page" href="#">"Chat with friends"</a>
                         </li>}
         } else {
+            let page_name_without_underscores = underscores_to_spaces(page_name);
             node! {
             <li class="nav-item">
-                            <a class="nav-link text-white" arria-current = "page" href="#">{text(page_name)}</a>
+                            <a class="nav-link text-white" arria-current = "page" href="#">{text(page_name_without_underscores)}</a>
                         </li>
 
             }
@@ -298,33 +331,19 @@ node!{
 
 use sauron::prelude::*;
 
-// Assume DefinedMsg and Page/SignedPage types are already defined
+// Showing left sidebar at pages that have it and don't require additional one
 
 pub fn left_sidebar(current_page: Page) -> Node<DefinedMsg> {
-    let page_titles: [String; 9] = [
-    "Groups list".to_string(),
-    "User profile".to_string(),
-    "Settings".to_string(),
-    "Notifications".to_string(),
-    "Chat with friends".to_string(),
-    //"Chat".to_string(),
-    "Friends".to_string(),
-    "Profile".to_string(),
-    //"Exercise".to_string(),
-    "List_of_exercises".to_string(),
-    //"Group".to_string(),
-    "Suggest to the developers".to_string(),
-];
-
 let string_of_current_page = page_name_to_string(current_page.clone());
     // Generate nav links as a Vec<Node<DefinedMsg>>
-    let nav_links: Vec<Node<DefinedMsg>> = page_titles
+    let nav_links: Vec<Node<DefinedMsg>> = PAGE_NAMES
         .iter()
         .map(|pagex| {
-            if *pagex != string_of_current_page {
-                show_nav_link(current_page.clone())
+            let to_String = pagex.to_string();
+            if to_String != string_of_current_page {
+                show_nav_link(string_to_page(to_String.clone()))
             } else {
-                show_active_nav_link(pagex.clone())
+                show_active_nav_link(pagex.to_string().clone())
             }
         })
         .collect();
@@ -341,31 +360,20 @@ let string_of_current_page = page_name_to_string(current_page.clone());
     }
 }
 
+/* Currently not complete. */
 pub fn left_sidebar_special(current_page: Page) -> Node<DefinedMsg> {
- let page_titles: [String; 9] = [
-    "Groups list".to_string(),
-    "User profile".to_string(),
-    "Settings".to_string(),
-    "Notifications".to_string(),
-    "Chat with friends".to_string(),
-    //"Chat".to_string(),
-    "Friends".to_string(),
-    "Profile".to_string(),
-    //"Exercise".to_string(),
-    "List_of_exercises".to_string(),
-    //"Group".to_string(),
-    "Suggest to the developers".to_string(),
-];
+ let page_titles= PAGE_NAMES;
     let string_of_current_page = page_name_to_string(current_page.clone());
     let mut nav_links: Vec<Node<DefinedMsg>>;
     if string_of_current_page == "Chat".to_string() {
         nav_links = page_titles
             .iter()
             .map(|pagex| {
-                if *pagex != "Chat with friends".to_string() {
-                    show_nav_link(string_to_page(pagex.clone()))
+                let to_String = pagex.to_string();
+                if to_String != "Chat_with_friends".to_string() {
+                    show_nav_link((string_to_page(pagex.to_string().clone())))
                 } else {
-                    show_active_nav_link(pagex.clone())
+                    show_active_nav_link(pagex.to_string().clone())
                 }
             })
             .collect()
