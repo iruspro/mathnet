@@ -112,9 +112,9 @@ pub fn routing_page_messages(page_message: DefinedMsg, current_state_of_app: &mu
         DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList)) => {
             current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::GroupsList);
         }
-        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile)) => {
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile(user_id))) => {
             current_state_of_app.current_page =
-                Page::ItemSignedPage(SignedPage::UserProfile(current_state_of_app.user_data.user_id.clone()));
+                Page::ItemSignedPage(SignedPage::UserProfile(user_id));
         }
         DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings)) => {
             current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Settings);
@@ -125,26 +125,20 @@ pub fn routing_page_messages(page_message: DefinedMsg, current_state_of_app: &mu
         DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications)) => {
             current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Notifications);
         }
-        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToExercise)) => {
-            let list_id = ListOfExercisesId::ListOfExercisesIdNumber(0);
-            let exercise_id = ExerciseId::ExerciseIdNumber(0);
-            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Exercise(list_id, exercise_id));
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToExercise(list_of_exercises_id,exercise_id))) => {
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Exercise(list_of_exercises_id, exercise_id));
         }
-        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToListOfExercises)) => {
-            let list_id = ListOfExercisesId::ListOfExercisesIdNumber(0);
-            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::ListOfExercises(list_id));
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToListOfExercises(list_of_exercises_id))) => {
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::ListOfExercises(list_of_exercises_id));
         }
-        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroup)) => {
-            let group_id = GroupId::GroupIdNumber(0);
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroup(group_id))) => {
             current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Group(group_id));
         }
-        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToProfile)) => {
-            let user_id = UserId::UserIdNumber(0);
+        DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToProfile(user_id))) => {
             current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Profile(user_id));
         }
         DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserSuggestsDevelopers)) => {
-            let user_id = UserId::UserIdNumber(0);
-            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::UserProfile(user_id));
+            current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::UserSuggestsToDevelopers);
         }
         DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToFriends)) => {
             current_state_of_app.current_page = Page::ItemSignedPage(SignedPage::Friends);

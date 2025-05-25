@@ -9,6 +9,7 @@ use crate::logics::{
 };
 use crate::logics::converting_ids_to_string::string_to_page;
 use crate::messages::{DefinedMsg, GoToPage,SwitchToPageOther,SwitchToPageSigned,SwitchToPageUnsigned,SwitchToPageShared};
+use crate::pages::logged_in_pages::{exercise, list_of_exercises};
 use crate::web_sys::console;
 use sauron::node;
 use sauron::prelude::*;
@@ -23,10 +24,10 @@ fn show_nav_link(page: Page) -> Node<DefinedMsg> {
                 }>"Groups"</a>
             </li>
         },
-        Page::ItemSignedPage(SignedPage::UserProfile(_)) => node! {
+        Page::ItemSignedPage(SignedPage::UserProfile(user_id)) => node! {
             <li class="nav-item">
-                <a class="nav-link" on_click=|_| {
-                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))
+                <a class="nav-link" on_click=move|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile(user_id.clone())))
                 }>"User profile"</a>
             </li>
         },
@@ -51,11 +52,11 @@ fn show_nav_link(page: Page) -> Node<DefinedMsg> {
                 }>"Chat with friends"</a>
             </li>
         },
-        Page::ItemSignedPage(SignedPage::Chat(_)) => node! {
+        /* Page::ItemSignedPage(SignedPage::Chat(_)) => node! {
             <li class="nav-item">
                 <a class="nav-link">"Chat (not linked)"</a>
             </li>
-        },
+        },*/
         Page::ItemSignedPage(SignedPage::Friends) => node! {
             <li class="nav-item">
                 <a class="nav-link" on_click=|_| {
@@ -63,34 +64,37 @@ fn show_nav_link(page: Page) -> Node<DefinedMsg> {
                 }>"Friends"</a>
             </li>
         },
-        Page::ItemSignedPage(SignedPage::Profile(_)) => node! {
+        Page::ItemSignedPage(SignedPage::Profile(user_id)) => node! {
             <li class="nav-item">
-                <a class="nav-link" on_click=|_| {
-                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToProfile))
+                <a class="nav-link" on_click=move|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToProfile(user_id.clone())))
                 }>"Profile"</a>
             </li>
         },
-        Page::ItemSignedPage(SignedPage::Exercise(_, _)) => node! {
+        /*
+        Page::ItemSignedPage(SignedPage::Exercise(list_of_exercises_id, exercise_id)) => node! {
             <li class="nav-item">
-                <a class="nav-link" on_click=|_| {
-                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToExercise))
+                <a class="nav-link" on_click=move|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToExercise(list_of_exercises_id.clone(),exercise_id.clone())))
                 }>"Exercise"</a>
             </li>
         },
-        Page::ItemSignedPage(SignedPage::ListOfExercises(_)) => node! {
+        
+        Page::ItemSignedPage(SignedPage::ListOfExercises(list_of_exercises_id)) => node! {
             <li class="nav-item">
-                <a class="nav-link" on_click=|_| {
-                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToListOfExercises))
+                <a class="nav-link" on_click=move|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToListOfExercises(list_of_exercises_id.clone())))
                 }>"List of exercises"</a>
             </li>
         },
-        Page::ItemSignedPage(SignedPage::Group(_)) => node! {
+        Page::ItemSignedPage(SignedPage::Group(group_id)) => node! {
             <li class="nav-item">
-                <a class="nav-link" on_click=|_| {
-                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroup))
+                <a class="nav-link" on_click=move|_| {
+                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroup(group_id.clone())))
                 }>"Group"</a>
             </li>
         },
+        */
         Page::ItemSignedPage(SignedPage::UserSuggestsToDevelopers) => node! {
             <li class="nav-item">
                 <a class="nav-link" on_click=|_| {
@@ -297,18 +301,18 @@ use sauron::prelude::*;
 // Assume DefinedMsg and Page/SignedPage types are already defined
 
 pub fn left_sidebar(current_page: Page) -> Node<DefinedMsg> {
-    let page_titles: [String; 12] = [
+    let page_titles: [String; 9] = [
     "Groups list".to_string(),
     "User profile".to_string(),
     "Settings".to_string(),
     "Notifications".to_string(),
     "Chat with friends".to_string(),
-    "Chat".to_string(),
+    //"Chat".to_string(),
     "Friends".to_string(),
     "Profile".to_string(),
-    "Exercise".to_string(),
+    //"Exercise".to_string(),
     "List_of_exercises".to_string(),
-    "Group".to_string(),
+    //"Group".to_string(),
     "Suggest to the developers".to_string(),
 ];
 
@@ -317,10 +321,10 @@ let string_of_current_page = page_name_to_string(current_page.clone());
     let nav_links: Vec<Node<DefinedMsg>> = page_titles
         .iter()
         .map(|pagex| {
-            if *pagex == string_of_current_page {
-                show_active_nav_link(pagex.clone())
-            } else {
+            if *pagex != string_of_current_page {
                 show_nav_link(current_page.clone())
+            } else {
+                show_active_nav_link(pagex.clone())
             }
         })
         .collect();
@@ -338,18 +342,18 @@ let string_of_current_page = page_name_to_string(current_page.clone());
 }
 
 pub fn left_sidebar_special(current_page: Page) -> Node<DefinedMsg> {
- let page_titles: [String; 12] = [
+ let page_titles: [String; 9] = [
     "Groups list".to_string(),
     "User profile".to_string(),
     "Settings".to_string(),
     "Notifications".to_string(),
     "Chat with friends".to_string(),
-    "Chat".to_string(),
+    //"Chat".to_string(),
     "Friends".to_string(),
     "Profile".to_string(),
-    "Exercise".to_string(),
+    //"Exercise".to_string(),
     "List_of_exercises".to_string(),
-    "Group".to_string(),
+    //"Group".to_string(),
     "Suggest to the developers".to_string(),
 ];
     let string_of_current_page = page_name_to_string(current_page.clone());

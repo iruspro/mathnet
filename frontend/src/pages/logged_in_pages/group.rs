@@ -1,20 +1,102 @@
+use std::thread::current;
+
 use crate::app::App;
 use crate::logics::sidebars;
-use crate::messages::DefinedMsg;
+use crate::messages::{DefinedMsg};
 use sauron::prelude::*;
-use crate::structs::user::UserId;
+use crate::structs::group_struct::GroupId;
 
-pub fn view(current_state_of_app: &App, user_id:UserId) -> Node<DefinedMsg> {
+pub fn view(current_state_of_app: &App, group_id:GroupId) -> Node<DefinedMsg> {
     node! {
             <main>
-    {sidebars::left_sidebar(current_state_of_app.current_page.clone())}
+                {sidebars::left_sidebar(current_state_of_app.current_page.clone())}
+
+                // Top Navbar
+                //<nav class="navbar navbar-expand navbar-dark bg-dark fixed-top">
+                //    <div class="container-fluid">
+                //        <a class="navbar-brand" href="#">"MathNet"</a>
+                //        <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasSidebar">
+                //            <span class="navbar-toggler-icon"></span>
+                //        </button>
+                //        <div class="collapse navbar-collapse">
+                //            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                //                <li class="nav-item">
+                //                    <a class="nav-link active" aria-current="page" href="#">"Home page"</a>
+                //                </li>
+                //                <li class="nav-item">
+                //                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToDocsPage)}>"Docs"</a>
+                //                </li>
+                //            </ul>
+                //        </div>
+                //    </div>
+                //</nav>
+
+                // Fixed Sidebar (desktop)
+    //            <div class="sidebar d-none d-md-block text-white">
+    //                <h4>"Sidebar"</h4>
+    //                <ul class="nav flex-column">
+    //                <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" href="#">"Groups"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
+    //            </li>
+    //            <li class="nav-item">
+    //                <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
+    //            </li>
+    //                </ul>
+    //            </div>
+    //
+    //            // Offcanvas Sidebar (mobile)
+    //            <div class="offcanvas offcanvas-start bg-dark text-white" tabindex="-1" id="offcanvasSidebar">
+    //                <div class="offcanvas-header">
+    //                    <h5 class="offcanvas-title">"Sidebar"</h5>
+    //                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"></button>
+    //                </div>
+    //                <div class="offcanvas-body">
+    //                    <ul class="nav flex-column">
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile))}>"User profile"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" href="#">"Groups"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage))} >"Docs"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject))}>"About project"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings))}>"Settings"</a>
+    //                        </li>
+    //                        <li class="nav-item">
+    //                            <a class="nav-link text-white" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToLogOut))}>"Log out"</a>
+    //                        </li>
+    //                    </ul>
+    //                </div>
+    //            </div>
+
                 // Main Content
                 <div class="content">
                     <div class="container-fluid">
                         <div class="row">
-                        <div class="col-2">
-                            </div>
-                            <div class="col-8">
+                            <div class="col-12">
                                 <h1 class="text-center">"Your groups"</h1>
                                 <p class="basicparagraph text-start">
                                     "Groups you belong to.
@@ -88,8 +170,6 @@ Mauris ex tellus, placerat sed purus at, facilisis efficitur dolor. Sed ac ex rh
 
 Cras felis tellus, egestas ut varius quis, tempor et felis. Mauris in purus auctor, dictum sapien vitae, tristique dolor. Ut felis nisi, feugiat a efficitur ut, imperdiet sit amet tellus. Quisque ante leo, efficitur quis mi hendrerit, posuere congue ante. "
                                 </p>
-                            </div>
-                            <div class="col-2">
                             </div>
                         </div>
                     </div>

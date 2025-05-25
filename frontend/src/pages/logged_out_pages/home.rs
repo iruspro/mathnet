@@ -1,4 +1,4 @@
-use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned};
+use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned,SwitchToPageShared};
 use sauron::prelude::*;
 
 pub fn view() -> Node<DefinedMsg> {
@@ -15,7 +15,7 @@ pub fn view() -> Node<DefinedMsg> {
                     </li>
             </li>
             <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToDocsPage))}>"Docs"</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage))}>"Log in"</a>
@@ -24,10 +24,10 @@ pub fn view() -> Node<DefinedMsg> {
                         <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"Register"</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject))}>"About this project"</a>
+                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToAboutProject))}>"About this project"</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
                     </li>
                 </ul>
             </div>

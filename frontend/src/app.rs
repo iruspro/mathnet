@@ -3,6 +3,7 @@ use crate::logics::{login_logics, registration_logics};
 pub use crate::messages::{
     DefinedMsg, UserLoginAttempt, UserRegister,
 };
+use crate::pages::logged_in_pages::{exercise, list_of_exercises};
 use crate::pages::{logged_in_pages, logged_out_pages, other_pages, shared_pages};
 use crate::structs::{
     group_struct::*,
@@ -146,7 +147,7 @@ impl Application for App {
 
 
     fn view(&self) -> Node<DefinedMsg> {
-        match self.current_page {
+        match self.current_page.clone() {
 
         // Unsigned pages
             Page::ItemUnsignedPage(UnsignedPage::Home) => logged_out_pages::home::view(),
@@ -155,13 +156,12 @@ impl Application for App {
 
         // Signed pages
             Page::ItemSignedPage(SignedPage::GroupsList) => {
-                console::log_1(&"Hello 4!".into());
-                logged_in_pages::groups::view(&self)
+                logged_in_pages::list_of_groups::view(&self)
             }
             Page::ItemSignedPage(SignedPage::Settings) => logged_in_pages::settings::view(&self),
 
             Page::ItemSignedPage(SignedPage::UserProfile(user_id)) => {
-                logged_in_pages::user_profile::view(&self)
+                logged_in_pages::user_profile::view(&self, user_id.clone())
             }
             Page::ItemSignedPage(SignedPage::ChatWithFriends) => {
                 logged_in_pages::chat_with_friends::view(&self)
@@ -174,11 +174,24 @@ impl Application for App {
                 logged_in_pages::chat::view(&self)
             }
             Page::ItemSignedPage(SignedPage::Friends) => {
-                logged_in_pages::friends::view()
+                shared_pages::about_project::view(self)
+                //logged_in_pages::friends::view()
             }
             Page::ItemSignedPage(SignedPage::Profile(user_id)) => {
-                logged_in_pages::profile::view()
+                logged_in_pages::profile::view(&self,user_id)
             },
+            Page::ItemSignedPage(SignedPage::Group(group_id)) => {
+                logged_in_pages::group::view(self,group_id)
+            }
+            Page::ItemSignedPage(SignedPage::ListOfExercises(list_of_exercises_id)) =>{
+            logged_in_pages::list_of_exercises::view(self,list_of_exercises_id)}
+
+            Page::ItemSignedPage(SignedPage::Exercise(list_of_exercises_id,exercise_id )) =>{
+            logged_in_pages::exercise::view(self,list_of_exercises_id,exercise_id)}
+
+            Page::ItemSignedPage(SignedPage::UserSuggestsToDevelopers) => {
+                logged_in_pages::user_suggests_developers::view(self)
+            }
 
             // Shared pages
             Page::ItemSharedPage(SharedPage::AboutProject) => shared_pages::about_project::view(&self),
@@ -187,15 +200,16 @@ impl Application for App {
 
             //Other pages
             Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => {
-                other_pages::successfully_changed_user_profile_data::view()
+                other_pages::successfully_changed_user_profile_data::view(self.user_data.user_id.clone())
             }
             Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData) => {
-                other_pages::retry_changing_user_profile_data::view()
+                other_pages::retry_changing_user_profile_data::view(self.user_data.user_id.clone())
             }
             Page::ItemOtherPage(OtherPage::DeleteAccount) => {
-                other_pages::delete_account::view()
+                other_pages::delete_account::view(self.user_data.user_id.clone())
             }
             Page::ItemOtherPage(OtherPage::LogOut) => other_pages::log_out::view(),
+            Page::ItemOtherPage(OtherPage::NotFound) => other_pages::not_found::view()
         }
     }
 }

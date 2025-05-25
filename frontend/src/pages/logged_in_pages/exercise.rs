@@ -1,11 +1,15 @@
 use std::thread::current;
 
 use crate::app::App;
+use crate::list_of_pages::ListOfExercisesId;
 use crate::logics::sidebars;
 use crate::messages::{DefinedMsg};
 use sauron::prelude::*;
+use crate::structs::exercise::ExerciseId;
 
-pub fn view(current_state_of_app: &App) -> Node<DefinedMsg> {
+use super::list_of_exercises;
+
+pub fn view(current_state_of_app: &App,list_of_exercises_id : ListOfExercisesId,exercise_id:ExerciseId) -> Node<DefinedMsg> {
     node! {
         <main>
             {sidebars::left_sidebar(current_state_of_app.current_page.clone())}

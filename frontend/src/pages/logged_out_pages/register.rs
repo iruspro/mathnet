@@ -1,4 +1,4 @@
-use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned, UserRegister};
+use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned, SwitchToPageShared,UserRegister};
 use sauron::html::{link, meta, title};
 use sauron::prelude::*;
 
@@ -19,7 +19,7 @@ pub fn view() -> Node<DefinedMsg> {
                 <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage))}>"Home page"</a>
             </li>
             <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToDocsPage))}>"Docs"</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage))}>"Log in"</a>
@@ -28,10 +28,10 @@ pub fn view() -> Node<DefinedMsg> {
                     <a class="nav-link active" aria-current="page" href="#">"Register"</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject))}>"About this project"</a>
+                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToAboutProject))}>"About this project"</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
                     </li>
                 </ul>
             </div>

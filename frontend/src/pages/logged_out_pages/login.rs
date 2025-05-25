@@ -1,5 +1,5 @@
 use crate::app::App;
-use crate::messages::{GoToPage, DefinedMsg, SwitchToPageSigned, SwitchToPageUnsigned, UserLoginAttempt};
+use crate::messages::{DefinedMsg, GoToPage, SwitchToPageShared, SwitchToPageSigned, SwitchToPageUnsigned, UserLoginAttempt};
 use crate::structs::user::UserLoginData;
 use sauron::html::{link, meta, title};
 use sauron::prelude::*;
@@ -18,7 +18,7 @@ pub fn view(app: &App) -> Node<DefinedMsg> {
                 <a class="nav-link" on_click=|_|{DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage))}>"Home page"</a>
             </li>
             <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToDocsPage))}>"Docs"</a>
                     </li>
                     <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="#">"Log in"</a>
@@ -27,10 +27,10 @@ pub fn view(app: &App) -> Node<DefinedMsg> {
                         <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"Register"</a>
                     </li>
                     <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}>"About this project"</a>
+                    <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToAboutProject))}>"About this project"</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
+                        <a class="nav-link" on_click=|_| {DefinedMsg::SetPage(GoToPage::GoToPageShared(SwitchToPageShared::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
                     </li>
                 </ul>
             </div>

@@ -3,7 +3,7 @@ use crate::structs::chat_message::ChatId;
 use crate::structs::user::{
     UserChangingProfileData, UserDemandsUserProfileDataChanges, UserId, UserLoginData,
     UserRegisterData, get_user_register_data};
-use crate::list_of_pages::{ExerciseId, ListOfExercisesId, Page};
+use crate::list_of_pages::{ExerciseId, GroupId, ListOfExercisesId, Page};
 
 #[derive(Debug, Clone,PartialEq)]
 pub enum DefinedMsg {
@@ -19,6 +19,7 @@ pub enum DefinedMsg {
     SetConversationToNone,
     NoOp,
     SendConversationMessage(String),
+    SendComment(String)
 }
 
 #[derive(Debug, Clone,PartialEq)]
@@ -39,14 +40,14 @@ pub enum SwitchToPageUnsigned {
 #[derive(Debug, Clone,PartialEq)]
 pub enum SwitchToPageSigned {
     GoToGroupsList,
-    GoToUserProfile,
+    GoToUserProfile(UserId),
     GoToSettings,
     GoToChatWithFriends,
     GoToNotifications,
-    GoToExercise,
-    GoToListOfExercises,
-    GoToGroup,
-    GoToProfile,
+    GoToExercise(ListOfExercisesId,ExerciseId),
+    GoToListOfExercises(ListOfExercisesId),
+    GoToGroup(GroupId),
+    GoToProfile(UserId),
     GoToUserSuggestsDevelopers,
     GoToFriends,
 }

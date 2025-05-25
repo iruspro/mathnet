@@ -1,9 +1,11 @@
 use crate::app::App;
+use crate::list_of_pages::ListOfExercisesId;
 use crate::logics::sidebars;
 use crate::messages::{DefinedMsg};
+use crate::structs::list_of_exercises;
 use sauron::prelude::*;
 
-pub fn view(current_state_of_app: &App) -> Node<DefinedMsg> {
+pub fn view(current_state_of_app: &App, list_of_exercises_id: ListOfExercisesId) -> Node<DefinedMsg> {
     node! {
             <main>
                 // Top Navbar

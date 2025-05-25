@@ -5,7 +5,7 @@ pub use crate::structs::user;
 pub use crate::structs::user::*;
 use sauron::prelude::*;
 
-pub fn view(current_state_of_app: &App) -> Node<DefinedMsg> {
+pub fn view(current_state_of_app: &App, user_id : UserId) -> Node<DefinedMsg> {
     let mut user = user::new();
     let mut user_profile_changes = UserChangingProfileData::new();
     node! {

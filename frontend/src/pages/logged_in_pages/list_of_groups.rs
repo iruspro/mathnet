@@ -4,6 +4,7 @@ use crate::app::App;
 use crate::logics::sidebars;
 use crate::messages::{DefinedMsg};
 use sauron::prelude::*;
+use crate::structs::group_struct::GroupId;
 
 pub fn view(current_state_of_app: &App) -> Node<DefinedMsg> {
     node! {
