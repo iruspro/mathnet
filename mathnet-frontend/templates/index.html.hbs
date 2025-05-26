@@ -1,0 +1,39 @@
+{{#*inline "page"}}
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-2">
+
+    </div>
+    <div class="col-8" class="col text-start">
+      <h1 class="text-center">"Welcome to MathNet!!!"</h1>
+      <p class="basicparagraph" class="text-start">"Welcome to MathNet. Hope you will enjoy it!"</p>
+    </div>
+    <div class="col-2">
+    </div>
+  </div>
+  <!-- TODO: Remove this example -->
+  <div class="row">
+    <div class="col">
+      <section id="hello">
+        <h1>Hi {{ name }}!</h1>
+        <h3>Here are your items:</h3>
+        <ul>
+          {{#each items}}
+            <li>{{ this }}</li>
+          {{/each}}
+        </ul>
+      </section>
+
+      <section id="custom-helper">
+        <p>Try going to <a href="/hbs/hello/Your%20Name">/hbs/hello/Your Name</a>.</p>
+        <p>Also, check (custom helper) out!</p>
+      </section>
+    </div>
+  </div>
+</div>
+
+
+
+{{/inline}}
+{{> layout}}

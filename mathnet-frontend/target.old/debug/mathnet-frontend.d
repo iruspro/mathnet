@@ -1,0 +1,1 @@
+/home/martin/tmp/mathnet-frontend/target/debug/mathnet-frontend: /home/martin/tmp/mathnet-frontend/src/main.rs /home/martin/tmp/mathnet-frontend/src/routes/auth.rs /home/martin/tmp/mathnet-frontend/src/routes/mod.rs /home/martin/tmp/mathnet-frontend/src/routes/other.rs
