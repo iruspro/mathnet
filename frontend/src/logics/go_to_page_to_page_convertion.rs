@@ -90,6 +90,7 @@ pub fn page_to_go_to_page(page: Page) -> GoToPage {
                 // No direct equivalent in GoToPage; fallback:
                 GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut) // or create a NotFound variant if needed
             }
+            OtherPage::LoginFailed => GoToPage::GoToPageOther(SwitchToPageOther::GoToDeleteAccount),
         },
         Page::ItemSharedPage(shared) => match shared {
             SharedPage::Docs => GoToPage::GoToPageShared(SwitchToPageShared::GoToDocsPage),

@@ -2,7 +2,7 @@
 In this file pages of the app are listed.
 This file is also meant for proper routing and also managing url-s. */
 
-use crate::app::DefinedMsg;
+use crate::messages::DefinedMsg;
 use crate::logics::special_parsing;
 use crate::pages::logged_in_pages::exercise;
 pub use crate::structs::chat_message::{ChatId};
@@ -50,6 +50,8 @@ pub fn page_name_to_string(page_name: Page) -> String {
             "Retry changing user profile data".to_string()
         }
         Page::ItemOtherPage(OtherPage::NotFound) => {"Page not found".to_string()},
+        Page::ItemOtherPage(OtherPage::LoginFailed) => {"Login failed".to_string()},
+        
         //Shared pages
         Page::ItemSharedPage(SharedPage::Docs) => "Docs".to_string(),
         Page::ItemSharedPage(SharedPage::AboutProject) => "About this project".to_string(),

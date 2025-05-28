@@ -8,7 +8,7 @@ use crate::list_of_pages::{ExerciseId, GroupId, ListOfExercisesId, Page};
 #[derive(Debug, Clone,PartialEq)]
 pub enum DefinedMsg {
     SetPage(GoToPage),
-    ChangingHash(Page),
+    ChangingHash(GoToPage),
     LoginAttempt(UserLoginAttempt),
     Registration(UserRegister),
     UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges),

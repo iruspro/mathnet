@@ -19,15 +19,16 @@ use crate::{
 };
 
 use sauron::dom::Program;
+
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::{Window, window, HashChangeEvent};
-use sauron::{html::{attributes::*, events::*, *},Cmd,Application,Effects};
-use crate::routing;
+use sauron::{html::{attributes::*, events::*, *},Cmd,Application,Effects,JsValue};
+use crate::routing::{self, change_hash_while_navigating};
 use crate::logics::go_to_page_to_page_convertion::{go_to_page_to_page, defined_msg_to_page,page_to_go_to_page};
 use wasm_bindgen_futures::spawn_local;
 use crate::rpc_client::login::rpc_login;
-
+pub use web_sys::Location;
 
 // (Main) model of this project
 
@@ -66,6 +67,7 @@ impl App {
 
 impl Application for App {
     type MSG = DefinedMsg;
+    /*
     fn init(&mut self) -> Cmd<DefinedMsg> {
     let current_hash = window()
         .and_then(|win| win.location().hash().ok())
@@ -74,12 +76,16 @@ impl Application for App {
     let new_effects = Effects::new(vec![DefinedMsg::ChangingHash(defined_msg_to_page(Page::parse_hashes(&current_hash.as_str())).unwrap())],vec![()] );
     Cmd::from(new_effects)
 }
+    */
 
     fn update(&mut self, message: DefinedMsg) -> Cmd<DefinedMsg> {
         match message.clone() {
             DefinedMsg::SetPage(page) => {
-                routing::change_hash_while_navigating(page.clone());
+                //routing::change_hash_while_navigating(page.clone());
                 routing::routing_page_messages(message, self)},
+            //DefinedMsg::ChangingHash(page) =>
+            //{change_hash_while_navigating(page);}
+            
             DefinedMsg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => 
             {},
             DefinedMsg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => {
@@ -87,6 +93,8 @@ impl Application for App {
             }
             DefinedMsg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => {
             let login_data = self.user_login_data.clone();
+            }
+            /*
             spawn_local(async {
                 let user_name = login_data.user_name.clone();
                 let user_password = login_data.user_password.clone();
@@ -102,6 +110,7 @@ impl Application for App {
                 }
             })
             }
+            */
             DefinedMsg::LoginAttempt(UserLoginAttempt::LoginFailure)=>{
             self.current_page = Page::ItemOtherPage(OtherPage::LoginFailed);}
 
@@ -232,7 +241,8 @@ impl Application for App {
                 other_pages::delete_account::view(self.user_data.user_id.clone())
             }
             Page::ItemOtherPage(OtherPage::LogOut) => other_pages::log_out::view(),
-            Page::ItemOtherPage(OtherPage::NotFound) => other_pages::not_found::view()
+            Page::ItemOtherPage(OtherPage::NotFound) => other_pages::not_found::view(),
+            Page::ItemOtherPage(OtherPage::LoginFailed) => other_pages::not_found::view()
         }
     }
 }
@@ -260,7 +270,19 @@ pub fn start() {
 
     let app = App::new();
     let mut program = Program::mount_to_body(app);
+}
 
+/*
+pub fn set_location_hash(hash: &str) {
+    if let Some(win) = window() {
+        let location: Location = win.location();
+        if let Err(err) = location.set_hash(hash) {
+            console::log_1(&format!("Failed to set hash: {:?}", err).into());
+        }
+    }}
+*/
+
+/*
     // Setup hashchange listener
     let closure = Closure::wrap(Box::new(move |_: HashChangeEvent| {
         if let Some(hash) = window().and_then(|win| win.location().hash().ok()) {
@@ -275,3 +297,4 @@ pub fn start() {
 
     closure.forget(); // Keeps the closure alive
 }
+*/

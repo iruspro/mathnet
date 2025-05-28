@@ -14,6 +14,7 @@ use crate::web_sys::console;
 use sauron::node;
 use sauron::prelude::*;
 use crate::page_names::PAGE_NAMES;
+use crate::routing::go_to_page_to_hash_convertor;
 
 
 fn show_nav_link(page: Page) -> Node<DefinedMsg> {
@@ -21,7 +22,7 @@ fn show_nav_link(page: Page) -> Node<DefinedMsg> {
         Page::ItemSignedPage(SignedPage::GroupsList) => node! {
             <li class="nav-item">
                 <a class="nav-link" on_click=|_| {
-                    DefinedMsg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList))
+                   DefinedMsg::ChangingHash(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList))
                 }>"Groups"</a>
             </li>
         },

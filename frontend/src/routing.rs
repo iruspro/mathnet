@@ -7,7 +7,9 @@ use crate::logics::special_parsing::parse_from_str_to_u32;
 use crate::app::App;
 use crate::logics::converting_ids_to_string::{chat_id_to_string,group_id_to_string,exercise_id_to_string,list_of_exercises_id_to_string,user_id_to_string};
 use crate::web_sys;
+use sauron::dom::util::set_location_hash;
 use web_sys::console;
+
 
 
 impl Page {
@@ -93,7 +95,7 @@ pub fn parse_hashes(hash: &str) -> DefinedMsg {
         }
     }
 
-    pub fn to_hash(current_state_of_app:&Page) -> String {
+    pub fn to_hash(current_state_of_app:Page) -> String {
         match current_state_of_app {
             //Unsigned pages
             Page::ItemUnsignedPage(UnsignedPage::Home) => "#/home".into(),
@@ -146,6 +148,7 @@ pub fn routing_page_messages(page_message: DefinedMsg, current_state_of_app: &mu
     match page_message {
         DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage)) => {
             current_state_of_app.current_page = Page::ItemUnsignedPage(UnsignedPage::Home);
+            set_location_hash(&Page::to_hash(Page::ItemUnsignedPage(UnsignedPage::Home).clone()));
         }
         DefinedMsg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage)) => {
             current_state_of_app.current_page = Page::ItemUnsignedPage(UnsignedPage::Login);
@@ -218,7 +221,7 @@ pub fn routing_page_messages(page_message: DefinedMsg, current_state_of_app: &mu
 }
 
 
-fn go_to_page_to_hash_convertor(go_to_page: GoToPage) -> String {
+pub fn go_to_page_to_hash_convertor(go_to_page: GoToPage) -> String {
     match go_to_page {
         GoToPage::GoToPageSigned(page) => match page {
             SwitchToPageSigned::GoToGroupsList => "#groups".to_string(),
@@ -256,11 +259,10 @@ fn go_to_page_to_hash_convertor(go_to_page: GoToPage) -> String {
 
 pub fn change_hash_while_navigating(go_to_page: GoToPage) {
     let new_hash = go_to_page_to_hash_convertor(go_to_page.clone());
-    let new_hash_2 = new_hash.clone();
+    let new_hash_2: String = new_hash.clone();
     // 2. Update the browser hash:
     if let Some(win) = web_sys::window() {
         console::log_1(&new_hash.into());
-
         let _ = win.location().set_hash(&new_hash_2);
     }
 }
