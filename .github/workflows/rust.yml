@@ -4,7 +4,7 @@ on:
   push:
     branches: [ "*" ]
   pull_request:
-    branches: [ "main", "develop", "be-develop" ]
+    branches: [ "main", "develop" ]
 
 env:
   CARGO_TERM_COLOR: always
@@ -60,27 +60,27 @@ jobs:
         cd mathnet-server
         cargo test --verbose
 
-  build-frontend:
+  build-mathnet-frontend:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
 
-    - name: Check formatting (frontend)
+    - name: Check formatting (mathnet-frontend)
       run: |
-        cd frontend
+        cd mathnet-frontend
         cargo fmt --all -- --check
 
-    # - name: Lint with Clippy (frontend)
-    #   run: |
-    #     cd frontend
-    #     cargo clippy --all-targets --all-features -- -D warnings
-
-    - name: Build frontend
+    - name: Lint with Clippy (frontend)
       run: |
-        cd frontend
+        cd mathnet-frontend
+        cargo clippy --all-targets --all-features -- -D warnings
+
+    - name: Build mathnet-frontend
+      run: |
+        cd mathnet-frontend
         cargo build --verbose
         
-    - name: Run frontend tests
+    - name: Run mathnet-frontend tests
       run: |
         cd frontend
         cargo test --verbose
