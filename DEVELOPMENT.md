@@ -2,13 +2,13 @@
 ## Setup development environment
 ### Pre-commit hooks:
 ```bash
-cp pre-commit.sh .git/hooks/pre-commit
+cp scripts/pre-commit.sh .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
 ```
 ## Start application
 ### Instal dependencies
 ```bash
-cd frontend
+cd mathnet-frontend
 cargo install wasm-pack
 rustup target add wasm32-unknown-unknown
 cargo install wasm-bindgen-cli
@@ -16,7 +16,7 @@ cargo install trunk
 ```
 ### Build frontend
 ```bash
-cd frontend
+cd mathnet-frontend
 trunk build --release --dist ../mathnet-server/web-folder
 ```
 
