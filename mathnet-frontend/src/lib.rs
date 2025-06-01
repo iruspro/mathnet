@@ -1,6 +1,7 @@
 pub mod api_client;
 pub mod app;
 pub mod pages;
+pub mod web;
 
 // region:    --- Modules
 use sauron::{Program, wasm_bindgen};

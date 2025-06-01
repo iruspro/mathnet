@@ -7,6 +7,12 @@ edition = "2024"
 crate-type = ["cdylib"]
 
 [dependencies]
+# frontend
 sauron = "0.70.0"
+# serialization
 serde = "1.0"
 serde_derive = "1.0"
+# web
+gloo-net = "0.6"
+# other
+derive_more = { version = "2", features = ["from"] }

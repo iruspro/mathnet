@@ -1,11 +1,11 @@
 mod elements;
 pub mod messages;
-mod serializers;
 
 // region:    --- Modules
-use sauron::{Cmd, Node, html::div, web_sys::console};
+use sauron::{Cmd, Node, html::div, wasm_bindgen_futures::spawn_local, web_sys::console};
 
 use super::elements::common;
+use crate::web::{self, serializers::auth::UserForLogin};
 use messages::Msg;
 // endregion: --- Modules
 
@@ -30,6 +30,7 @@ pub struct Model {
 }
 // endregion: --- Types
 
+// region:    --- Main page logic
 impl Model {
     // TODO: Do we need to return Cmd<...>?
     pub fn update(&mut self, msg: Msg) -> Cmd<Msg> {
@@ -42,13 +43,18 @@ impl Model {
 
             // Form data
             Msg::UpdateUsername(val) => self.username = val,
-            Msg::UpdatePassword(val) => self.set_password(val),
+            Msg::UpdatePassword(val) => self.password = val,
             Msg::UpdateSecretCode(val) => self.recovery_code = val,
             Msg::UpdateFirstName(val) => self.first_name = val,
             Msg::UpdateLastName(val) => self.last_name = val,
-            Msg::Submit => {
-                console::log_1(&"Form send to server".into());
-            }
+            Msg::Submit => match self.auth_mode {
+                AuthMode::Login => {
+                    let body = self.get_login_body();
+                    spawn_local(async { web::auth::login(body).await });
+                }
+                AuthMode::SignUp => console::log_1(&"Form send to server".into()),
+                AuthMode::PasswordRecovery => console::log_1(&"Form send to server".into()),
+            },
 
             // Other
             Msg::NoOp(_) => {}
@@ -69,7 +75,9 @@ impl Model {
         )
     }
 }
+// endregion: --- Main page logic
 
+// region:    --- Model Controller
 impl Model {
     pub fn new() -> Self {
         Model {
@@ -83,16 +91,6 @@ impl Model {
             first_name: "".to_string(),
             last_name: "".to_string(),
         }
-    }
-
-    fn get_hidden_password(&self) -> String {
-        let len = self.password.len();
-        "*".repeat(len)
-    }
-
-    // TODO: Should we encrypt data?
-    fn set_password(&mut self, val: String) {
-        self.password = val;
     }
 
     fn reset_text_fields(&mut self) {
@@ -113,3 +111,20 @@ impl Default for Model {
         Self::new()
     }
 }
+// endregion: --- Model Controller
+
+// region:    --- Web
+impl Model {
+    fn get_login_body(&self) -> UserForLogin {
+        // TODO: Should we encrypt data?
+        UserForLogin {
+            username: self.username.clone(),
+            password: self.password.clone(),
+        }
+    }
+
+    // fn get_sign_up_body(&self) {
+    //     todo!()
+    // }
+}
+// endregion: --- Web

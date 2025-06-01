@@ -67,8 +67,9 @@ impl Model {
         );
         let password = input(
             [
+                r#type("password"),
                 placeholder("password"),
-                value(self.get_hidden_password()),
+                value(self.password.clone()),
                 on_input(|val: InputEvent| Msg::UpdatePassword(val.value())),
             ],
             [],
