@@ -55,26 +55,10 @@ impl Application for App {
     type MSG = Msg;
     fn update(&mut self, msg: Self::MSG) -> Cmd<Msg> {
         match msg {
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::Home),
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::Docs),
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage) )=> self.current_page = Page::ItemUnsignedPage(UnsignedPage::Login),
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::Register),
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::AboutProject),
-            Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity)) => self.current_page = Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity),
             
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToGroupsList)) => self.current_page = Page::ItemSignedPage(SignedPage::GroupsList),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToAboutProject)) => self.current_page = Page::ItemSignedPage(SignedPage::AboutProject),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToPrivacyAndSecurity)) => self.current_page = Page::ItemSignedPage(SignedPage::PrivacyAndSecurity),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToUserProfile)) => self.current_page = Page::ItemSignedPage(SignedPage::UserProfile),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToSettings)) => self.current_page = Page::ItemSignedPage(SignedPage::Settings),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToDocsPage)) => self.current_page = Page::ItemSignedPage(SignedPage::Docs),
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToNotifications)) => self.current_page = Page::ItemSignedPage(SignedPage::Notifications),  
-            Msg::SetPage(GoToPage::GoToPageSigned(SwitchToPageSigned::GoToChatWithFriends)) => self.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends),          
-            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToDeleteAccount)) => self.current_page = Page::ItemOtherPage(OtherPage::DeleteAccount),
-            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToRetryChangingUserProfileData)) => self.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData),
-            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToSuccessfullyChangedUserProfileData)) => self.current_page = Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData),
-            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToLogOut)) => self.current_page = Page::ItemOtherPage(OtherPage::LogOut),
-            
+            // TODO: Update pages according to changed page variants in 'list_of_pages.rs'
+            Msg::SetPage(_) => todo!("Consider pages"),
+
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
             Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => login_logics::check_login_attempt_validity(self),
@@ -105,6 +89,9 @@ impl Application for App {
     }
 
     fn view(&self) -> Node<Self::MSG> {
+        // TODO: fix variants so that they will match simplified variants of page names
+        // The change from 'view' methods to just triggering page_templates and insertion 
+        // of pages' content is also needed.
         match self.current_page {
             Page::ItemUnsignedPage(UnsignedPage::Home) => logged_out_pages::home::view(),
             Page::ItemUnsignedPage(UnsignedPage::Docs) => logged_out_pages::docs::view(),
@@ -114,7 +101,7 @@ impl Application for App {
             Page::ItemUnsignedPage(UnsignedPage::Register) => logged_out_pages::register::view(),
 
             Page::ItemSignedPage(SignedPage::GroupsList) => {
-                console::log_1(&"Hello 4!".into());
+                
                 logged_in_pages::groups::view(&self)}
             Page::ItemSignedPage(SignedPage::Settings) => logged_in_pages::settings::view(&self),
             Page::ItemSignedPage(SignedPage::UserProfile) => logged_in_pages::user_profile::view(&self),
@@ -124,7 +111,7 @@ impl Application for App {
             Page::ItemSignedPage(SignedPage::ChatWithFriends) => logged_in_pages::chat_with_friends::view(&self),
             Page::ItemSignedPage(SignedPage::Notifications) => logged_in_pages::notifications::view(&self), 
             Page::ItemSignedPage(SignedPage::Conversation) => {
-                console::log_1(&"Rust8!".into());
+                
                 logged_in_pages::conversation::view(&self)},
             Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(),
 

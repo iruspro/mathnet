@@ -1,0 +1,89 @@
+/*
+Implementacija za male zaslone in potem prilagajam na večje zaslone
+*/
+.mysidebar{
+  display: none;
+}
+
+.mycontent{
+  margin-left: 0;
+  padding: 1rem;
+  transition: margin-left 0.2s ease;
+  box-sizing: border-box; /* ensure width calculations are consistent */
+  position: relative;     /* keep content in normal flow */
+}
+
+.my-content-with-left-sidebar{
+  display: flex;
+  padding: 1rem;
+  transition: margin-left 0.2s ease;
+  box-sizing: border-box; /* ensure width calculations are consistent */
+  position: relative;     /* keep content in normal flow */
+}
+
+/* increase specificity so Bootstrap is less likely to override */
+body .mycontent{
+  margin-left: 0 !important;
+}
+
+.mysidebar a.mylink{
+  color: grey !important;
+  display: block !important;
+ /* text-decoration: none !important; */
+  padding:8px 16px !important
+}
+
+.mysidebar a.mycurrentlyactivelink{
+color: white !important;
+/*
+  text-decoration: none;
+  text-underline-position: none;
+  text-underline-offset: none;
+*/
+  }
+
+.mysidebar a.mylink:hover{
+  color: white !important;
+  /* text-decoration: none; */
+}
+
+.myactivenavbutton{
+  color: white!important;
+}
+
+@media  (min-width:992px) {
+  .mysidebar{
+  display: block;
+  list-style-type: none;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 25%;
+  height: 100%;
+  background-color: #212529;
+  padding: 1rem;
+  overflow-y: scroll;
+  color: grey;
+  z-index: 1000;
+}
+
+.my-stacked-sidebar{
+    display: none;
+  }
+
+  body .mycontent{
+    margin-left: 10% !important;
+    width: 80% !important;
+    margin-right: 10% !important;
+  }
+
+  .my-content-with-left-sidebar{
+    margin-left: 25%;
+    margin-right: 10%;
+  }
+
+  }
+
+.green{
+  color: green
+}

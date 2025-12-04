@@ -2,9 +2,9 @@ pub use crate::structs::chat_message::ChatId;
 
 #[derive(Debug,Clone,PartialEq)]
 pub enum Page {
-    ItemUnsignedPage(UnsignedPage),
-    ItemSignedPage(SignedPage),
-    ItemOtherPage(OtherPage),
+    PageSortUnsigned(UnsignedPage),
+    PageSortSigned(SignedPage),
+    PageSortOther(OtherPage),
 }
 
 impl Page {
@@ -40,7 +40,7 @@ impl Page {
 #[derive(Debug,Clone,PartialEq)]
 pub enum UnsignedPage {
 Home,
-Login,
+LogIn,
 Register,
 Docs,
 AboutProject,
@@ -49,16 +49,15 @@ PrivacyAndSecurity,
 
 #[derive(Debug,Clone,PartialEq)]
 pub enum SignedPage {
-GroupsList,
-Docs,
-AboutProject,
-PrivacyAndSecurity,
-UserProfile,
-Settings,
-Notifications,
-ChatWithFriends,
-Conversation,
-LogOut
+    AboutProject,
+    Docs,
+    PrivacyAndSecurity,
+    Settings,
+    MathNetNotifications,
+    UserProfile,
+    GroupsList,
+    ChatWithFriends,
+    Conversation,
 }
 
 #[derive(Debug,Clone,PartialEq)]
@@ -68,3 +67,24 @@ RetryChangingUserProfileData,
 DeleteAccount,
 LogOut,
 }
+
+pub const list_of_signed_pages: [Page; 9] = [
+    Page::PageSortSigned(SignedPage::AboutProject),
+    Page::PageSortSigned(SignedPage::Docs),
+    Page::PageSortSigned(SignedPage::PrivacyAndSecurity),
+    Page::PageSortSigned(SignedPage::Settings),
+    Page::PageSortSigned(SignedPage::MathNetNotifications),
+    Page::PageSortSigned(SignedPage::UserProfile),
+    Page::PageSortSigned(SignedPage::GroupsList),
+    Page::PageSortSigned(SignedPage::ChatWithFriends),
+    Page::PageSortSigned(SignedPage::Conversation),
+];
+
+pub const list_of_unsigned_pages: [Page;6 ] = [
+    Page::PageSortUnsigned(UnsignedPage::Home),
+    Page::PageSortUnsigned(UnsignedPage::LogIn),
+    Page::PageSortUnsigned(UnsignedPage::Register),
+    Page::PageSortUnsigned(UnsignedPage::Docs),
+    Page::PageSortUnsigned(UnsignedPage::AboutProject),
+    Page::PageSortUnsigned(UnsignedPage::PrivacyAndSecurity),
+];
