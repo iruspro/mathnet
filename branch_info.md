@@ -4,27 +4,97 @@ This branch is for making better frontend design choices and features. It is als
 
 ## Branch todo
 
+### General design
+
 ~~Improve left sidebar and top navbar design.~~
 
-Simplify frontend code
+Simplify and organize frontend code:
 - ~~Simplify page enums!~~
+
+- Page reorganization.
 
 - Page and view routing need to be updated to match simplified enums in 
 `list_of_pages.rs`
 
 - Add content functions for each logged in and logged out page (to get rid of unneccessary left sidebar and top navbar in each `view` function). Rename `view` functions to `content`
 functions.
--Rewrite every page so that they will match the template idea.
 
+- Rewrite every page so that they will match the template idea.
 
-Rename `logged_in_pages` to `signed_in_pages` and `logged_out_pages` to `signed_out_pages` (or vice versa - the important thing is to have consistent naming across the project).
+- Rewrite `register.rs` so that only content will be present.
+
+- Rewrite `displaying_conversation.rs` so that only content will be present.
+
+- Comment on code: explain its purpose.
+
+- Merge `frontend_features` and `logics` directories.
+
+- Declare project's naming convention.
+
+- Think off how to avoid data duplication.
+
+- Tidy `use` statements.
+
+- Reduce public code where possible.
+
+- Rename `logged_in_pages` to `signed_in_pages` and `logged_out_pages` to `signed_out_pages` (or vice versa - the important thing is to have consistent naming across the project).
 
 Add licence info at the bottom of every page.
 
-Features
+Add tests. No logic code has been been tested yet.
+
+### Base of exercises
+
+- Base of exercise building
+- Base of exercise access setting and sharing.
+- Collecting based on source (e. g. book, article).
+- Adding problems.
+- Merging, splitting, organizing.
+- Search.
+
+### Exercise
+- Attributes (e. g. source, math subject, status ...)
+- Discussion, responses.
+- Enable photos loading and editing.
+
+### Learning resources
+- Enable students to share their notes.
+- List of useful links.
+- Educational programs sharing feature.
+
+### Messages and conversations
 - Show and hide chat message details.
-- Filter chat messages in a converstion based on date.
-- Latex rendering.
+- Edit messages.
+- Display friends at sidebar (when in `chat_with_friends_display()`).
+- Filter chat messages in a conversation based on date.
+- Emojis.
+- User responses.
+
+### Friends
+- Enable people search.
+- Enable friend adding mechanism.
+- Block people.
+
+### Groups
+- Enable group search.
+- Enable join group mechanism.
+
+### User Profile
 - User profile picture.
-- Searching for friends, add friends, send chat messages.
-- Edit chat message.
+- User profile page.
+
+### Settings
+- Language settings - text in different languages.
+
+### Events
+- Make some event cathegory - on a group and public level.
+
+### Mathnet notifications
+- Enable notification receiving (mechanism similar to conversation).
+
+### Writing styles
+- Enable writing code.
+- Enable writing latex
+
+
+

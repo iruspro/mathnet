@@ -1,6 +1,8 @@
+/* About MathNet */
+
 use sauron::prelude::*;
 use crate::app::Msg;
-fn about_project() -> Node<Msg> {
+pub fn about_project_display() -> Node<Msg> {
     node!{
                             <h1 class="text-center">"About project"</h1>
                             <p class="basicparagraph text-start">

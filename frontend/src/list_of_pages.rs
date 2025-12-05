@@ -10,6 +10,7 @@ pub enum Page {
     PageSortUnsigned(UnsignedPage),
     PageSortSigned(SignedPage),
     PageSortOther(OtherPage),
+    PageSortShared(SharedPage)
 }
 
 /*
@@ -49,56 +50,65 @@ impl Page {
 #[derive(Debug,Clone,PartialEq)]
 pub enum UnsignedPage {
 Home,
-LogIn,
-Register,
-Docs,
-AboutProject,
-PrivacyAndSecurity,
+SignIn,
+Register
 }
 
 // Accessible only when user is logged in.
 #[derive(Debug,Clone,PartialEq)]
 pub enum SignedPage {
+    BaseOfExercises,
+    BaseOfLearningResources,
+    ChatWithFriends,
+    Conversation,
+    Exercise,
+    Group,
+    GroupList,
+    LearningResources,
+    MathNetNotifications,
+    Settings,
+    UserProfile,
+}
+
+#[derive(Debug, Clone, PartialEq)]
+pub enum SharedPage{
     AboutProject,
     Docs,
     PrivacyAndSecurity,
-    Settings,
-    MathNetNotifications,
-    UserProfile,
-    GroupsList,
-    ChatWithFriends,
-    Conversation,
 }
 
 // Pages that provide system messages or other important tasks not strictly related 
 // to the main way of use.
 #[derive(Debug,Clone,PartialEq)]
 pub enum OtherPage{
-SuccessfullyChangedUserProfileData,
-RetryChangingUserProfileData,
 DeleteAccount,
-LogOut,
+SignOut,
 }
 
 // This and the next array are for pattern matching. 
 // Should be the same as SignedPage and UnsignedPage enums.
-pub const list_of_signed_pages: [Page; 9] = [
-    Page::PageSortSigned(SignedPage::AboutProject),
-    Page::PageSortSigned(SignedPage::Docs),
-    Page::PageSortSigned(SignedPage::PrivacyAndSecurity),
-    Page::PageSortSigned(SignedPage::Settings),
-    Page::PageSortSigned(SignedPage::MathNetNotifications),
-    Page::PageSortSigned(SignedPage::UserProfile),
-    Page::PageSortSigned(SignedPage::GroupsList),
+pub const list_of_signed_pages: [Page; 11] = [
+    Page::PageSortSigned(SignedPage::BaseOfExercises),
+    Page::PageSortSigned(SignedPage::BaseOfLearningResources),
     Page::PageSortSigned(SignedPage::ChatWithFriends),
     Page::PageSortSigned(SignedPage::Conversation),
+    Page::PageSortSigned(SignedPage::Exercise),
+    Page::PageSortSigned(SignedPage::Group),
+    Page::PageSortSigned(SignedPage::GroupList),
+    Page::PageSortSigned(SignedPage::LearningResources),
+    Page::PageSortSigned(SignedPage::MathNetNotifications),
+    Page::PageSortSigned(SignedPage::Settings),
+    Page::PageSortSigned(SignedPage::UserProfile),
 ];
 
-pub const list_of_unsigned_pages: [Page;6 ] = [
+pub const list_of_unsigned_pages: [Page;3] = [
     Page::PageSortUnsigned(UnsignedPage::Home),
-    Page::PageSortUnsigned(UnsignedPage::LogIn),
-    Page::PageSortUnsigned(UnsignedPage::Register),
-    Page::PageSortUnsigned(UnsignedPage::Docs),
-    Page::PageSortUnsigned(UnsignedPage::AboutProject),
-    Page::PageSortUnsigned(UnsignedPage::PrivacyAndSecurity),
+    Page::PageSortUnsigned(UnsignedPage::SignIn),
+    Page::PageSortUnsigned(UnsignedPage::Register)
+];
+
+pub const list_of_shared_pages: [Page; 3] = [
+    Page::PageSortShared(SharedPage::AboutProject),
+    Page::PageSortShared(SharedPage::Docs),
+    Page::PageSortShared(SharedPage::PrivacyAndSecurity),
 ];

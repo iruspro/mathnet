@@ -15,6 +15,7 @@ pub enum Msg {
     SetConversationToNone,
     NoOp,
     SendConversationMessage(String),
+    DeleteAccount,
 }
 
 
