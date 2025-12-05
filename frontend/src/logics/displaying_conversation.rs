@@ -8,12 +8,13 @@ pub use crate::structs::friends_at_sidebar::{FriendAtSidebar,ShowChats};
 pub use sauron::{node,text};
 pub use crate::app::App;
 pub use crate::communication_with_server::get_conversation::get_whole_conversation_from_server;
-pub use crate::logics::{date_and_time, post_new_message,sidebars};
+pub use crate::logics::{date_and_time, post_new_message};
 pub use crate::list_of_pages::Page;
+pub use crate::frontend_features::left_sidebar::display_left_sidebar;
 
 
 /* When you click on some person in show_chats_in_content, you get the selected conversation.*/
-pub fn show_conversation(chat_id : ChatId, current_page: Page ) -> Node<Msg>{
+pub fn show_conversation(chat_id : ChatId, current_page: &Page ) -> Node<Msg>{
     let tuple_of_vec_of_chat_messages_and_friend_name = get_whole_conversation_from_server(chat_id);
     let friend_name:String = tuple_of_vec_of_chat_messages_and_friend_name.1;
     let vec_of_chat_messages_unused:Vec<ChatMessage> = tuple_of_vec_of_chat_messages_and_friend_name.0;
@@ -22,7 +23,7 @@ pub fn show_conversation(chat_id : ChatId, current_page: Page ) -> Node<Msg>{
     node! {
         <main>
             // Left Sidebar (Desktop)
-             {sidebars::left_sidebar_special(current_page.clone())}
+             {display_left_sidebar(current_page)}
 
             // Right Sidebar
             <div class="right-sidebar d-none d-md-block text-white">
@@ -37,7 +38,7 @@ pub fn show_conversation(chat_id : ChatId, current_page: Page ) -> Node<Msg>{
             </div>
 
             // Main Content
-            <div class="content">
+            <div class="mycontent">
                 <div class="container-fluid"> //scrollable-container doesn't do anything because sidebars are already fixed (independent from scrolling the content.)
                     <h1 class="text-center">{text!("{}",friend_name)}</h1>
 <div class="d-grid gap-2 d-md-flex justify-content-md-start">

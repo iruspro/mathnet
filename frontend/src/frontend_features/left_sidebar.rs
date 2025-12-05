@@ -5,7 +5,6 @@ left sidebar link management.
 
 
 use sauron::prelude::*;
-use crate::messages::GoToPage::GoToPageSigned;
 use crate::messages::{Msg};
 use crate::app::App;
 use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_content}, displaying_conversation};
@@ -76,7 +75,7 @@ match page{
 }
 
 
-fn show_active_nav_link(page_name : String)->Node<Msg>{
+fn show_active_nav_link(page : &Page)->Node<Msg>{
    match page{
     Page::PageSortSigned(SignedPage::AboutProject) => {
         node!{
@@ -148,17 +147,17 @@ pub fn display_left_sidebar(current_page: &Page) -> Node<Msg> {
     let nav_links: Vec<Node<Msg>> = list_of_signed_pages
         .iter()
         .map(|pagex| {
-            if *pagex == current_page {
-                show_active_nav_link(Page::page_name_to_string(pagex.clone()))
+            if *pagex == *current_page {
+                show_active_nav_link(pagex)
             } else {
-                show_nav_link(pagex.clone())
+                show_nav_link(pagex)
             }
         })
         .collect();
 
     node! {
         <ul class="mysidebar">
-        {for el in nav_links{
+        {for el in nav_links.clone(){
             el
         }}
         </ul>
@@ -171,12 +170,9 @@ pub fn display_left_sidebar(current_page: &Page) -> Node<Msg> {
             </button>
             <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                       <ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-nav">
-                        <li class="nav-item">
-                          <button class="nav-link btn btn-link" type="button" on_click=|_|{MSG::SpremeniStran(crate::app::VrsteStrani::NeprijavljenaStran(NepriStran::Registracija))}>"Register"</button>
-                        </li>
-                        <li class="nav-item">
-                          <button class="nav-link btn btn-link" type="button" on_click=|_|{MSG::SpremeniStran(crate::app::VrsteStrani::PrijavljenaStran(PriStran::UserProfile))}>"User Profile"</button>
-                        </li>
+                        {for el in nav_links{
+                          el
+                        }}
                       </ul>
                     </div></div>
                   </nav>

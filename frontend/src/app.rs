@@ -1,15 +1,15 @@
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
-use crate::{list_of_pages::OtherPage, logics::registration_logics::check_registration_validity, messages::*, pages::logged_in_pages::conversation, structs::chat_message::ChatId};
-pub use crate::messages::{Msg, UserLoginAttempt,UserRegister,SwitchToPageSigned,SwitchToPageUnsigned,GoToPage::{GoToPageSigned, GoToPageUnsigned}};
+use crate::{list_of_pages::OtherPage, logics::registration_logics::check_registration_validity, messages::*};
+pub use crate::messages::{Msg, UserLoginAttempt,UserRegister};
 use crate::list_of_pages::{Page,UnsignedPage,SignedPage};
-use crate::pages::{logged_out_pages,logged_in_pages};
+use crate::pages::pages_templates::{logged_in_page_template::logged_in_page_template, logged_out_page_template::logged_out_page_template};
 use sauron::dom::Program;
 use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData},group_struct::*};
 use crate::logics::{login_logics,registration_logics};
-use crate::messages::GoToPage;
 use crate::web_sys::console;
+use crate::structs::chat_message::ChatId;
 
 #[derive(Debug)]
 pub struct App {
@@ -25,7 +25,7 @@ pub struct App {
 impl App {
     pub fn new() -> Self {
         App {
-            current_page : Page::ItemUnsignedPage(UnsignedPage::Home),
+            current_page : Page::PageSortUnsigned(UnsignedPage::Home),
             user_login_data : UserLoginData{user_name : String::new(), user_password : String::new()},
             user_register_data : crate::structs::user::get_user_register_data(),
             user_data : crate::structs::user::new(),
@@ -57,7 +57,7 @@ impl Application for App {
         match msg {
             
             // TODO: Update pages according to changed page variants in 'list_of_pages.rs'
-            Msg::SetPage(_) => todo!("Consider pages"),
+            Msg::SetPage(page) => self.current_page = page,
 
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
             Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
@@ -73,14 +73,14 @@ impl Application for App {
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserEmail(new_email)) => self.user_changing_data_structure.new_user_email = new_email,
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(new_password)) => self.user_changing_data_structure.new_user_password = new_password,
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(new_password)) => self.user_changing_data_structure.new_user_password_confirmation = new_password,
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {self.current_page = Page::ItemOtherPage(OtherPage::DeleteAccount)},
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => self.current_page = Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {self.current_page = Page::PageSortOther(OtherPage::DeleteAccount)},
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => self.current_page = Page::PageSortOther(OtherPage::RetryChangingUserProfileData),
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges) => {},
             Msg::SearchFriend(searched_person) => {unimplemented!()},
             Msg::NoAction => {unimplemented!()},
             Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
-            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {self.current_conversation = Some(chat_id); self.current_page = Page::ItemSignedPage(SignedPage::Conversation)},
-            Msg::SetConversationToNone => {self.current_conversation = None; self.current_page = Page::ItemSignedPage(SignedPage::ChatWithFriends)},
+            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {self.current_conversation = Some(chat_id); self.current_page = Page::PageSortSigned(SignedPage::Conversation)},
+            Msg::SetConversationToNone => {self.current_conversation = None; self.current_page = Page::PageSortSigned(SignedPage::ChatWithFriends)},
             Msg::NoOp =>{},
             Msg::SendConversationMessage(conversation_message) => {},
         
@@ -92,33 +92,10 @@ impl Application for App {
         // TODO: fix variants so that they will match simplified variants of page names
         // The change from 'view' methods to just triggering page_templates and insertion 
         // of pages' content is also needed.
-        match self.current_page {
-            Page::ItemUnsignedPage(UnsignedPage::Home) => logged_out_pages::home::view(),
-            Page::ItemUnsignedPage(UnsignedPage::Docs) => logged_out_pages::docs::view(),
-            Page::ItemUnsignedPage(UnsignedPage::AboutProject) => logged_out_pages::about_project::view(),
-            Page::ItemUnsignedPage(UnsignedPage::Login) => logged_out_pages::login::view(&self),
-            Page::ItemUnsignedPage(UnsignedPage::PrivacyAndSecurity) => logged_out_pages::privacy_and_security::view(),
-            Page::ItemUnsignedPage(UnsignedPage::Register) => logged_out_pages::register::view(),
-
-            Page::ItemSignedPage(SignedPage::GroupsList) => {
-                
-                logged_in_pages::groups::view(&self)}
-            Page::ItemSignedPage(SignedPage::Settings) => logged_in_pages::settings::view(&self),
-            Page::ItemSignedPage(SignedPage::UserProfile) => logged_in_pages::user_profile::view(&self),
-            Page::ItemSignedPage(SignedPage::PrivacyAndSecurity) => logged_in_pages::privacy_and_security::view(&self),
-            Page::ItemSignedPage(SignedPage::AboutProject) => logged_in_pages::about_project::view(&self),
-            Page::ItemSignedPage(SignedPage::Docs) => logged_in_pages::docs::view(&self),
-            Page::ItemSignedPage(SignedPage::ChatWithFriends) => logged_in_pages::chat_with_friends::view(&self),
-            Page::ItemSignedPage(SignedPage::Notifications) => logged_in_pages::notifications::view(&self), 
-            Page::ItemSignedPage(SignedPage::Conversation) => {
-                
-                logged_in_pages::conversation::view(&self)},
-            Page::ItemSignedPage(SignedPage::LogOut) => logged_in_pages::log_out::view(),
-
-            Page::ItemOtherPage(OtherPage::SuccessfullyChangedUserProfileData) => logged_in_pages::successfully_changed_user_profile_data::view(),
-            Page::ItemOtherPage(OtherPage::RetryChangingUserProfileData) => logged_in_pages::retry_changing_user_profile_data::view(),
-            Page::ItemOtherPage(OtherPage::DeleteAccount) => logged_in_pages::delete_account::view(),
-            Page::ItemOtherPage(OtherPage::LogOut) => logged_in_pages::log_out::view(), 
+        match &self.current_page {
+            Page::PageSortUnsigned(page) => logged_out_page_template(&Page::PageSortUnsigned(page.clone())),
+            Page::PageSortSigned(page) => logged_in_page_template(&Page::PageSortSigned(page.clone())),
+            Page::PageSortOther(page) => todo!("implement matching for other pages"),
         }
     }
 

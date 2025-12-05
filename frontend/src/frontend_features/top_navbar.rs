@@ -6,16 +6,17 @@ top navbar link management.
 
 
 use sauron::prelude::*;
-use crate::messages::GoToPage::GoToPageSigned;
 use crate::messages::{Msg};
 use crate::app::App;
 use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_content}, displaying_conversation};
 use crate::experimental_examples::imaginary_friends;
-use crate::list_of_pages::{Page,SignedPage,OtherPage, list_of_unsigned_pages};
+use crate::list_of_pages::{Page,SignedPage,UnsignedPage,OtherPage, list_of_unsigned_pages};
 use sauron::node;
 use crate::web_sys::console;
 
-fn show_nav_buttons(page : &Page)->Node<Msg>{
+type MSG = Msg;
+
+fn show_nav_button(page : &Page) -> Node<Msg>{
 match page{
     Page::PageSortUnsigned(UnsignedPage::Home) => {
         node!{
@@ -59,6 +60,7 @@ match page{
                 </li>
         }
     },
+    _ => panic!("Should match this unsigned page")
 }
 }
 
@@ -107,6 +109,7 @@ fn show_active_nav_button(page: &Page)->Node<Msg>{
                 </li>
         }
     },
+    _ => panic!("Shouldn't match this arm.")
 }
 }
 
@@ -118,7 +121,7 @@ pub fn display_top_navbar(current_page: &Page)-> Node<MSG>{
     let nav_buttons: Vec<Node<Msg>> = list_of_unsigned_pages
         .iter()
         .map(|pagex| {
-            if *pagex == current_page {
+            if *pagex == *current_page {
                 show_active_nav_button(pagex)
             } else {
                 show_nav_button(pagex)
@@ -134,7 +137,7 @@ pub fn display_top_navbar(current_page: &Page)-> Node<MSG>{
     </button>
     <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
               <ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-nav">
-               {for el in nav_buttons:{
+               {for el in nav_buttons{
                 el
                }}
               </ul>

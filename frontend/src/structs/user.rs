@@ -1,8 +1,9 @@
 
-use crate::app::SwitchToPageSigned;
+
 pub use crate::structs::group_struct::GroupId;
 pub use crate::structs::languages;
 pub use crate::messages::*;
+pub use crate::list_of_pages::{Page, SignedPage, UnsignedPage, OtherPage};
 
 use self::languages::Languages;
 
@@ -81,6 +82,6 @@ impl UserChangingProfileData{
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry)
         }
         else {
-            Msg::SetPage(GoToPage::GoToPageOther(SwitchToPageOther::GoToSuccessfullyChangedUserProfileData))
+            Msg::SetPage(Page::PageSortOther(OtherPage::SuccessfullyChangedUserProfileData))
         }
     }}

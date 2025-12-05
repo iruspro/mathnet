@@ -1,3 +1,8 @@
+/* 
+List of available pages on MathNet.
+*/
+
+
 pub use crate::structs::chat_message::ChatId;
 
 #[derive(Debug,Clone,PartialEq)]
@@ -7,6 +12,7 @@ pub enum Page {
     PageSortOther(OtherPage),
 }
 
+/*
 impl Page {
     pub fn page_name_to_string(page_name : Page) -> String{
         match page_name{
@@ -37,6 +43,9 @@ impl Page {
     }
 }
 
+*/
+
+// Some kind of info pages for potential new users.
 #[derive(Debug,Clone,PartialEq)]
 pub enum UnsignedPage {
 Home,
@@ -47,6 +56,7 @@ AboutProject,
 PrivacyAndSecurity,
 }
 
+// Accessible only when user is logged in.
 #[derive(Debug,Clone,PartialEq)]
 pub enum SignedPage {
     AboutProject,
@@ -60,6 +70,8 @@ pub enum SignedPage {
     Conversation,
 }
 
+// Pages that provide system messages or other important tasks not strictly related 
+// to the main way of use.
 #[derive(Debug,Clone,PartialEq)]
 pub enum OtherPage{
 SuccessfullyChangedUserProfileData,
@@ -68,6 +80,8 @@ DeleteAccount,
 LogOut,
 }
 
+// This and the next array are for pattern matching. 
+// Should be the same as SignedPage and UnsignedPage enums.
 pub const list_of_signed_pages: [Page; 9] = [
     Page::PageSortSigned(SignedPage::AboutProject),
     Page::PageSortSigned(SignedPage::Docs),
