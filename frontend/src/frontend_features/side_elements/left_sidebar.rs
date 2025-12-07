@@ -7,66 +7,66 @@ left sidebar link management.
 use sauron::prelude::*;
 use crate::messages::{Msg};
 use crate::app::App;
-use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_content}, displaying_conversation};
+use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_content}};
 use crate::experimental_examples::imaginary_friends;
-use crate::list_of_pages::{Page,SignedPage,OtherPage, list_of_signed_pages};
+use crate::list_of_pages::{Page,SignedPage,OtherPage, SharedPage, list_of_signed_pages};
 use sauron::node;
 use crate::web_sys::console;
 
 fn show_nav_link(page : &Page)->Node<Msg>{
 match page{
-    Page::PageSortSigned(SignedPage::AboutProject) => {
+    Page::PageSortShared(SharedPage::AboutProject) => {
         node!{
              <li >
-                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::AboutProject))}>"About project"</a>
+                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortShared(SharedPage::AboutProject))}>"About project"</a>
                 </li>
         }
     },
-    Page::PageSortSigned(SignedPage::Docs) => {
+    Page::PageSortShared(SharedPage::Docs) => {
         node!{
              <li >
-                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::Docs))}>"Docs"</a>
+                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortShared(SharedPage::Docs))}>"Docs"</a>
                 </li>
         }
     },
-    Page::PageSortSigned(SignedPage::PrivacyAndSecurity) => {
+    Page::PageSortShared(SharedPage::PrivacyAndSecurity) => {
         node!{
              <li >
-                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::AboutProject))}>"Privacy and Security"</a>
+                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortShared(SharedPage::PrivacyAndSecurity))}>"Privacy and Security"</a>
                 </li>
         }
     },
     Page::PageSortSigned(SignedPage::Settings) => {
         node!{
              <li >
-                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::AboutProject))}>"Settings"</a>
+                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::Settings))}>"Settings"</a>
                 </li>
         }},
     Page::PageSortSigned(SignedPage::MathNetNotifications) => {
         node!{
              <li >
-                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::AboutProject))}>"MathNet Notifications"</a>
+                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::MathNetNotifications))}>"MathNet Notifications"</a>
                 </li>
         }
     },
     Page::PageSortSigned(SignedPage::UserProfile) => {
         node!{
              <li >
-                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::AboutProject))}>"User profile"</a>
+                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::UserProfile))}>"User profile"</a>
                 </li>
         }
     },
-    Page::PageSortSigned(SignedPage::GroupsList) => {
+    Page::PageSortSigned(SignedPage::GroupList) => {
         node!{
              <li >
-                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::AboutProject))}>"Group lists"</a>
+                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::GroupList))}>"Group lists"</a>
                 </li>
         }
     },
     Page::PageSortSigned(SignedPage::ChatWithFriends) => {
         node!{
              <li >
-                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::AboutProject))}>"Chat with Friends"</a>
+                  <a class="mylink" on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::ChatWithFriends))}>"Chat with Friends"</a>
                 </li>
         }
     },
@@ -77,21 +77,21 @@ match page{
 
 fn show_active_nav_link(page : &Page)->Node<Msg>{
    match page{
-    Page::PageSortSigned(SignedPage::AboutProject) => {
+    Page::PageSortShared(SharedPage::AboutProject) => {
         node!{
              <li >
                   <a class="mycurrentlyactivelink" >"About project"</a>
                 </li>
         }
     },
-    Page::PageSortSigned(SignedPage::Docs) => {
+    Page::PageSortShared(SharedPage::Docs) => {
         node!{
              <li >
                   <a class="mycurrentlyactivelink" >"Docs"</a>
                 </li>
         }
     },
-    Page::PageSortSigned(SignedPage::PrivacyAndSecurity) => {
+    Page::PageSortShared(SharedPage::PrivacyAndSecurity) => {
         node!{
              <li >
                   <a class="mycurrentlyactivelink" >"Privacy and Security"</a>
@@ -118,7 +118,7 @@ fn show_active_nav_link(page : &Page)->Node<Msg>{
                 </li>
         }
     },
-    Page::PageSortSigned(SignedPage::GroupsList) => {
+    Page::PageSortSigned(SignedPage::GroupList) => {
         node!{
              <li >
                   <a class="mycurrentlyactivelink" >"Group lists"</a>

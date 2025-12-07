@@ -1,31 +1,28 @@
-use crate::app::Msg;
+use crate::app::{Msg, App};
 type MSG = Msg;
-use crate::list_of_pages::{OtherPage, Page};
-use crate::pages::delete_account::delete_account_display;
-use crate::pages::{chat_with_friends, mathnet_notifications, privacy_and_security};
+use crate::list_of_pages::{OtherPage, Page, SignedPage, UnsignedPage, SharedPage};
+use crate::pages::{delete_account, conversation_list, mathnet_notifications, privacy_and_security};
 use crate::pages::{
     about_project::about_project_display,
-    base_of_exercises::base_of_exercises_display(),
-    chat_with_friends::chat_with_friends_display(),
-    conversation::conversation_display(),
-    delete_account::delete_account_display(),
-    docs::docs_display(),
-    exercise::exercise_display(),
-    groups::group_display(),
-    home::home_display(),
-    learning_resources::learning_resources_display(),
-    mathnet_notifications::mathnet_notifications_display(),
-    privacy_and_security::privacy_and_security_display(),
-    register::register_display(),
-    settings::settings_display(),
-    sign_in::sign_in_display();
+    base_of_exercises::base_of_exercises_display,
+    conversation_list::chat_with_friends_display,
+    conversation::conversation_display,
+    delete_account::delete_account_display,
+    docs::docs_display,
+    exercise::exercise_display,
+    group::group_display,
+    home::home_display,
+    learning_resources::learning_resources_display,
+    mathnet_notifications::mathnet_notifications_display,
+    privacy_and_security::privacy_and_security_display,
+    register::register_display,
+    settings::settings_display,
+    sign_in::sign_in_display,
     sign_out::sign_out_display,
     user_profile::user_profile_display,
-
-
-
-
+    group_list::group_list_display,
 }
+
 use sauron::prelude::*;
 
 pub fn display_content(page: &Page) -> Node<MSG>{
@@ -33,7 +30,7 @@ match page {
     Page::PageSortSigned(SignedPage::BaseOfExercises) => about_project_display(),
     Page::PageSortSigned(SignedPage::BaseOfLearningResources) => base_of_exercises_display(),
     Page::PageSortSigned(SignedPage::ChatWithFriends) => chat_with_friends_display(),
-    Page::PageSortSigned(SignedPage::Conversation) => conversation_display(),
+    Page::PageSortSigned(SignedPage::Conversation) => conversation_display(app),
     Page::PageSortSigned(SignedPage::Exercise) => exercise_display(),
     Page::PageSortSigned(SignedPage::Group) => group_display(),
     Page::PageSortSigned(SignedPage::GroupList) => group_list_display(),

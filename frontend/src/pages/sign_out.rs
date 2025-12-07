@@ -3,7 +3,7 @@ use crate::messages::{Msg};
 use crate::list_of_pages::{Page::{PageSortSigned, PageSortUnsigned}, SignedPage, UnsignedPage};
 use crate::list_of_pages::Page;
 
-pub fn view() -> Node<Msg> {
+pub fn sign_out_display() -> Node<Msg> {
     node! {
         <main>
 <div class="position-relative">

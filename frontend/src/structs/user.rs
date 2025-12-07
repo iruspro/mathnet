@@ -77,6 +77,8 @@ impl UserChangingProfileData{
         new_user_password_confirmation : String::new(),
         }
     }
+
+    // FIX: manage unsuccessfull pages so that the alert box shows on the same page.
     pub fn confirm_changes(self)-> Msg {
         if self.new_user_password != self.new_user_password_confirmation {
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry)

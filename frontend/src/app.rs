@@ -5,18 +5,19 @@ Main frontend file.
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
+use crate::pages::pages_templates_and_routing::display_content_function::display_content;
 use crate::{list_of_pages::OtherPage, logics::registration_logics::check_registration_validity, messages::*};
 pub use crate::messages::{Msg, UserLoginAttempt,UserRegister};
 use crate::list_of_pages::{Page,UnsignedPage,SignedPage};
 use crate::pages::pages_templates_and_routing::{signed_in_page_template::signed_in_page_template, 
                                                 signed_out_page_template::signed_out_page_template,
-                                                other_page_router::other_page_template,
+                                                other_page_router::other_page_router,
                                                 shared_page_router::shared_page_router};
 use sauron::dom::Program;
 use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData},group_struct::*};
 use crate::logics::{login_logics,registration_logics};
 use crate::web_sys::console;
-use crate::structs::chat_message::ChatId;
+use crate::structs::chat_message::ConversationId;
 use crate::frontend_features::delete_account::delete_account;
 
 
@@ -29,7 +30,7 @@ pub struct App {
     pub user_register_data : UserRegisterData,
     pub user_data : User,
     pub user_changing_data_structure : UserChangingProfileData,
-    pub current_conversation : Option<ChatId>,
+    pub current_conversation : Option<ConversationId>,
     pub reload_current_page : bool,
 }
 
@@ -90,11 +91,11 @@ impl Application for App {
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {self.current_page = Page::PageSortOther(OtherPage::DeleteAccount)},
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => self.current_page = Page::PageSortOther(OtherPage::RetryChangingUserProfileData),
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges) => {},
-            Msg::SearchFriend(searched_person) => {unimplemented!()},
+            Msg::SearchFriend(searched_person) => {},
             Msg::NoAction => {unimplemented!()},
             Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
-            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(chat_id) => {self.current_conversation = Some(chat_id); self.current_page = Page::PageSortSigned(SignedPage::Conversation)},
-            Msg::SetConversationToNone => {self.current_conversation = None; self.current_page = Page::PageSortSigned(SignedPage::ChatWithFriends)},
+            Msg::UserWantsToChatWithSomePersonViaPersonalConversation(conversation_id) => {self.current_conversation = Some(conversation_id); self.current_page = Page::PageSortSigned(SignedPage::Conversation)},
+            Msg::SetConversationToNone => {self.current_conversation = None; self.current_page = Page::PageSortSigned(SignedPage::ConversationWithFriends)},
             Msg::NoOp =>{},
             Msg::SendConversationMessage(conversation_message) => {},
             Msg::DeleteAccount => {
@@ -110,11 +111,12 @@ impl Application for App {
         // TODO: fix variants so that they will match simplified variants of page names
         // The change from 'view' methods to just triggering page_templates and insertion 
         // of pages' content is also needed.
-        match &self.current_page {
-            Page::PageSortUnsigned(page) => signed_out_page_template(&Page::PageSortUnsigned(page.clone())),
-            Page::PageSortSigned(page) => signed_in_page_template(&Page::PageSortSigned(page.clone())),
-            Page::PageSortShared(page) => shared_page_router(self,&Page::PageSortShared(page.clone())),
-            Page::PageSortOther(page) => other_page_template(self, &Page::PageSortOther(page.clone())),
+        match self.current_page {
+            Page::PageSortUnsigned(_) => signed_out_page_template(&self.current_page),
+            Page::PageSortSigned(_)   => signed_in_page_template(&self.current_page),
+            Page::PageSortShared(_)   => shared_page_router(self, &self.current_page),
+            Page::PageSortOther(_)    => other_page_router(self, &self.current_page), // Will be fixed when implementing other_page_router
+
         }
     }
 

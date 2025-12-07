@@ -6,6 +6,6 @@ use crate::web_sys::console;
 
 pub fn check_login_attempt_validity(app : &mut App){
     console::log_1(&"Hello from Rust!".into());
-    app.current_page = Page::PageSortSigned(SignedPage::GroupsList);
+    app.current_page = Page::PageSortSigned(SignedPage::GroupList);
     console::log_1(&"Hello from Rust2!".into());
 }

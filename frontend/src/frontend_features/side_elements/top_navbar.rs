@@ -8,9 +8,8 @@ top navbar link management.
 use sauron::prelude::*;
 use crate::messages::{Msg};
 use crate::app::App;
-use crate::logics::{displaying_friends::{show_friends_at_sidebar,show_chats_in_content}, displaying_conversation};
 use crate::experimental_examples::imaginary_friends;
-use crate::list_of_pages::{Page,SignedPage,UnsignedPage,OtherPage, list_of_unsigned_pages};
+use crate::list_of_pages::{Page,SignedPage,UnsignedPage,OtherPage, SharedPage, list_of_unsigned_pages};
 use sauron::node;
 use crate::web_sys::console;
 
@@ -25,10 +24,10 @@ match page{
                 </li>
         }
     },
-    Page::PageSortUnsigned(UnsignedPage::LogIn) => {
+    Page::PageSortUnsigned(UnsignedPage::SignIn) => {
         node!{
             <li class="nav-item">
-                  <button class="nav-link btn btn-link" type="button" on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::LogIn))}>"Log in"</button>
+                  <button class="nav-link btn btn-link" type="button" on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::SignIn))}>"Sign in"</button>
                 </li>
         }
     },
@@ -39,24 +38,24 @@ match page{
                 </li>
         }
     },
-    Page::PageSortUnsigned(UnsignedPage::Docs) =>{
+    Page::PageSortShared(SharedPage::Docs) =>{
         node!{
             <li class="nav-item">
-                  <button class="nav-link btn btn-link" type="button" on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::Docs))}>"Docs"</button>
+                  <button class="nav-link btn btn-link" type="button" on_click=|_|{Msg::SetPage(Page::PageSortShared(SharedPage::Docs))}>"Docs"</button>
                 </li>
         }
     } ,
-    Page::PageSortUnsigned(UnsignedPage::AboutProject) => {
+    Page::PageSortShared(SharedPage::AboutProject) => {
         node!{
             <li class="nav-item">
-                  <button class="nav-link btn btn-link" type="button" on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::AboutProject))}>"About project"</button>
+                  <button class="nav-link btn btn-link" type="button" on_click=|_|{Msg::SetPage(Page::PageSortShared(SharedPage::AboutProject))}>"About project"</button>
                 </li>
         }
     },
-    Page::PageSortUnsigned(UnsignedPage::PrivacyAndSecurity) => {
+    Page::PageSortShared(SharedPage::PrivacyAndSecurity) => {
         node!{
             <li class="nav-item">
-                  <button class="nav-link btn btn-link" type="button" on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::PrivacyAndSecurity))}>"Privacy and Security"</button>
+                  <button class="nav-link btn btn-link" type="button" on_click=|_|{Msg::SetPage(Page::PageSortShared(SharedPage::PrivacyAndSecurity))}>"Privacy and Security"</button>
                 </li>
         }
     },
@@ -74,10 +73,10 @@ fn show_active_nav_button(page: &Page)->Node<Msg>{
                 </li>
         }
     },
-    Page::PageSortUnsigned(UnsignedPage::LogIn) => {
+    Page::PageSortUnsigned(UnsignedPage::SignIn) => {
         node!{
             <li class="nav-item">
-                  <button class="nav-link btn btn-link" class="myactivenavbutton" type="button" on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::LogIn))}>"Log in"</button>
+                  <button class="nav-link btn btn-link" class="myactivenavbutton" type="button" on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::SignIn))}>"Log in"</button>
                 </li>
         }
     },
@@ -88,24 +87,24 @@ fn show_active_nav_button(page: &Page)->Node<Msg>{
                 </li>
         }
     },
-    Page::PageSortUnsigned(UnsignedPage::Docs) =>{
+    Page::PageSortShared(SharedPage::Docs) =>{
         node!{
             <li class="nav-item">
-                  <button class="nav-link btn btn-link" type="button" on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::Docs))}>"Docs"</button>
+                  <button class="nav-link btn btn-link" type="button" on_click=|_|{Msg::SetPage(Page::PageSortShared(SharedPage::Docs))}>"Docs"</button>
                 </li>
         }
     } ,
-    Page::PageSortUnsigned(UnsignedPage::AboutProject) => {
+    Page::PageSortShared(SharedPage::AboutProject) => {
         node!{
             <li class="nav-item">
-                  <button class="nav-link btn btn-link" class="myactivenavbutton" type="button" on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::AboutProject))}>"About project"</button>
+                  <button class="nav-link btn btn-link" class="myactivenavbutton" type="button" on_click=|_|{Msg::SetPage(Page::PageSortShared(SharedPage::AboutProject))}>"About project"</button>
                 </li>
         }
     },
-    Page::PageSortUnsigned(UnsignedPage::PrivacyAndSecurity) => {
+    Page::PageSortShared(SharedPage::PrivacyAndSecurity) => {
         node!{
             <li class="nav-item">
-                  <button class="nav-link btn btn-link"  class="myactivenavbutton" type="button" on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::PrivacyAndSecurity))}>"Privacy and Security"</button>
+                  <button class="nav-link btn btn-link"  class="myactivenavbutton" type="button" on_click=|_|{Msg::SetPage(Page::PageSortShared(SharedPage::PrivacyAndSecurity))}>"Privacy and Security"</button>
                 </li>
         }
     },

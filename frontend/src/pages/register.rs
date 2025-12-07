@@ -1,42 +1,14 @@
 use sauron::prelude::*;
-use crate::messages::{Msg,GoToPage,UserRegister,SwitchToPageSigned,SwitchToPageUnsigned};
+use crate::messages::{Msg,UserRegister};
 use sauron::html::{meta,title,link};
 
-pub fn view() -> Node<Msg> {
+pub fn register_display() -> Node<Msg> {
   let mut username : String = String::new();
   let mut userpassword : String = String::new();
   let mut userpassword_again : String = String::new();
   let mut usermail : String = String::new();
 
-    node! {
-      <main>
-    <nav class="navbar navbar-expand navbar-dark bg-dark">
-    <div class="container-fluid">
-        <a class="navbar-brand" href="#">"MathNet"</a>
-        <div class="collapse navbar-collapse">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-            <li class="nav-item">
-            <a class="nav-link" on_click=|_|{Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToHomePage))}>"Home page"</a>
-        </li>
-        <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToDocsPage))}>"Docs"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToLoginPage))}>"Log in"</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="#">"Register"</a>
-                </li>
-                <li class="nav-item">
-                <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToAboutProject))}>"About this project"</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" on_click=|_| {Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToPrivacyAndSecurity))}>"Privacy and security"</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-    </nav>
+    node! { 
     <div class="container-fluid">
     <div class="row">
       <div class="col-2">
@@ -113,5 +85,4 @@ pub fn view() -> Node<Msg> {
     </div>
   </div>
   </div>
-  </main>
   }}

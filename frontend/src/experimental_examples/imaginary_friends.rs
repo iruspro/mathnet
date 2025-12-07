@@ -1,4 +1,4 @@
-use crate::structs::chat_message::ChatChannel;
+
 pub use crate::structs::friends_at_sidebar::*;
 use crate::structs::user;
 

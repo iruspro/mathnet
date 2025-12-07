@@ -4,7 +4,7 @@ How to use MathnNet, link to GitHub repository
 use sauron::prelude::*;
 use crate::messages::Msg;
 
-fn docs_display() -> Node<Msg> {
+pub fn docs_display() -> Node<Msg> {
     node!{
         <h1>
             "Documentation and how to use MathNet"

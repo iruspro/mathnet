@@ -3,7 +3,6 @@ use crate::experimental_examples::imaginary_chat_messages::dummy_chat_messages;
 pub use crate::messages::*;
 
 pub use crate::structs::user::{User,UserId,new};
-pub use crate::structs::chat_message::{ChatId,ChatMessage};
 pub use crate::structs::friends_at_sidebar::{FriendAtSidebar,ShowChats};
 pub use sauron::{node,text};
 pub use crate::app::App;

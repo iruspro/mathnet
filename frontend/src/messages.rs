@@ -1,5 +1,4 @@
 use crate::structs::user::{UserLoginData, UserRegisterData, get_user_register_data,UserChangingProfileData,UserDemandsUserProfileDataChanges,UserId};
-use crate::structs::chat_message::ChatId;
 use crate::list_of_pages::Page;
 
 #[derive(Debug,Clone)]
@@ -11,7 +10,7 @@ pub enum Msg {
     SearchFriend(String),
     NoAction,
     UserWantsToChatWithSomePerson(UserId),
-    UserWantsToChatWithSomePersonViaPersonalConversation(ChatId),
+    UserWantsToChatWithSomePersonViaPersonalConversation(u128),
     SetConversationToNone,
     NoOp,
     SendConversationMessage(String),
