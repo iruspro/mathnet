@@ -1,15 +1,14 @@
+/*
+Here conversation messages are designed. 
+
+*/
+
 pub use crate::structs::user;
 pub use crate::structs::emojis_and_reactions;
 pub use crate::logics::date_and_time::{DateAndTime, display_current_date_and_time};
 pub use crate::messages::Msg;
 use sauron::prelude::*;
 
-
-
-pub struct ConversationChannel{
-    Conversation_id : u128,
-    Conversation_messages_vec : Vec<ConversationMessage>,
-}
 
 
 /* ConversationMessage represents a message that some person can 
@@ -46,4 +45,12 @@ impl ConversationMessage{
 </div>
 
     }}
+}
+
+pub fn conversation_message_box_display(conversation_message: ConversationMessage) -> Node<Msg>{
+  node!{<div class="conversation_message_box">
+    <div class="conversation_date_and_time">{text!("Send: {}", conversation_message.date_and_time.date_and_time_to_string())}</div>
+  </div>
+  <div class="conversation_message">{text!("{}",conversation_message.content)}</div> 
+}
 }

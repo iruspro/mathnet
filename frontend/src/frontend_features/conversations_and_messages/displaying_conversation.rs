@@ -15,7 +15,10 @@ pub use crate::app::App;
 pub use crate::communication_with_server::get_conversation::get_whole_conversation_from_server;
 pub use crate::list_of_pages::Page;
 
-
+pub struct ConversationChannel{
+    Conversation_id : u128,
+    Conversation_messages_vec : Vec<ConversationMessage>,
+}
 
 pub fn show_conversation(conversation_id : u128, current_page: &Page ) -> Node<Msg>{
     let tuple_of_vec_of_chat_messages_and_friend_name = get_whole_conversation_from_server(conversation_id);

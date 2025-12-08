@@ -70,7 +70,7 @@ fn friend_search_result_box(search_result: FriendSearchQuery) -> Node<Msg> {
         }
         FriendQueryStatus::Blocked => {
             node!{
-                <div class="single_friend_search_box">
+                <div class="single-friend-search-box">
                 text!("{}",search_result.name)
                 <button on_click=|_|{Msg::UnblockFriend}> "Unblock" </button>
                 </div>

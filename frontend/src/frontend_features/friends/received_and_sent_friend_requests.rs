@@ -8,14 +8,14 @@ use crate::{list_of_pages::{SignedPage, Page}};
 use crate::{messages::Msg};
 
 #[derive(Clone, PartialEq, Eq, Ord, PartialOrd, Debug)]
-enum ReceivedOrSent{
+enum ReceivedOrSentFriendRequest{
     Received,
     Sent
 }
 
 #[derive(Clone, PartialEq, Debug)]
 struct FriendRequest{
-    friend_request_status: ReceivedOrSent,
+    friend_request_status: ReceivedOrSentFriendRequest,
     person_name: String,
     person_id: u128
 
@@ -50,7 +50,7 @@ pub fn search_results(search_results: Vec<FriendRequest>) -> Node<Msg> {
             node!{
                 <div class="scrollable-box">
                     {for result in search_results{
-                        friend_search_result_box(result)
+                        friend_request_box(result)
                     }}
                 </div>
             }}
@@ -58,24 +58,19 @@ pub fn search_results(search_results: Vec<FriendRequest>) -> Node<Msg> {
 }
 
 fn friend_request_box(search_result: FriendRequest) -> Node<Msg> {
-    match search_result.friend_query_status {
-        FriendQueryStatus::YourFriend => {
-            node!{
-                <div class="single_friend_search_box">
-                text!("{}",search_result.name)
-                <button on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::Conversation))}> "Chat" </button>
-                <button on_click=|_|{Msg::BlockFriend}>"Block"</button>
-                <button on_click=|_|{Msg::RemoveFriend}>"Remove"</button>
-                </div>
-            }
+    match search_result.friend_request_status {
+        ReceivedOrSentFriendRequest::Received => {
+            node!{<div class="single-friend-search-box">
+                text!("{}", search_result.person_name)
+                <button on_click=|_|{Msg::AcceptFriendRequest}>"Accept"</button>
+                <button on_click=|_|{Msg::RejectFriendRequest}>"Reject"</button>
+            </div>}
         }
-        FriendQueryStatus::Blocked => {
-            node!{
-                <div class="single_friend_search_box">
-                text!("{}",search_result.name)
-                <button on_click=|_|{Msg::UnblockFriend}> "Unblock" </button>
-                </div>
-            }
+        ReceivedOrSentFriendRequest::Sent => {
+            node!{<div class="single-friend-search-box">
+                text!("{}", search_result.person_name)
+                <button on_click=|_|{Msg::CancelFriendRequest}>"Cancel"</button>              
+            </div>}
         }
     }
 

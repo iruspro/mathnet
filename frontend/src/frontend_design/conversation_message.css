@@ -1,0 +1,33 @@
+
+.conversation_message_box{
+    position: relative;
+    margin-left: 20%;
+    margin-right: 20%;
+}
+
+/*Values may be adjusted in the future.*/
+.conversation_message{
+    position:relative;
+    margin-left: 20%;
+    margin-right: 20%;
+    border:5px;
+    border-color: green;
+    padding: 3px;
+}
+
+/*
+Features at each conversation message (inside conversation-message-box): 
+- latex on/off,
+- emojis bar,
+- seen by ... when
+- date and time
+- options: reply, edit (if you are the sender).
+*/
+
+.conversation_date_and_time{
+    color: grey;
+    text-align: center;
+    position:relative;
+}
+
+/* I am not sure how to make position relative to another css element, but 

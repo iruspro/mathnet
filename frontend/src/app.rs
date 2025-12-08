@@ -77,6 +77,10 @@ impl Application for App {
     type MSG = Msg;
 
     // Update application's state based on a message it receives.
+    /*
+    TODO: include missing messages and make subsections based on 
+    their functionality.
+    */
     fn update(&mut self, msg: Self::MSG) -> Cmd<Msg> {
         match msg {
             
@@ -113,6 +117,9 @@ impl Application for App {
             }
             Msg::UpdatePersonSearch(s) => {self.person_search_query = s},
             Msg::UpdateFriendSearch(s) => {self.friend_search_query = s}
+            Msg::AcceptFriendRequest => {},
+            Msg::RejectFriendRequest => {},
+            Msg::CancelFriendRequest => {},        
         }
         Cmd::none()
     }

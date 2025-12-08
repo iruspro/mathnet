@@ -75,10 +75,10 @@ Make sure code is consistent across mathnet project.
 - ~~Enable people search.~~
 - ~~Enable friend search.~~
 - ~~Enable friend adding mechanism.~~
-- Remove friend.
-- Block friend.
+- ~~Remove friend.~~
+- ~~Block friend.~~
 - Block people.
-- List of received and sent friend requests.
+- ~~List of received and sent friend requests.~~
 
 ### Groups
 - Enable group search.
