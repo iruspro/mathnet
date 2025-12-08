@@ -7,7 +7,7 @@ pub enum Msg {
     LoginAttempt(UserLoginAttempt),
     Registration(UserRegister),
     UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges),
-    SearchFriend(String),
+    SearchFriend,
     NoAction,
     UserWantsToChatWithSomePerson(UserId),
     UserWantsToChatWithSomePersonViaPersonalConversation(u128),
@@ -15,6 +15,14 @@ pub enum Msg {
     NoOp,
     SendConversationMessage(String),
     DeleteAccount,
+    UpdatePersonSearch(String),
+    SendFriendRequest,
+    UnsendFriendRequest,
+    UpdateFriendSearch(String),
+    UnblockFriend,
+    BlockFriend,
+    RemoveFriend
+
 }
 
 

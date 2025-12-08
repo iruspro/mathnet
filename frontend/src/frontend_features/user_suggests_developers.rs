@@ -105,7 +105,7 @@ pub fn view() -> Node<Msg> {
                                 <form>
                                 <div class="d-grid gap-2 col-6 mx-auto">
                                 <div class="form-floating">
-  <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" on_input=|input|{Msg::SendComment(input.value())}></textarea>
+  <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" on_input=|input|{Msg::NoAction}></textarea>
   <label for="floatingTextarea">"Comments"</label>
 </div>
 </div>

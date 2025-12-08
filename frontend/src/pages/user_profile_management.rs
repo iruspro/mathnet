@@ -5,7 +5,7 @@ pub use crate::structs::user;
 pub use crate::app::App;
 
 
-pub fn user_profile_display(current_state_of_app : &App) -> Node<Msg> {
+pub fn user_profile_management_display(current_state_of_app : &App) -> Node<Msg> {
     let mut user = user::new();
     let mut user_profile_changes = UserChangingProfileData::new();
     node! {

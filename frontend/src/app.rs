@@ -17,8 +17,9 @@ use sauron::dom::Program;
 use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData},group_struct::*};
 use crate::logics::{login_logics,registration_logics};
 use crate::web_sys::console;
-use crate::structs::chat_message::ConversationId;
 use crate::frontend_features::delete_account::delete_account;
+use crate::frontend_features::friends::find_people::FriendSearchQuery;
+use crate::frontend_features::friends::find_people::PersonSearchQuery;
 
 
 // Application state
@@ -30,8 +31,12 @@ pub struct App {
     pub user_register_data : UserRegisterData,
     pub user_data : User,
     pub user_changing_data_structure : UserChangingProfileData,
-    pub current_conversation : Option<ConversationId>,
+    pub current_conversation : Option<u128>,
     pub reload_current_page : bool,
+    pub person_search_query : String,
+    pub person_search_results: Vec<PersonSearchQuery>,
+    pub friend_search_query: String,
+    pub friend_search_results: Vec<FriendSearchQuery>
 }
 
 impl App {
@@ -45,6 +50,10 @@ impl App {
             user_changing_data_structure : crate::structs::user::UserChangingProfileData::new(),
             current_conversation : None,
             reload_current_page : false,
+            person_search_query: String::new(),
+            person_search_results: Vec::new(),
+            friend_search_query: String::new(),
+            friend_search_results: Vec::new()
         }
     }
     //fn parse_location() -> Page {
@@ -91,7 +100,7 @@ impl Application for App {
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {self.current_page = Page::PageSortOther(OtherPage::DeleteAccount)},
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => self.current_page = Page::PageSortOther(OtherPage::RetryChangingUserProfileData),
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges) => {},
-            Msg::SearchFriend(searched_person) => {},
+            Msg::SearchFriend => {},
             Msg::NoAction => {unimplemented!()},
             Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
             Msg::UserWantsToChatWithSomePersonViaPersonalConversation(conversation_id) => {self.current_conversation = Some(conversation_id); self.current_page = Page::PageSortSigned(SignedPage::Conversation)},
@@ -102,6 +111,8 @@ impl Application for App {
                 self.current_page = Page::PageSortUnsigned(UnsignedPage::Home);
                 delete_account();
             }
+            Msg::UpdatePersonSearch(s) => {self.person_search_query = s},
+            Msg::UpdateFriendSearch(s) => {self.friend_search_query = s}
         }
         Cmd::none()
     }

@@ -1,0 +1,21 @@
+#friend_search_input{
+    margin-left: 30%;
+    margin-right: 30%;
+    position: relative
+}
+
+.scrollable-box{
+    overflow:scroll;
+    margin-left: 15%;
+    margin-right: 15%;
+    height: 10cm;
+    position: relative;
+}
+
+.single-friend-search-box{
+    border-width: 3px;
+    border-color: green;
+    padding: 10px;
+    margin: 7px;
+    /* Somehow arbitrary values - need to adjust them when needeed.*/
+}

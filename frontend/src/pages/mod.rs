@@ -15,7 +15,7 @@ pub mod mathnet_notifications;
 pub mod privacy_and_security;
 pub mod register;
 pub mod settings;
-pub mod user_profile;
+pub mod user_profile_management;
 pub mod base_of_learning_resources;
 pub mod event_list;
 pub mod event;
@@ -23,4 +23,5 @@ pub mod group_list;
 pub mod learning_resources;
 pub mod project;
 pub mod project_list;
+pub mod user_public_profile;
 

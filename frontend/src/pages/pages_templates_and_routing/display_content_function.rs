@@ -19,7 +19,7 @@ use crate::pages::{
     settings::settings_display,
     sign_in::sign_in_display,
     sign_out::sign_out_display,
-    user_profile::user_profile_display,
+    user_profile_management::user_profile_display,
     group_list::group_list_display,
 }
 

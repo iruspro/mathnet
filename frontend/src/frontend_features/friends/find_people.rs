@@ -9,33 +9,34 @@ use crate::{messages::Msg};
 
 
 #[derive(Clone, PartialEq, Debug)]
-enum FriendQueryStatus{
-    YourFriend,
-    Blocked,
+enum PersonQueryStatus{
+    NotYourFriend,
+    FriendRequestSent,
+    YourFriend
 }
 
 #[derive(Clone, PartialEq, Debug)]
-pub struct FriendSearchQuery{
+pub struct PersonSearchQuery{
     name: String,
     user_id: u128, 
-    friend_query_status: FriendQueryStatus,
+    person_query_status: PersonQueryStatus
 }
 
-
-pub fn find_friend() -> Node<Msg>{
+pub fn find_person() -> Node<Msg>{
     node!{<form>
             <textarea
-            id="friend_search_input"
-                placeholder="Find your friends"
-                on_input=|input: InputEvent| {Msg::UpdateFriendSearch(input.value())}></textarea>
+            id="person_search_input"
+                placeholder="Find people you want!"
+                on_input=|input: InputEvent| {
+                    Msg::UpdatePersonSearch(input.value())
+                }></textarea>
 
             <button on_click= move |_| { Msg::SearchFriend }>"Find"</button>
-        <label for="friend_search_input">"Find people"</label>
+        <label for="person_search_input">"Find people"</label>
         </form>
 }}
 
-// Meant for getting search results from database.
-pub fn search_results(search_results: Vec<FriendSearchQuery>) -> Node<Msg> {
+pub fn search_results(search_results: Vec<PersonSearchQuery>) -> Node<Msg> {
     match search_results {
        v if v == Vec::new() => {
         node!{
@@ -49,30 +50,35 @@ pub fn search_results(search_results: Vec<FriendSearchQuery>) -> Node<Msg> {
             node!{
                 <div class="scrollable-box">
                     {for result in search_results{
-                        friend_search_result_box(result)
+                        person_search_result_box(result)
                     }}
                 </div>
             }}
     }
 }
 
-fn friend_search_result_box(search_result: FriendSearchQuery) -> Node<Msg> {
-    match search_result.friend_query_status {
-        FriendQueryStatus::YourFriend => {
+fn person_search_result_box(search_result: PersonSearchQuery) -> Node<Msg> {
+    match search_result.person_query_status {
+        PersonQueryStatus::NotYourFriend => {
             node!{
                 <div class="single_friend_search_box">
                 text!("{}",search_result.name)
-                <button on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::Conversation))}> "Chat" </button>
-                <button on_click=|_|{Msg::BlockFriend}>"Block"</button>
-                <button on_click=|_|{Msg::RemoveFriend}>"Remove"</button>
+                <button on_click=|_|{Msg::SendFriendRequest}> "Send friend request" </button>
                 </div>
             }
         }
-        FriendQueryStatus::Blocked => {
+        PersonQueryStatus::FriendRequestSent => {
             node!{
                 <div class="single_friend_search_box">
                 text!("{}",search_result.name)
-                <button on_click=|_|{Msg::UnblockFriend}> "Unblock" </button>
+                <button on_click=|_|{Msg::UnsendFriendRequest}> "Unsend friend request" </button>
+                </div>
+            }
+        }
+        PersonQueryStatus::YourFriend => {
+            node!{<div class="single_friend_search_box">
+                text!("{}",search_result.name)
+                <button on_click=|_|{Msg::SetPage(Page::PageSortSigned(SignedPage::Conversation))}> "Chat with them!" </button> // Conversation page hasn't been prepared yet.
                 </div>
             }
         }

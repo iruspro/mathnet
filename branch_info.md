@@ -69,12 +69,16 @@ Make sure code is consistent across mathnet project.
 - Filter chat messages in a conversation based on date.
 - Emojis.
 - User responses.
-- Extract message builder to another file.
+- ~~Extract message builder to another file.~~
 
 ### Friends
-- Enable people search.
-- Enable friend adding mechanism.
+- ~~Enable people search.~~
+- ~~Enable friend search.~~
+- ~~Enable friend adding mechanism.~~
+- Remove friend.
+- Block friend.
 - Block people.
+- List of received and sent friend requests.
 
 ### Groups
 - Enable group search.
@@ -99,7 +103,18 @@ Make sure code is consistent across mathnet project.
 - Enable writing latex
 
 ### Project
-- Add a page for projects
+- Add a page for projects: similar to groups, but for projects.
+
+### Other
+- Write `Search` trait which would include functionalities for searching among
+various cathegories.
+
+---
+Important note to these goals is that they are **design parts** of available 
+functionalitites, i. e. they won't actually work untill communication with 
+the backend
+is created. After completing these aims functions that send and receive to 
+and from the backend will still need to be written. 
 
 
 
