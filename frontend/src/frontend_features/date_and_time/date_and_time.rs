@@ -1,5 +1,6 @@
 use chrono::prelude::*;
 
+#[derive(Debug)]
 pub enum DateAndTime{
     MathNetDate(String)
 }

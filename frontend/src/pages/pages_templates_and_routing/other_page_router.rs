@@ -6,7 +6,7 @@ use sauron::prelude::*;
 use crate::messages::Msg;
 
 pub fn other_page_router(app: & App, page: &Page) -> Node<Msg> {
-    display_content(page)
+    display_content(page, app)
 
     
 }

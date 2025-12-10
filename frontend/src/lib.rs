@@ -3,6 +3,7 @@ This module includes router (currently
 the project is relatively small.)
 */
 
+#[allow(warnings)]
 pub mod app;
 pub mod messages;
 pub mod router;

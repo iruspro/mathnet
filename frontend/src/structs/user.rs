@@ -1,13 +1,12 @@
 
 
-pub use crate::structs::group_struct::GroupId;
+
 pub use crate::structs::languages;
 pub use crate::messages::*;
 pub use crate::list_of_pages::{Page, SignedPage, UnsignedPage, OtherPage};
 
 use self::languages::Languages;
 
-use super::friends_at_sidebar::FriendAtSidebar;
 #[derive(Debug,Clone)]
 pub struct UserLoginData{
     pub user_name : String,
@@ -37,13 +36,13 @@ pub struct User{
     pub user_name : String,
     pub user_password : String,
     pub user_email: String,
-    pub user_friends : Vec<FriendAtSidebar>,
-    pub user_groups: Vec<GroupId>,
+    // pub user_friends : Vec<FriendAtSidebar>,
+    // pub user_groups: Vec<GroupId>,
     pub language : Languages,
 }
 
 pub fn new() -> User {
-    User { user_id: UserId::UserIdNumber(1), user_name: "John Doe".to_string(), user_password: "MathNetIsTheBest!".to_string(), user_email: "john.doe@gmail.com".to_string(), user_friends: vec![], user_groups: vec![], language: Languages::English}
+    User { user_id: UserId::UserIdNumber(1), user_name: "John Doe".to_string(), user_password: "MathNetIsTheBest!".to_string(), user_email: "john.doe@gmail.com".to_string(), language: Languages::English}
 }
 
 #[derive(Debug,Clone)]
@@ -84,6 +83,7 @@ impl UserChangingProfileData{
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry)
         }
         else {
-            Msg::SetPage(Page::PageSortOther(OtherPage::SuccessfullyChangedUserProfileData))
+            // Msg::SetPage(Page::PageSortOther(OtherPage::SuccessfullyChangedUserProfileData))
+            Msg::NoAction
         }
     }}

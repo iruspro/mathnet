@@ -14,11 +14,11 @@ use crate::pages::pages_templates_and_routing::{signed_in_page_template::signed_
                                                 other_page_router::other_page_router,
                                                 shared_page_router::shared_page_router};
 use sauron::dom::Program;
-use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData},group_struct::*};
+use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData}};
 use crate::logics::{login_logics,registration_logics};
 use crate::web_sys::console;
 use crate::frontend_features::delete_account::delete_account;
-use crate::frontend_features::friends::find_people::FriendSearchQuery;
+use crate::frontend_features::friends::find_friends::FriendSearchQuery;
 use crate::frontend_features::friends::find_people::PersonSearchQuery;
 
 
@@ -87,8 +87,8 @@ impl Application for App {
             // TODO: Update pages according to changed page variants in 'list_of_pages.rs'
             Msg::SetPage(page) => self.current_page = page,
 
-            Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_login_data.user_name = name,
-            Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_login_data.user_password = passw,
+            Msg::LoginAttempt(UserLoginAttempt::UpdateUserName(name)) => self.user_sign_in_data.user_name = name,
+            Msg::LoginAttempt(UserLoginAttempt::UpdateUserPassword(passw)) => self.user_sign_in_data.user_password = passw,
             Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy) => login_logics::check_login_attempt_validity(self),
             
             Msg::Registration(UserRegister::UpdateUserRegisterName(name)) => self.user_register_data.user_name = name, 
@@ -102,13 +102,13 @@ impl Application for App {
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPassword(new_password)) => self.user_changing_data_structure.new_user_password = new_password,
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ChangeUserPasswordConfirmation(new_password)) => self.user_changing_data_structure.new_user_password_confirmation = new_password,
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::DeleteAccount) => {self.current_page = Page::PageSortOther(OtherPage::DeleteAccount)},
-            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => self.current_page = Page::PageSortOther(OtherPage::RetryChangingUserProfileData),
+            Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::Retry) => {} // self.current_page = Page::PageSortOther(OtherPage::RetryChangingUserProfileData),
             Msg::UserWantsToChangeProfileData(UserDemandsUserProfileDataChanges::ConfirmChanges) => {},
             Msg::SearchFriend => {},
             Msg::NoAction => {unimplemented!()},
             Msg::UserWantsToChatWithSomePerson(user_id) => {unimplemented!()},
             Msg::UserWantsToChatWithSomePersonViaPersonalConversation(conversation_id) => {self.current_conversation = Some(conversation_id); self.current_page = Page::PageSortSigned(SignedPage::Conversation)},
-            Msg::SetConversationToNone => {self.current_conversation = None; self.current_page = Page::PageSortSigned(SignedPage::ConversationWithFriends)},
+            Msg::SetConversationToNone => {}// {self.current_conversation = None; self.current_page = Page::PageSortSigned(SignedPage::ConversationWithFriends)},
             Msg::NoOp =>{},
             Msg::SendConversationMessage(conversation_message) => {},
             Msg::DeleteAccount => {
@@ -119,7 +119,15 @@ impl Application for App {
             Msg::UpdateFriendSearch(s) => {self.friend_search_query = s}
             Msg::AcceptFriendRequest => {},
             Msg::RejectFriendRequest => {},
-            Msg::CancelFriendRequest => {},        
+            Msg::CancelFriendRequest => {},
+
+            // Friends and people
+
+            Msg::SendFriendRequest => {},
+            Msg::BlockFriend => {},
+            Msg::UnblockFriend => {},
+            Msg::UnsendFriendRequest => {},
+            Msg::RemoveFriend => {}     
         }
         Cmd::none()
     }
@@ -130,8 +138,8 @@ impl Application for App {
         // The change from 'view' methods to just triggering page_templates and insertion 
         // of pages' content is also needed.
         match self.current_page {
-            Page::PageSortUnsigned(_) => signed_out_page_template(&self.current_page),
-            Page::PageSortSigned(_)   => signed_in_page_template(&self.current_page),
+            Page::PageSortUnsigned(_) => signed_out_page_template(self, &self.current_page),
+            Page::PageSortSigned(_)   => signed_in_page_template(self, &self.current_page),
             Page::PageSortShared(_)   => shared_page_router(self, &self.current_page),
             Page::PageSortOther(_)    => other_page_router(self, &self.current_page), // Will be fixed when implementing other_page_router
 

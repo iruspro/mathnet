@@ -125,7 +125,7 @@ and from the backend will still need to be written.
 I learn only the basics.
 
 ## Connection/communication
-- Signin
+- Sign in
 - Register
 - Add friend
 - Send message
@@ -135,4 +135,6 @@ I learn only the basics.
 # Reconsidering crate choices
 - If things didn't go as easy as expected, switching to other crates (like `rocket`) would have to be considered. The catch is that switching to any 
 other crate would demand a lot of code rewriting and time. Therefore the 
-best option so far is to make something with sqlx.
+best option so far is to make something with `sqlx`.
+
+# Bugs

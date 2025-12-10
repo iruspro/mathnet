@@ -9,7 +9,6 @@ pub use crate::messages::*;
 
 pub use crate::structs::user::{User,UserId,new};
 pub use crate::frontend_features::conversations_and_messages::{conversation_message::ConversationMessage, post_new_message::post_new_message};
-pub use crate::structs::friends_at_sidebar::{FriendAtSidebar,ShowChats};
 pub use sauron::{node,text};
 pub use crate::app::App;
 pub use crate::communication_with_server::get_conversation::get_whole_conversation_from_server;

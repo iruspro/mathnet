@@ -5,7 +5,7 @@ Here conversation messages are designed.
 
 pub use crate::structs::user;
 pub use crate::structs::emojis_and_reactions;
-pub use crate::logics::date_and_time::{DateAndTime, display_current_date_and_time};
+pub use crate::frontend_features::date_and_time::date_and_time::{display_current_date_and_time, DateAndTime};
 pub use crate::messages::Msg;
 use sauron::prelude::*;
 
@@ -54,3 +54,4 @@ pub fn conversation_message_box_display(conversation_message: ConversationMessag
   <div class="conversation_message">{text!("{}",conversation_message.content)}</div> 
 }
 }
+

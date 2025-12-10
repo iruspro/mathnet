@@ -5,7 +5,7 @@ use crate::pages::{delete_account, conversation_list, mathnet_notifications, pri
 use crate::pages::{
     about_project::about_project_display,
     base_of_exercises::base_of_exercises_display,
-    conversation_list::chat_with_friends_display,
+    conversation_list::conversation_list_display,
     conversation::conversation_display,
     delete_account::delete_account_display,
     docs::docs_display,
@@ -19,17 +19,17 @@ use crate::pages::{
     settings::settings_display,
     sign_in::sign_in_display,
     sign_out::sign_out_display,
-    user_profile_management::user_profile_display,
+    user_profile_management::user_profile_management_display,
     group_list::group_list_display,
-}
+};
 
 use sauron::prelude::*;
 
-pub fn display_content(page: &Page) -> Node<MSG>{
+pub fn display_content(page: &Page, app: &App) -> Node<MSG>{
 match page {
     Page::PageSortSigned(SignedPage::BaseOfExercises) => about_project_display(),
     Page::PageSortSigned(SignedPage::BaseOfLearningResources) => base_of_exercises_display(),
-    Page::PageSortSigned(SignedPage::ChatWithFriends) => chat_with_friends_display(),
+    Page::PageSortSigned(SignedPage::ChatWithFriends) => conversation_list_display(),
     Page::PageSortSigned(SignedPage::Conversation) => conversation_display(app),
     Page::PageSortSigned(SignedPage::Exercise) => exercise_display(),
     Page::PageSortSigned(SignedPage::Group) => group_display(),
@@ -37,10 +37,10 @@ match page {
     Page::PageSortSigned(SignedPage::LearningResources) => learning_resources_display(),
     Page::PageSortSigned(SignedPage::MathNetNotifications) => mathnet_notifications_display(),
     Page::PageSortSigned(SignedPage::Settings) => settings_display(),
-    Page::PageSortSigned(SignedPage::UserProfile) => user_profile_display(),
+    Page::PageSortSigned(SignedPage::UserProfile) => user_profile_management_display(app),
 
     Page::PageSortUnsigned(UnsignedPage::Home) => home_display(),
-    Page::PageSortUnsigned(UnsignedPage::SignIn) => sign_in_display(),
+    Page::PageSortUnsigned(UnsignedPage::SignIn) => sign_in_display(app),
     Page::PageSortUnsigned(UnsignedPage::Register)=> register_display(),
 
     Page::PageSortShared(SharedPage::AboutProject) => about_project_display(),

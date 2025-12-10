@@ -1,12 +1,15 @@
 use sauron::prelude::*;
+use crate::list_of_pages::UnsignedPage;
 use crate::messages::{Msg,UserLoginAttempt};
 use sauron::html::{meta,title,link};
 use crate::app::App;
 use crate::structs::user::UserLoginData;
+use crate::list_of_pages::Page;
 
-pub fn sign_in_display() -> Node<Msg> {
-    let username = app.user_login_data.user_name.clone();
-    let password = app.user_login_data.user_password.clone();
+pub fn sign_in_display(app: &App) -> Node<Msg> {
+    log::info!("Successfully loaded sign in page");
+    let username = app.user_sign_in_data.user_name.clone();
+    let password = app.user_sign_in_data.user_password.clone();
     node! {
     <div class="container-fluid">
     <div class="row">
@@ -50,7 +53,7 @@ pub fn sign_in_display() -> Node<Msg> {
     <button class="btn btn-primary w-100" on_click=move |_| Msg::LoginAttempt(UserLoginAttempt::CheckLoginValidy)>
         "Log in"
     </button> <br></br>
-<div>"Don't you have an account yet? Click" <a on_click=|_|{Msg::SetPage(GoToPage::GoToPageUnsigned(SwitchToPageUnsigned::GoToRegister))}> " here " </a> "and make one."</div>
+<div>"Don't you have an account yet? Click" <a on_click=|_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::Register))}> " here " </a> "and make one."</div>
       </div>
       <div class="col-5">
       </div>
