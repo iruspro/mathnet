@@ -214,11 +214,11 @@ pub fn display_left_sidebar(current_page: &Page) -> Node<MSG> {
     node!{
         <aside class="left-sidebar">
             <div class="list-group">
-                { show_sidebar_item(current_page, Page::PageSortSigned(SignedPage::Conversation), "Conversations") }
-                { show_sidebar_item(current_page, Page::PageSortSigned(SignedPage::UserProfile), "Profile") }
+                show_sidebar_item(current_page, Page::PageSortSigned(SignedPage::Conversation), "Conversations") 
+                show_sidebar_item(current_page, Page::PageSortSigned(SignedPage::UserProfile), "Profile") 
                 <hr/>
-                { show_sidebar_item(current_page, Page::PageSortUnsigned(UnsignedPage::Home), "Home") }
-                { show_sidebar_item(current_page, Page::PageSortShared(SharedPage::Docs), "Docs") }
+                show_sidebar_item(current_page, Page::PageSortUnsigned(UnsignedPage::Home), "Home")
+                show_sidebar_item(current_page, Page::PageSortShared(SharedPage::Docs), "Docs")
             </div>
         </aside>
     }

@@ -5,21 +5,18 @@ Main frontend file.
 use sauron::prelude::*;
 use wasm_bindgen::prelude::*;
 use web_sys::window;
-use crate::pages::pages_templates_and_routing::display_content_function::display_content;
-use crate::{list_of_pages::OtherPage, logics::registration_logics::check_registration_validity, messages::*};
+use crate::{list_of_pages::{OtherPage, SharedPage}, logics::registration_logics::check_registration_validity, messages::*, pages::{home, register}};
 pub use crate::messages::{Msg, UserLoginAttempt,UserRegister};
 use crate::list_of_pages::{Page,UnsignedPage,SignedPage};
-use crate::pages::pages_templates_and_routing::{signed_in_page_template::signed_in_page_template, 
-                                                signed_out_page_template::signed_out_page_template,
-                                                other_page_router::other_page_router,
-                                                shared_page_router::shared_page_router};
+
 use sauron::dom::Program;
 use crate::structs::{user::{UserLoginData, UserRegisterData,get_user_register_data,User,UserDemandsUserProfileDataChanges,UserChangingProfileData}};
 use crate::logics::{login_logics,registration_logics};
 use crate::web_sys::console;
 use crate::frontend_features::delete_account::delete_account;
-use crate::frontend_features::friends::find_friends::FriendSearchQuery;
-use crate::frontend_features::friends::find_people::PersonSearchQuery;
+// use crate::frontend_features::friends::find_friends::FriendSearchQuery;
+// use crate::frontend_features::friends::find_people::PersonSearchQuery;
+use crate::pages::{home::home_view, register::register_view, about_project::about_project_view, sign_in::sign_in_view, docs::docs_view, privacy_and_security::privacy_and_security_view};
 
 
 // Application state
@@ -33,10 +30,10 @@ pub struct App {
     pub user_changing_data_structure : UserChangingProfileData,
     pub current_conversation : Option<u128>,
     pub reload_current_page : bool,
-    pub person_search_query : String,
-    pub person_search_results: Vec<PersonSearchQuery>,
-    pub friend_search_query: String,
-    pub friend_search_results: Vec<FriendSearchQuery>
+    // pub person_search_query : String,
+    // pub person_search_results: Vec<PersonSearchQuery>,
+    // pub friend_search_query: String,
+    // pub friend_search_results: Vec<FriendSearchQuery>
 }
 
 impl App {
@@ -50,10 +47,10 @@ impl App {
             user_changing_data_structure : crate::structs::user::UserChangingProfileData::new(),
             current_conversation : None,
             reload_current_page : false,
-            person_search_query: String::new(),
-            person_search_results: Vec::new(),
-            friend_search_query: String::new(),
-            friend_search_results: Vec::new()
+            // person_search_query: String::new(),
+            // person_search_results: Vec::new(),
+            // friend_search_query: String::new(),
+            // friend_search_results: Vec::new()
         }
     }
     //fn parse_location() -> Page {
@@ -115,19 +112,20 @@ impl Application for App {
                 self.current_page = Page::PageSortUnsigned(UnsignedPage::Home);
                 delete_account();
             }
-            Msg::UpdatePersonSearch(s) => {self.person_search_query = s},
-            Msg::UpdateFriendSearch(s) => {self.friend_search_query = s}
-            Msg::AcceptFriendRequest => {},
-            Msg::RejectFriendRequest => {},
-            Msg::CancelFriendRequest => {},
+            // Msg::UpdatePersonSearch(s) => {self.person_search_query = s},
+            // Msg::UpdateFriendSearch(s) => {self.friend_search_query = s}
+            // Msg::AcceptFriendRequest => {},
+            // Msg::RejectFriendRequest => {},
+            // Msg::CancelFriendRequest => {},
 
             // Friends and people
 
-            Msg::SendFriendRequest => {},
-            Msg::BlockFriend => {},
-            Msg::UnblockFriend => {},
-            Msg::UnsendFriendRequest => {},
-            Msg::RemoveFriend => {}     
+            // Msg::SendFriendRequest => {},
+            // Msg::BlockFriend => {},
+            // Msg::UnblockFriend => {},
+            // Msg::UnsendFriendRequest => {},
+            // Msg::RemoveFriend => {}     
+            _ => {self.current_page = Page::PageSortUnsigned(UnsignedPage::Home)}
         }
         Cmd::none()
     }
@@ -138,10 +136,13 @@ impl Application for App {
         // The change from 'view' methods to just triggering page_templates and insertion 
         // of pages' content is also needed.
         match self.current_page {
-            Page::PageSortUnsigned(_) => signed_out_page_template(self, &self.current_page),
-            Page::PageSortSigned(_)   => signed_in_page_template(self, &self.current_page),
-            Page::PageSortShared(_)   => shared_page_router(self, &self.current_page),
-            Page::PageSortOther(_)    => other_page_router(self, &self.current_page), // Will be fixed when implementing other_page_router
+            Page::PageSortUnsigned(UnsignedPage::Home) => home_view(),
+            Page::PageSortUnsigned(UnsignedPage::Register) =>  register_view(),
+            Page::PageSortUnsigned(UnsignedPage::SignIn) => sign_in_view(self.clone()),
+            Page::PageSortShared(SharedPage::AboutProject) => about_project_view(self),
+            Page::PageSortShared(SharedPage::Docs) => docs_view(self),
+            Page::PageSortShared(SharedPage::PrivacyAndSecurity) => privacy_and_security_view(self),
+            _ => home_view(),
 
         }
     }

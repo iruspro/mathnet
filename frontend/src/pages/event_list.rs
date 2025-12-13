@@ -11,6 +11,6 @@ use crate::messages::Msg;
 use crate::experimental_examples::dummy_page_content::dummy_page_content;
 pub fn event_list_display() -> Node<Msg>{
     node!{
-        {dummy_page_content()}
+        dummy_page_content()
 
 }}

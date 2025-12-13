@@ -1,9 +1,42 @@
 /* About MathNet */
 
 use sauron::prelude::*;
-use crate::app::Msg;
-pub fn about_project_display() -> Node<Msg> {
-    node!{
+use crate::app::{Msg, App};
+use crate::list_of_pages::{Page,SignedPage,UnsignedPage, SharedPage, OtherPage};
+pub fn about_project_view(app: &App) -> Node<Msg> {
+    log::info!("Successfully loaded About project page");
+
+    match app.is_user_signed_in{
+        false => {
+            node!{
+            <nav class="navbar bg-dark navbar-expand-lg bg-body-tertiary" data-bs-theme="dark">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">"Navbar"</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo02" aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-nav">
+                <li class="nav-item">
+                    <button class="nav-link btn btn-link"  type="button" on_click = |_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::Home))}>"Home"</button>
+                </li>
+                 <li class="nav-item">
+                    <button class="nav-link btn btn-link"  type="button" on_click = |_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::SignIn))}>"Sign in"</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link btn btn-link"  type="button" on_click = |_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::Register))}>"Register"</button>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active btn btn-link" aria-current="page"  >"About project"</a>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link btn btn-link" type="button" on_click = |_|{Msg::SetPage(Page::PageSortShared(SharedPage::Docs))}>"Docs"</button>
+                </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+                                
                             <h1 class="text-center">"About project"</h1>
                             <p class="basicparagraph text-start">
                                 "About project
@@ -77,4 +110,64 @@ Mauris ex tellus, placerat sed purus at, facilisis efficitur dolor. Sed ac ex rh
 
 Cras felis tellus, egestas ut varius quis, tempor et felis. Mauris in purus auctor, dictum sapien vitae, tristique dolor. Ut felis nisi, feugiat a efficitur ut, imperdiet sit amet tellus. Quisque ante leo, efficitur quis mi hendrerit, posuere congue ante. "
                             </p>
-}}
+
+ <div class="myfooter">
+        "Notification:"
+        <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />"This work is licensed under a" <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">"Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License"</a>.
+        </div>
+                        }}
+true => {
+node!{
+    <aside class="left-sidebar">
+            <div class="list-group">
+                <div class="list-group-item active" aria-current="true">
+            "About project" 
+            </div>
+            <button class="list-group-item list-group-item-action" type="button" on_click=move |_| Msg::SetPage(Page::PageSortSigned(SignedPage::BaseOfLearningResources))>
+            "Your base of learning resources."
+        </button>
+         <button class="list-group-item list-group-item-action" type="button" on_click=move |_| Msg::SetPage(Page::PageSortSigned(SignedPage::ConversationList))>
+            "Chat with friends."
+        </button>
+         <button class="list-group-item list-group-item-action" type="button" on_click=move |_| Msg::SetPage(Page::PageSortSigned(SignedPage::BaseOfLearningResources))>
+            "Docs"
+        </button>
+        <button class="list-group-item list-group-item-action" type="button" on_click=move |_| Msg::SetPage(Page::PageSortSigned(SignedPage::GroupList))>
+            "Your groups"
+        </button>
+        <button class="list-group-item list-group-item-action" type="button" on_click=move |_| Msg::SetPage(Page::PageSortSigned(SignedPage::MathNetNotifications))>
+            "MathNet Notifications"
+        </button>
+         <button class="list-group-item list-group-item-action" type="button" on_click=move |_| Msg::SetPage(Page::PageSortShared(SharedPage::PrivacyAndSecurity))>
+            "Privacy and Security"
+        </button>
+        <button class="list-group-item list-group-item-action" type="button" on_click=move |_| Msg::SetPage(Page::PageSortSigned(SignedPage::Settings))>
+            "Settings"
+        </button>
+         <button class="list-group-item list-group-item-action" type="button" on_click=move |_| Msg::SetPage(Page::PageSortOther(OtherPage::SignOut))>
+            "Sign out"
+        </button>
+        <button class="list-group-item list-group-item-action" type="button" on_click=move |_| Msg::SetPage(Page::PageSortSigned(SignedPage::UserProfileManagement))>
+           "Manage your profile"
+        </button>
+        <button class="list-group-item list-group-item-action" type="button" on_click=move |_| Msg::SetPage(Page::PageSortSigned(SignedPage::UserProfileWall))>
+          "User wall"
+        </button>
+
+            </div>
+        </aside>
+<h1 class="text-center">"About project"</h1>
+                            <p class="basicparagraph text-start">
+                                "About project
+                                
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras luctus consectetur placerat. Donec non pretium sapien. Donec ac placerat ex. Aenean tempus massa nulla, nec ullamcorper leo tempus eget. Vestibulum at lectus ut libero ullamcorper consectetur. Vestibulum auctor urna venenatis libero eleifend, in sodales odio dictum. Curabitur auctor, massa eget ultricies efficitur, justo nulla porta purus, in laoreet quam turpis ut risus. Aliquam nunc nibh, placerat eget bibendum varius, porta eget tellus. Phasellus in lacinia augue, sed consequat ex. Curabitur laoreet mi nec eros tristique, ac tristique mauris tempus.
+
+Pellentesque in lacus laoreet metus" </p>
+        <div class="myfooter_with_left_sidebar">
+        "Notification:"
+        <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png" /></a><br />"This work is licensed under a" <a rel="license" href="http://creativecommons.org/licenses/by-nc-nd/4.0/">"Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International License"</a>.
+        </div>
+}
+
+}}}

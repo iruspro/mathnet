@@ -61,13 +61,15 @@ pub enum SignedPage {
     BaseOfLearningResources,
     ChatWithFriends,
     Conversation,
+    ConversationList,
     Exercise,
     Group,
     GroupList,
     LearningResources,
     MathNetNotifications,
     Settings,
-    UserProfile,
+    UserProfileManagement,
+    UserProfileWall,
 }
 
 #[derive(Debug, Clone, PartialEq)]
@@ -87,7 +89,7 @@ SignOut,
 
 // This and the next array are for pattern matching. 
 // Should be the same as SignedPage and UnsignedPage enums.
-pub const list_of_signed_pages: [Page; 11] = [
+pub const list_of_signed_pages: [Page; 12] = [
     Page::PageSortSigned(SignedPage::BaseOfExercises),
     Page::PageSortSigned(SignedPage::BaseOfLearningResources),
     Page::PageSortSigned(SignedPage::ChatWithFriends),
@@ -98,7 +100,8 @@ pub const list_of_signed_pages: [Page; 11] = [
     Page::PageSortSigned(SignedPage::LearningResources),
     Page::PageSortSigned(SignedPage::MathNetNotifications),
     Page::PageSortSigned(SignedPage::Settings),
-    Page::PageSortSigned(SignedPage::UserProfile),
+    Page::PageSortSigned(SignedPage::UserProfileManagement),
+    Page::PageSortSigned(SignedPage::UserProfileWall),
 ];
 
 pub const list_of_unsigned_pages: [Page;3] = [

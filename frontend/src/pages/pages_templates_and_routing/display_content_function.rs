@@ -1,3 +1,4 @@
+
 use crate::app::{Msg, App};
 type MSG = Msg;
 use crate::list_of_pages::{OtherPage, Page, SignedPage, UnsignedPage, SharedPage};

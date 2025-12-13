@@ -8,10 +8,9 @@ use crate::app::App;
 
 pub fn signed_in_page_template(app: &App, current_page: &Page) -> Node<Msg>{
     node!{
-        {display_left_sidebar(current_page)}
+        display_left_sidebar(current_page)
         <div class="my-content-with-left-sidebar">
-        {display_content(current_page, app)}
+        display_content(current_page, app)
         </div>
-    
-        {licence_with_left_sidebar_display()}
+        licence_with_left_sidebar_display()
 }}

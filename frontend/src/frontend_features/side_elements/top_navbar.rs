@@ -256,9 +256,15 @@ pub fn display_top_navbar(current_page: &Page) -> Node<MSG> {
                 </button>
                 <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0 navbar-nav">
-                        { for el in list_of_unsigned_pages.iter() {
-                                show_nav_button(el)
-                        }}
+                       <li class="nav-item">
+                    <button class="nav-link active btn btn-link" aria-current="page" type="button" on_click = |_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::Home))}>"Home"</button>
+                </li>
+                 <li class="nav-item">
+                    <button class="nav-link active btn btn-link" aria-current="page" type="button" on_click = |_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::SignIn))}>"Sign in"</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link active btn btn-link" aria-current="page" type="button" on_click = |_|{Msg::SetPage(Page::PageSortUnsigned(UnsignedPage::Register))}>"Register"</button>
+                </li>
                     </ul>
                 </div>
             </div>

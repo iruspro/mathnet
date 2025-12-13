@@ -138,3 +138,5 @@ other crate would demand a lot of code rewriting and time. Therefore the
 best option so far is to make something with `sqlx`.
 
 # Bugs
+When navigating between pages in browser, misterious
+"Node list must have already unrolled when creating an element" error is raised by sauron. I suspect it has something to do with left sidebar and top navbar, but similar mechanism has worked in my other projects.
